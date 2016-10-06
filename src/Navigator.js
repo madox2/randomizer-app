@@ -1,5 +1,5 @@
-const listeners = new Set();
-const history = [];
+const listeners = new Set()
+const history = []
 
 const navigateTo = Screen => [...listeners.values()].forEach(l => l(Screen))
 
@@ -17,7 +17,7 @@ export function navigate(Screen) {
 }
 
 export function back() {
-  history.pop();
+  history.pop()
   navigateTo(history[history.length -1])
 }
 

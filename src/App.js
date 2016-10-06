@@ -21,7 +21,7 @@ export class App extends Component {
   }
 
   render() {
-    const { Screen } = this.state;
+    const { Screen } = this.state
     return (
       <Screen />
     )

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { View } from 'react-native'
 import { navigate, back } from '../Navigator'
 import { Link } from '../components/Link'
