@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { View } from 'react-native'
-import { navigate, back } from '../Navigator'
 import { Link } from '../components/Link'
 import { Coin, Matches, Bottle, Numbers, Dices, Custom } from '.'
 
-const navig = Screen => () => navigate(() => (
-  <View>
-    <Screen />
-    <Link navigate={back}>Back</Link>
-  </View>
-))
+export function Welcome(props, { navigate, back }) {
 
-export function Welcome() {
+  const navig = Screen => () => navigate(() => (
+    <View>
+      <Screen />
+      <Link navigate={back}>Back</Link>
+    </View>
+  ))
+
   return (
     <View>
       <Link navigate={navig(Coin)}>
@@ -34,4 +34,9 @@ export function Welcome() {
       </Link>
     </View>
   )
+}
+
+Welcome.contextTypes = {
+  navigate: PropTypes.func,
+  back: PropTypes.func,
 }
