@@ -5,7 +5,11 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start:web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-react-native"
   },
   "dependencies": {
     "react": "^15.3.2",
@@ -15,11 +19,18 @@
   "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
+    "babel-jest": "^16.0.0",
     "babel-loader": "^6.2.5",
     "babel-preset-react-native": "^1.9.0",
     "babel-runtime": "^6.11.6",
+    "enzyme": "^2.4.1",
     "eslint": "^3.7.1",
     "eslint-plugin-react": "^6.3.0",
+    "jest": "^16.0.1",
+    "jest-cli": "^16.0.1",
+    "jest-react-native": "^16.0.0",
+    "react-addons-test-utils": "^15.3.2",
+    "react-test-renderer": "^15.3.2",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"
   }
