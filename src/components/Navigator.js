@@ -14,8 +14,7 @@ export class Navigator extends Component {
   }
 
   back() {
-    // TODO: handle empty history
-    this.history.pop()
+    this.history.length > 1 && this.history.pop()
     this.setState({ Screen: this.history[this.history.length - 1] })
   }
 
