@@ -1,6 +1,9 @@
 const path = require('path')
 const webpack = require('webpack')
 
+/* to exclude module from node_modules: */
+//exclude: /node_modules\/(?!(some-module|other-module)\/).*/,
+
 module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'src'),
