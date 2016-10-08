@@ -1,8 +1,0 @@
-{
-  "globals": {
-    "jasmine": true,
-    "expect": true,
-    "it": true,
-    "describe": true
-  }
-}

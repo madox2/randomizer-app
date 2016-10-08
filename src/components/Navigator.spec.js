@@ -1,3 +1,4 @@
+/*eslint-env jest, jasmine*/
 import React from 'react'
 import { View } from 'react-native'
 import { shallow } from 'enzyme'
@@ -5,6 +6,7 @@ import { Navigator } from '../../src/components/Navigator'
 
 describe('<Navigator />', () => {
 
+  const { any } = jasmine
   const Root = () => <View />
   const Next = () => <View />
 
@@ -16,8 +18,8 @@ describe('<Navigator />', () => {
   it('should expose `navigate` and `back` functions to the context', () => {
     const instance = shallow(<Navigator root={View} />).instance()
     expect(instance.getChildContext()).toEqual({
-      navigate: jasmine.any(Function),
-      back: jasmine.any(Function),
+      navigate: any(Function),
+      back: any(Function),
     })
   })
 
