@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { Text } from 'react-native'
+import { SectionTemplate } from '../components/SectionTemplate'
 
 export const Dices = () => (
-  <View>
+  <SectionTemplate>
     <Text>Dices</Text>
-  </View>
+  </SectionTemplate>
 )

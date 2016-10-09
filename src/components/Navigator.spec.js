@@ -2,7 +2,7 @@
 import React from 'react'
 import { View } from 'react-native'
 import { shallow } from 'enzyme'
-import { Navigator } from '../../src/components/Navigator'
+import { Navigator } from './Navigator'
 
 describe('<Navigator />', () => {
 

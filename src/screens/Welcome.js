@@ -3,14 +3,9 @@ import { View } from 'react-native'
 import { Link } from '../components/Link'
 import { Coin, Matches, Bottle, Numbers, Dices, Custom } from '.'
 
-export function Welcome(props, { navigate, back }) {
+export const Welcome = (props, { navigate }) => {
 
-  const navig = Screen => () => navigate(() => (
-    <View>
-      <Screen />
-      <Link navigate={back}>Back</Link>
-    </View>
-  ))
+  const navig = Screen => () => navigate(() => <Screen />)
 
   return (
     <View>
