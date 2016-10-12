@@ -18,7 +18,7 @@ describe('<SectionTemplate />', () => {
 
   it('should render all buttons', () => {
     const wrapper = shallow(
-      <SectionTemplate back={jest.fn()} fire={jest.fn()} reset={jest.fn()} />
+      <SectionTemplate onBack={jest.fn()} onFire={jest.fn()} onReset={jest.fn()} />
     )
     expect(wrapper.find(Button).length).toBe(3)
   })
@@ -30,38 +30,38 @@ describe('<SectionTemplate />', () => {
     expect(wrapper.find(Button).length).toBe(0)
   })
 
-  it('should call back function from props', () => {
-    const back = jest.fn()
+  it('should call onBack handler from props', () => {
+    const onBack = jest.fn()
     const wrapper = shallow(
-      <SectionTemplate back={back} />
+      <SectionTemplate onBack={onBack} />
     )
-    wrapper.find(Button, { onPress: back }).simulate('press')
-    expect(back).toHaveBeenCalledTimes(1)
+    wrapper.find(Button, { onPress: onBack }).simulate('press')
+    expect(onBack).toHaveBeenCalledTimes(1)
   })
 
-  it('should call default back function from context', () => {
+  it('should default back function from context', () => {
     const context = { back: jest.fn() }
     const wrapper = shallow(<SectionTemplate />, { context })
     wrapper.find(Button, { onPress: context.back }).simulate('press')
     expect(context.back).toHaveBeenCalledTimes(1)
   })
 
-  it('should call fire function', () => {
-    const fire = jest.fn()
+  it('should call onFire handler', () => {
+    const onFire = jest.fn()
     const wrapper = shallow(
-      <SectionTemplate fire={fire} />
+      <SectionTemplate onFire={onFire} />
     )
-    wrapper.find(Button, { onPress: fire }).simulate('press')
-    expect(fire).toHaveBeenCalledTimes(1)
+    wrapper.find(Button, { onPress: onFire }).simulate('press')
+    expect(onFire).toHaveBeenCalledTimes(1)
   })
 
-  it('should call reset function', () => {
-    const reset = jest.fn()
+  it('should call onReset handler', () => {
+    const onReset = jest.fn()
     const wrapper = shallow(
-      <SectionTemplate reset={reset} />
+      <SectionTemplate onReset={onReset} />
     )
-    wrapper.find(Button, { onPress: reset }).simulate('press')
-    expect(reset).toHaveBeenCalledTimes(1)
+    wrapper.find(Button, { onPress: onReset }).simulate('press')
+    expect(onReset).toHaveBeenCalledTimes(1)
   })
 
 })

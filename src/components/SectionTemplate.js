@@ -9,29 +9,41 @@ export const Button = props => (
 
 export class SectionTemplate extends Component {
 
+  constructor(...args) {
+    super(...args)
+    this.back = this.back.bind(this)
+  }
+
   render() {
-    const { children, reset, fire } = this.props
-    const back = this.props.back || this.context.back
+    const { children, onReset, onFire } = this.props
+    const displayBack = this.props.onBack || this.context.back
     return (
       <View>
         {children}
-        {back &&
-          <Button onPress={back}>Back</Button>
+        {displayBack &&
+          <Button onPress={this.back}>Back</Button>
         }
-        {fire &&
-          <Button onPress={fire}>Fire</Button>
+        {onFire &&
+          <Button onPress={onFire}>Fire</Button>
         }
-        {reset &&
-          <Button onPress={reset}>Reset</Button>
+        {onReset &&
+          <Button onPress={onReset}>Reset</Button>
         }
       </View>
     )
   }
 
+  back() {
+    this.context.back && this.context.back()
+    this.props.onBack && this.props.onBack()
+  }
+
 }
 
 SectionTemplate.propTypes = {
-  back: PropTypes.func,
+  onBack: PropTypes.func,
+  onFire: PropTypes.func,
+  onReset: PropTypes.func,
 }
 
 SectionTemplate.contextTypes = {
