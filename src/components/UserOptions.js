@@ -9,7 +9,7 @@ export const Button = ({ children, onPress }) => (
   </TouchableHighlight>
 )
 
-export const InputText = ({ children  }) => (
+export const InputText = () => (
   <Text>TBD</Text>
 )
 
@@ -18,16 +18,10 @@ const inputs = {
   text: InputText,
 }
 
-const makeOptions = options => Object.keys(options).reduce((r, key) => {
-  return Object.assign(
-    r, {
-      [key]: {
-        ...options[key],
-        value: options[key].defaultValue,
-      },
-    }
-  )
-}, {})
+const mapProperties = (obj, fn) => Object.keys(obj).reduce((r, k) => ({
+  ...r,
+  [k]: fn(obj[k], k),
+}), {})
 
 export class UserOptions extends Component {
 
@@ -36,10 +30,10 @@ export class UserOptions extends Component {
     this.change = this.change.bind(this)
     this.cancel = this.cancel.bind(this)
     this.save = this.save.bind(this)
-    this.state = {
-      editMode: false,
-      options: makeOptions(this.props.options),
-    }
+    const options = mapProperties(this.props.options, obj => ({
+      ...obj, value: obj.defaultValue,
+    }))
+    this.state = { editMode: false, options }
   }
 
   render() {
