@@ -37,17 +37,16 @@ export class UserOptions extends Component {
   render() {
     const { editMode } = this.state
     const summary = this.makeSummary()
-    return (
+    return editMode ? (
+      <View>
+        {this.makeInputs()}
+        <Button onPress={this.cancel}>Cancel</Button>
+        <Button onPress={this.save}>Save</Button>
+      </View>
+    ) : (
       <View>
         {summary}
         <Button onPress={this.change}>Change</Button>
-        {editMode && (
-          <View>
-            {this.makeInputs()}
-            <Button onPress={this.cancel}>Cancel</Button>
-            <Button onPress={this.save}>Save</Button>
-          </View>
-        )}
       </View>
     )
   }
@@ -86,7 +85,7 @@ export class UserOptions extends Component {
   }
 
   makeInputs() {
-    return mapObject(this.state.options, ([ key, obj ]) => {
+    return mapObject(this.state.editOptions, ([ key, obj ]) => {
       const Input = inputs[obj.type]
       const onInputChange = this.onInputChange.bind(this, key)
       return (

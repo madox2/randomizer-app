@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { View, TouchableHighlight, Text } from 'react-native'
+import { UserOptions } from './UserOptions'
 
 export const Button = props => (
   <TouchableHighlight onPress={props.onPress}>
@@ -15,10 +16,13 @@ export class SectionTemplate extends Component {
   }
 
   render() {
-    const { children, onReset, onFire } = this.props
+    const { children, onReset, onFire, options, onOptionChange } = this.props
     const displayBack = this.props.onBack || this.context.back
     return (
       <View>
+        {options &&
+          <UserOptions options={options} onChange={onOptionChange} />
+        }
         {children}
         {displayBack &&
           <Button onPress={this.back}>Back</Button>
@@ -44,6 +48,8 @@ SectionTemplate.propTypes = {
   onBack: PropTypes.func,
   onFire: PropTypes.func,
   onReset: PropTypes.func,
+  options: PropTypes.object,
+  onOptionChange: PropTypes.func,
 }
 
 SectionTemplate.contextTypes = {

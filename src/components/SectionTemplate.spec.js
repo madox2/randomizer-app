@@ -3,6 +3,9 @@ import React from 'react'
 import { View } from 'react-native'
 import { shallow } from 'enzyme'
 import { SectionTemplate, Button } from './SectionTemplate'
+import { UserOptions } from './UserOptions'
+
+// TODO: enzyme selector with multiple arguments does not work
 
 describe('<SectionTemplate />', () => {
 
@@ -62,6 +65,31 @@ describe('<SectionTemplate />', () => {
     )
     wrapper.find(Button, { onPress: onReset }).simulate('press')
     expect(onReset).toHaveBeenCalledTimes(1)
+  })
+
+  it('should display user options', () => {
+    const options = { number: { type: 'number' } }
+    const wrapper = shallow(
+      <SectionTemplate options={options} />
+    )
+    expect(wrapper.find(UserOptions, { options }).length).toBe(1)
+  })
+
+  it('should trigger onOptionsChange event', () => {
+    const options = { number: { type: 'number' } }
+    const onOptionChange = jest.fn()
+    const wrapper = shallow(
+      <SectionTemplate options={options} onOptionChange={onOptionChange} />
+    )
+    const newOptions = {
+      number: {
+        type: 'number',
+        value: 3,
+      },
+    }
+    wrapper.find(UserOptions).simulate('change', newOptions)
+    expect(onOptionChange.mock.calls.length).toBe(1)
+    expect(onOptionChange.mock.calls[0][0]).toEqual(newOptions)
   })
 
 })
