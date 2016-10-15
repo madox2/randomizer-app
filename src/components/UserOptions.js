@@ -1,5 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
+import { InputNumber } from './InputNumber'
+import { InputText } from './InputText'
 
 const mapObject = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
 
@@ -9,12 +11,8 @@ export const Button = ({ children, onPress }) => (
   </TouchableHighlight>
 )
 
-export const InputText = () => (
-  <Text>TBD</Text>
-)
-
 const inputs = {
-  number: InputText,
+  number: InputNumber,
   text: InputText,
 }
 
