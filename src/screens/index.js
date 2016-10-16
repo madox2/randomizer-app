@@ -4,6 +4,6 @@ import { Coin } from './Coin'
 import { Bottle } from './Bottle'
 import { Numbers } from './Numbers'
 import { Dices } from './Dices'
-import { Custom } from './Custom'
+import { MagicBall } from './MagicBall'
 
-export { Welcome, Matches, Coin, Bottle, Numbers, Dices, Custom }
+export { Welcome, Matches, Coin, Bottle, Numbers, Dices, MagicBall }

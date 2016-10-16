@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { View } from 'react-native'
 import { Link } from '../components/Link'
-import { Coin, Matches, Bottle, Numbers, Dices, Custom } from '.'
+import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from '.'
 
 export const Welcome = (props, { navigate }) => {
 
@@ -24,8 +24,8 @@ export const Welcome = (props, { navigate }) => {
       <Link navigate={navig(Dices)}>
         Dices
       </Link>
-      <Link navigate={navig(Custom)}>
-        Custom
+      <Link navigate={navig(MagicBall)}>
+        Magic 8-Ball
       </Link>
     </View>
   )
