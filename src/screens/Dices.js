@@ -1,7 +1,59 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { Text } from 'react-native'
+import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 
-export const Dices = () => (
-  <SectionTemplate title='Dices'>
-  </SectionTemplate>
-)
+const options = {
+  count: {
+    type: 'number',
+    label: 'Count',
+    defaultValue: 1,
+  },
+}
+
+export class Dices extends Component {
+
+  constructor(...args) {
+    super(...args)
+    this.state = {
+      count: options.count.defaultValue,
+      results: [],
+    }
+    this.onFire = this.onFire.bind(this)
+    this.onReset = this.onReset.bind(this)
+    this.onOptionsChange = this.onOptionsChange.bind(this)
+  }
+
+  onFire() {
+    const results = new Array(this.state.count)
+      .fill(0)
+      .map(() => randomNumber(1, 6))
+    this.setState({ results })
+  }
+
+  onReset() {
+    this.setState({ results: [] })
+  }
+
+  onOptionsChange({ count }) {
+    this.setState({
+      count: count.value,
+    })
+  }
+
+  render() {
+    return (
+      <SectionTemplate
+        onFire={this.onFire}
+        onReset={this.onReset}
+        options={options}
+        onOptionsChange={this.onOptionsChange}
+        title='Dices'
+      >
+        <Text>{JSON.stringify(this.state.results)}</Text>
+      </SectionTemplate>
+    )
+  }
+
+}
+

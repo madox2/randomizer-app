@@ -18,8 +18,9 @@ describe('<InputNumber />', () => {
       <InputNumber label='Number' value={13} onChange={onChange} />
     )
     const textinput = wrapper.find('TextInput[value="13"]')
-    textinput.simulate('changeText', 18)
+    textinput.simulate('changeText', '18')
     expect(onChange.mock.calls.length).toBe(1)
+    expect(typeof onChange.mock.calls[0][0]).toBe('number')
     expect(onChange.mock.calls[0][0]).toBe(18)
   })
 

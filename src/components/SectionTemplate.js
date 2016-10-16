@@ -22,14 +22,14 @@ export class SectionTemplate extends Component {
       onReset,
       onFire,
       options,
-      onOptionChange,
+      onOptionsChange,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     return (
       <View>
         <Text>{title}</Text>
         {options &&
-          <UserOptions options={options} onChange={onOptionChange} />
+          <UserOptions options={options} onChange={onOptionsChange} />
         }
         {children}
         {displayBack &&
@@ -57,7 +57,7 @@ SectionTemplate.propTypes = {
   onFire: PropTypes.func,
   onReset: PropTypes.func,
   options: PropTypes.object,
-  onOptionChange: PropTypes.func,
+  onOptionsChange: PropTypes.func,
   title: PropTypes.string,
 }
 

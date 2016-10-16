@@ -1,18 +1,57 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { Text } from 'react-native'
+import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 
 const options = {
   count: {
     type: 'number',
     label: 'Count',
-    defaultValue: 4,
+    defaultValue: 3,
   },
 }
 
-export const Matches = () => (
-  <SectionTemplate
-    title='Matches'
-    options={options}
-  >
-  </SectionTemplate>
-)
+export class Matches extends Component {
+
+  constructor(...args) {
+    super(...args)
+    this.state = {
+      count: options.count.defaultValue,
+      selected: 0,
+    }
+    this.onFire = this.onFire.bind(this)
+    this.onReset = this.onReset.bind(this)
+    this.onOptionsChange = this.onOptionsChange.bind(this)
+  }
+
+  onFire() {
+    const selected = randomNumber(1, this.state.count)
+    this.setState({ selected })
+  }
+
+  onReset() {
+    this.setState({ selected: 0 })
+  }
+
+  onOptionsChange({ count }) {
+    this.setState({
+      count: count.value,
+    })
+  }
+
+  render() {
+    return (
+      <SectionTemplate
+        onFire={this.onFire}
+        onReset={this.onReset}
+        options={options}
+        onOptionsChange={this.onOptionsChange}
+        title='Matches'
+      >
+        <Text>{this.state.selected}</Text>
+      </SectionTemplate>
+    )
+  }
+
+}
+

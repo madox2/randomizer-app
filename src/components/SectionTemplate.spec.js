@@ -83,9 +83,9 @@ describe('<SectionTemplate />', () => {
 
   it('should trigger onOptionsChange event', () => {
     const options = { number: { type: 'number' } }
-    const onOptionChange = jest.fn()
+    const onOptionsChange = jest.fn()
     const wrapper = shallow(
-      <SectionTemplate options={options} onOptionChange={onOptionChange} />
+      <SectionTemplate options={options} onOptionsChange={onOptionsChange} />
     )
     const newOptions = {
       number: {
@@ -94,8 +94,8 @@ describe('<SectionTemplate />', () => {
       },
     }
     wrapper.find(UserOptions).simulate('change', newOptions)
-    expect(onOptionChange.mock.calls.length).toBe(1)
-    expect(onOptionChange.mock.calls[0][0]).toEqual(newOptions)
+    expect(onOptionsChange.mock.calls.length).toBe(1)
+    expect(onOptionsChange.mock.calls[0][0]).toEqual(newOptions)
   })
 
 })
