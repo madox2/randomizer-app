@@ -5,8 +5,6 @@ import { shallow } from 'enzyme'
 import { SectionTemplate, Button } from './SectionTemplate'
 import { UserOptions } from './UserOptions'
 
-// TODO: enzyme selector with multiple arguments does not work
-
 describe('<SectionTemplate />', () => {
 
   it('should render children', () => {
@@ -38,14 +36,14 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onBack={onBack} />
     )
-    wrapper.find(Button, { onPress: onBack }).simulate('press')
+    wrapper.find('Button[children="Back"]').simulate('press')
     expect(onBack).toHaveBeenCalledTimes(1)
   })
 
   it('should default back function from context', () => {
     const context = { back: jest.fn() }
     const wrapper = shallow(<SectionTemplate />, { context })
-    wrapper.find(Button, { onPress: context.back }).simulate('press')
+    wrapper.find('Button[children="Back"]').simulate('press')
     expect(context.back).toHaveBeenCalledTimes(1)
   })
 
@@ -54,7 +52,7 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onFire={onFire} />
     )
-    wrapper.find(Button, { onPress: onFire }).simulate('press')
+    wrapper.find('Button[children="Fire"]').simulate('press')
     expect(onFire).toHaveBeenCalledTimes(1)
   })
 
@@ -63,7 +61,7 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onReset={onReset} />
     )
-    wrapper.find(Button, { onPress: onReset }).simulate('press')
+    wrapper.find('Button[children="Reset"]').simulate('press')
     expect(onReset).toHaveBeenCalledTimes(1)
   })
 
@@ -72,7 +70,8 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate options={options} />
     )
-    expect(wrapper.find(UserOptions, { options }).length).toBe(1)
+    expect(wrapper.find(UserOptions).length).toBe(1)
+    expect(wrapper.find(UserOptions).prop('options')).toEqual(options)
   })
 
   it('should trigger onOptionsChange event', () => {
