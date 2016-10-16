@@ -1,5 +1,4 @@
 import React from 'react'
-import { Text } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 
 const options = {
@@ -12,8 +11,8 @@ const options = {
 
 export const Matches = () => (
   <SectionTemplate
+    title='Matches'
     options={options}
   >
-    <Text>Matches</Text>
   </SectionTemplate>
 )

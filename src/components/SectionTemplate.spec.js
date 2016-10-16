@@ -17,6 +17,13 @@ describe('<SectionTemplate />', () => {
     expect(wrapper.find(Child).length).toBe(1)
   })
 
+  it('should display title', () => {
+    const wrapper = shallow(
+      <SectionTemplate title='Hello world' />
+    )
+    expect(wrapper.find({ children: 'Hello world' }).length).toBe(1)
+  })
+
   it('should render all buttons', () => {
     const wrapper = shallow(
       <SectionTemplate onBack={jest.fn()} onFire={jest.fn()} onReset={jest.fn()} />

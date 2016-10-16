@@ -16,10 +16,18 @@ export class SectionTemplate extends Component {
   }
 
   render() {
-    const { children, onReset, onFire, options, onOptionChange } = this.props
+    const {
+      children,
+      title,
+      onReset,
+      onFire,
+      options,
+      onOptionChange,
+    } = this.props
     const displayBack = this.props.onBack || this.context.back
     return (
       <View>
+        <Text>{title}</Text>
         {options &&
           <UserOptions options={options} onChange={onOptionChange} />
         }
@@ -50,6 +58,7 @@ SectionTemplate.propTypes = {
   onReset: PropTypes.func,
   options: PropTypes.object,
   onOptionChange: PropTypes.func,
+  title: PropTypes.string,
 }
 
 SectionTemplate.contextTypes = {
