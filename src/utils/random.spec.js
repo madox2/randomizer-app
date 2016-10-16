@@ -1,19 +1,19 @@
 /*eslint-env jest, jasmine*/
 
-import { randomRange } from './random'
+import { randomNumber } from './random'
 
-describe('randomRange', () => {
+describe('randomNumber', () => {
 
   let randomSpy
 
   const testRange = (min, max) => {
     randomSpy.and.returnValue(0)
-    expect(randomRange(min, max)).toBe(min)
+    expect(randomNumber(min, max)).toBe(min)
     randomSpy.and.returnValue(1)
-    expect(randomRange(min, max)).toBe(max)
+    expect(randomNumber(min, max)).toBe(max)
     randomSpy.and.returnValue(0.5)
-    expect(randomRange(min, max)).toBeLessThan(max + 1)
-    expect(randomRange(min, max)).toBeGreaterThan(min - 1)
+    expect(randomNumber(min, max)).toBeLessThan(max + 1)
+    expect(randomNumber(min, max)).toBeGreaterThan(min - 1)
   }
 
   beforeEach(() => {
