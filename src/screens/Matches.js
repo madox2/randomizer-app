@@ -8,6 +8,7 @@ const options = {
     type: 'number',
     label: 'Count',
     defaultValue: 3,
+    constraints: { min: 1, max: 10 },
   },
 }
 

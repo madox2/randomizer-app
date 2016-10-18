@@ -1,8 +1,8 @@
 /*eslint-env jest, jasmine*/
 import { validateNumber } from './validation'
 
-const valid = { result: true }
-const invalid = { result: false, message: jasmine.any(String) }
+const valid = { valid: true }
+const invalid = { valid: false, err: jasmine.any(String) }
 
 describe('validateNumber', () => {
 

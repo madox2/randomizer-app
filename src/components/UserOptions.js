@@ -6,6 +6,11 @@ import { validateNumber, validateText } from '../utils/validation'
 
 const mapObject = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
 
+const reduceProperties = (obj, fn) => Object.keys(obj).reduce((r, k) => ({
+  ...r,
+  [k]: fn(obj[k], k),
+}), {})
+
 export const Button = ({ children, onPress }) => (
   <TouchableHighlight onPress={onPress}>
     <Text>{children}</Text>
@@ -22,10 +27,22 @@ const validations = {
   text: validateText,
 }
 
-const mapProperties = (obj, fn) => Object.keys(obj).reduce((r, k) => ({
-  ...r,
-  [k]: fn(obj[k], k),
-}), {})
+const validate = options => {
+  let _valid = true
+  const _options = reduceProperties(options, (o) => {
+    const validator = validations[o.type]
+    if (validator) {
+      const { valid, err } = validator(o.value, o.constraints)
+      if (!valid) {
+        _valid = false
+        return { ...o, err }
+      }
+    }
+    const { err, ...opt } = o // eslint-disable-line
+    return opt
+  })
+  return { valid: _valid, options: _options }
+}
 
 export class UserOptions extends Component {
 
@@ -34,7 +51,7 @@ export class UserOptions extends Component {
     this.change = this.change.bind(this)
     this.cancel = this.cancel.bind(this)
     this.save = this.save.bind(this)
-    const options = mapProperties(this.props.options, obj => ({
+    const options = reduceProperties(this.props.options, obj => ({
       ...obj, value: obj.defaultValue,
     }))
     this.state = { editMode: false, options }
@@ -72,6 +89,11 @@ export class UserOptions extends Component {
   }
 
   save() {
+    const { valid, options } = validate(this.state.editOptions)
+    if (!valid) {
+      this.setState({ editOptions: options })
+      return
+    }
     this.props.onChange(this.state.editOptions)
     this.setState({
       editMode: false,
@@ -99,6 +121,7 @@ export class UserOptions extends Component {
           key={key}
           value={obj.value}
           label={obj.label}
+          error={obj.err}
           onChange={onInputChange}
         />
       )

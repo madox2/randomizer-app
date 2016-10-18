@@ -110,4 +110,29 @@ describe('<UserOptions />', () => {
     })
   })
 
+  it('should not pass via validation', () => {
+    const options = {
+      number: {
+        type: 'number',
+        label: 'Number',
+        constraints: { min: 0 },
+        defaultValue: 1,
+      },
+    }
+    const onChange = jest.fn()
+    const wrapper = shallow(<UserOptions options={options} onChange={onChange} />)
+    const change = wrapper.find('Button[children="Change"]')
+    change.simulate('press')
+    wrapper.update()
+    const input = wrapper.find('InputNumber[label="Number"]')
+    input.simulate('change', -3)
+    wrapper.update()
+    const save = wrapper.find('Button[children="Save"]')
+    save.simulate('press')
+    wrapper.update()
+    const inputWithError = wrapper.find('InputNumber[label="Number"]')
+    expect(inputWithError.length).toBe(1)
+    expect(!!inputWithError.prop('error')).toBe(true)
+  })
+
 })
