@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { InputText } from './InputText'
+import { validateNumber, validateText } from '../utils/validation'
 
 const mapObject = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
 
@@ -14,6 +15,11 @@ export const Button = ({ children, onPress }) => (
 const inputs = {
   number: InputNumber,
   text: InputText,
+}
+
+const validations = {
+  number: validateNumber,
+  text: validateText,
 }
 
 const mapProperties = (obj, fn) => Object.keys(obj).reduce((r, k) => ({
