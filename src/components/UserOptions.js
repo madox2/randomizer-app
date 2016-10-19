@@ -1,14 +1,15 @@
 import React, { PropTypes, Component } from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
 import { InputNumber } from './InputNumber'
-import { InputText } from './InputText'
 
-const mapObject = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
+const mapProperties = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
 
 const reduceProperties = (obj, fn) => Object.keys(obj).reduce((r, k) => ({
   ...r,
   [k]: fn(obj[k], k),
 }), {})
+
+const someProperty = (obj, fn) => Object.keys(obj).some(k => fn(obj[k]))
 
 export const Button = ({ children, onPress }) => (
   <TouchableHighlight onPress={onPress}>
@@ -18,10 +19,7 @@ export const Button = ({ children, onPress }) => (
 
 const inputs = {
   number: InputNumber,
-  text: InputText,
 }
-
-const someProperty = (obj, fn) => Object.keys(obj).some(k => fn(obj[k]))
 
 export class UserOptions extends Component {
 
@@ -94,7 +92,7 @@ export class UserOptions extends Component {
 
   makeInputs() {
     const { editOptions } = this.state
-    return mapObject(editOptions, ([ key, obj ]) => {
+    return mapProperties(editOptions, ([ key, obj ]) => {
       const Input = inputs[obj.type]
       const onInputChange = this.onInputChange.bind(this, key)
       return (
@@ -102,6 +100,7 @@ export class UserOptions extends Component {
           key={key}
           value={obj.value}
           label={obj.label}
+          constraints={obj.constraints}
           err={obj.err}
           onChange={onInputChange}
         />
@@ -110,7 +109,7 @@ export class UserOptions extends Component {
   }
 
   makeSummary() {
-    return mapObject(this.state.options, ([ key, obj ]) => {
+    return mapProperties(this.state.options, ([ key, obj ]) => {
       const text = `${obj.label}: ${obj.value}`
       return (
         <Text key={key}>{text}</Text>

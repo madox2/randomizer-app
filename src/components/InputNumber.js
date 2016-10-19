@@ -13,7 +13,9 @@ export const validate = (value, constraints = {}) => {
   return null
 }
 
-const sanitize = n => /^\-?\d+$/.test(n) ? +n : n
+const length = x => `${x}`.length
+
+const sanitize = n => /^\-?\d+$/.test(n) && length(n) === length(+n) ? +n : n
 
 const Error = ({ children }) => (
   <Text>{children}</Text>
