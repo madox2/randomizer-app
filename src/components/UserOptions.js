@@ -1,15 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
 import { InputNumber } from './InputNumber'
-
-const mapProperties = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
-
-const reduceProperties = (obj, fn) => Object.keys(obj).reduce((r, k) => ({
-  ...r,
-  [k]: fn(obj[k], k),
-}), {})
-
-const someProperty = (obj, fn) => Object.keys(obj).some(k => fn(obj[k]))
+import { mapProps, reduceProps, someProp } from '../utils/functional'
 
 export const Button = ({ children, onPress }) => (
   <TouchableHighlight onPress={onPress}>
@@ -28,7 +20,7 @@ export class UserOptions extends Component {
     this.change = this.change.bind(this)
     this.cancel = this.cancel.bind(this)
     this.save = this.save.bind(this)
-    const options = reduceProperties(this.props.options, obj => ({
+    const options = reduceProps(this.props.options, obj => ({
       ...obj, value: obj.defaultValue,
     }))
     this.state = { editMode: false, options }
@@ -67,7 +59,7 @@ export class UserOptions extends Component {
 
   save() {
     const { editOptions } = this.state
-    const hasErrors = someProperty(editOptions, p => p.err)
+    const hasErrors = someProp(editOptions, p => p.err)
     if (hasErrors) {
       this.setState({ editOptions })
       return
@@ -92,7 +84,7 @@ export class UserOptions extends Component {
 
   makeInputs() {
     const { editOptions } = this.state
-    return mapProperties(editOptions, ([ key, obj ]) => {
+    return mapProps(editOptions, ([ key, obj ]) => {
       const Input = inputs[obj.type]
       const onInputChange = this.onInputChange.bind(this, key)
       return (
@@ -109,7 +101,7 @@ export class UserOptions extends Component {
   }
 
   makeSummary() {
-    return mapProperties(this.state.options, ([ key, obj ]) => {
+    return mapProps(this.state.options, ([ key, obj ]) => {
       const text = `${obj.label}: ${obj.value}`
       return (
         <Text key={key}>{text}</Text>
