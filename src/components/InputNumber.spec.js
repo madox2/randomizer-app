@@ -24,4 +24,52 @@ describe('<InputNumber />', () => {
     expect(onChange.mock.calls[0][0]).toBe(18)
   })
 
+  it('should display validation error', () => {
+    const onChange = jest.fn()
+    const wrapper = shallow(
+      <InputNumber label='Number' value={13} err={'some error'} onChange={onChange} />
+    )
+    expect(wrapper.find('Error[children="some error"]').length).toBe(1)
+  })
+
+})
+
+describe('InputNumber validation', () => {
+
+  const valid = null
+  const invalid = jasmine.any(String)
+
+  const validateNumber = (value, constraints) => {
+    const onChange = jest.fn()
+    const wrapper = shallow(
+      <InputNumber constraints={constraints} onChange={onChange} />
+    )
+    wrapper.find('TextInput').simulate('changeText', value)
+    return onChange.mock.calls[0][1]
+  }
+
+  it('should pass without options', () => {
+    expect(validateNumber('3')).toEqual(valid)
+  })
+
+  it('should pass with empty options', () => {
+    expect(validateNumber('-6', {})).toEqual(valid)
+  })
+
+  it('should reject floating numbers', () => {
+    expect(validateNumber('3.14')).toEqual(invalid)
+  })
+
+  it('should be invalid minimal range', () => {
+    expect(validateNumber('3', { min: 4 })).toEqual(invalid)
+  })
+
+  it('should be invalid maximal range', () => {
+    expect(validateNumber('8', { max: 4 })).toEqual(invalid)
+  })
+
+  it('should pass all validations', () => {
+    expect(validateNumber('8', { min: 4, max: 8 })).toEqual(valid)
+  })
+
 })

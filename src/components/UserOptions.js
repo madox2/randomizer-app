@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react'
 import { View, Text, TouchableHighlight } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { InputText } from './InputText'
-import { validateNumber, validateText } from '../utils/validation'
 
 const mapObject = (obj, fn) => Object.keys(obj).map(k => fn([ k, obj[k] ]))
 
@@ -22,27 +21,7 @@ const inputs = {
   text: InputText,
 }
 
-const validations = {
-  number: validateNumber,
-  text: validateText,
-}
-
-const validate = options => {
-  let _valid = true
-  const _options = reduceProperties(options, (o) => {
-    const validator = validations[o.type]
-    if (validator) {
-      const { valid, err } = validator(o.value, o.constraints)
-      if (!valid) {
-        _valid = false
-        return { ...o, err }
-      }
-    }
-    const { err, ...opt } = o // eslint-disable-line
-    return opt
-  })
-  return { valid: _valid, options: _options }
-}
+const someProperty = (obj, fn) => Object.keys(obj).some(k => fn(obj[k]))
 
 export class UserOptions extends Component {
 
@@ -89,31 +68,33 @@ export class UserOptions extends Component {
   }
 
   save() {
-    const { valid, options } = validate(this.state.editOptions)
-    if (!valid) {
-      this.setState({ editOptions: options })
+    const { editOptions } = this.state
+    const hasErrors = someProperty(editOptions, p => p.err)
+    if (hasErrors) {
+      this.setState({ editOptions })
       return
     }
-    this.props.onChange(this.state.editOptions)
+    this.props.onChange(editOptions)
     this.setState({
       editMode: false,
       editOptions: null,
-      options: this.state.editOptions,
+      options: editOptions,
     })
   }
 
-  onInputChange(key, value) {
+  onInputChange(key, value, err) {
     const { editOptions } = this.state
     this.setState({
       editOptions: {
         ...editOptions,
-        [key]: { ...editOptions[key], value },
+        [key]: { ...editOptions[key], value, err },
       },
     })
   }
 
   makeInputs() {
-    return mapObject(this.state.editOptions, ([ key, obj ]) => {
+    const { editOptions } = this.state
+    return mapObject(editOptions, ([ key, obj ]) => {
       const Input = inputs[obj.type]
       const onInputChange = this.onInputChange.bind(this, key)
       return (
@@ -121,7 +102,7 @@ export class UserOptions extends Component {
           key={key}
           value={obj.value}
           label={obj.label}
-          error={obj.err}
+          err={obj.err}
           onChange={onInputChange}
         />
       )
