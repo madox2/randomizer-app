@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const DashboardPlugin = require('webpack-dashboard/plugin')
 
 /* to exclude module from node_modules: */
 //exclude: /node_modules\/(?!(some-module|other-module)\/).*/,
@@ -35,6 +36,7 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
+    new DashboardPlugin({ port: 3001  }),
   ],
   resolve: {
     alias: {

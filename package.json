@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "start:web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors",
+    "start:web": "webpack-dashboard -- webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors",
     "lint": "eslint .",
     "test": "jest"
   },
@@ -33,6 +33,7 @@
     "react-addons-test-utils": "^15.3.2",
     "react-test-renderer": "^15.3.2",
     "webpack": "^1.13.2",
+    "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.16.1"
   }
 }
