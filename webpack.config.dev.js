@@ -10,7 +10,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'src'),
   },
   entry: [
-    path.join(__dirname, '../index.web.js'),
+    path.join(__dirname, './index.web.js'),
   ],
   module: {
     loaders: [

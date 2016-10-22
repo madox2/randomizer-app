@@ -17,7 +17,7 @@ describe('<SectionButton />', () => {
     const wrapper = shallow(
       <SectionButton title='Matches' onPress={onPress} />
     )
-    wrapper.find('TouchableHighlight').simulate('press')
+    wrapper.find('TouchableOpacity').simulate('press')
     expect(onPress).toBeCalled()
   })
 
