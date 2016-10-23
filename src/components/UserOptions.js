@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Text, TouchableHighlight } from 'react-native'
+import { StyleSheet, View, Text, TouchableHighlight } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { mapProps, reduceProps, someProp } from '../utils/functional'
 
 export const Button = ({ children, onPress }) => (
-  <TouchableHighlight onPress={onPress}>
+  <TouchableHighlight onPress={onPress} style={s.button}>
     <Text>{children}</Text>
   </TouchableHighlight>
 )
@@ -28,17 +28,24 @@ export class UserOptions extends Component {
 
   render() {
     const { editMode } = this.state
-    const summary = this.makeSummary()
     return editMode ? (
-      <View>
-        {this.makeInputs()}
-        <Button onPress={this.cancel}>Cancel</Button>
-        <Button onPress={this.save}>Save</Button>
+      <View style={s.container}>
+        <View style={s.edit}>
+          {this.makeInputs()}
+        </View>
+        <View style={s.controls}>
+          <Button onPress={this.cancel}>Cancel</Button>
+          <Button onPress={this.save}>Save</Button>
+        </View>
       </View>
     ) : (
-      <View>
-        {summary}
-        <Button onPress={this.change}>Change</Button>
+      <View style={s.container}>
+        <View style={s.summary}>
+          {this.makeSummary()}
+        </View>
+        <View style={s.controls}>
+          <Button onPress={this.change}>Change</Button>
+        </View>
       </View>
     )
   }
@@ -104,7 +111,7 @@ export class UserOptions extends Component {
     return mapProps(this.state.options, ([ key, obj ]) => {
       const text = `${obj.label}: ${obj.value}`
       return (
-        <Text key={key}>{text}</Text>
+        <Text style={s.summaryItem} key={key}>{text}</Text>
       )
     })
   }
@@ -120,3 +127,25 @@ UserOptions.defaultProps = {
   options: {},
   onChange: () => 0,
 }
+
+const s = StyleSheet.create({
+  container: {
+    padding: 5,
+  },
+  summary: {
+    flexDirection: 'row',
+  },
+  summaryItem: {
+    marginRight: 15,
+  },
+  edit: {
+    flexDirection: 'column',
+  },
+  controls: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  button: {
+    padding: 5,
+  },
+})

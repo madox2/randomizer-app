@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import { View, TouchableHighlight, Text } from 'react-native'
+import { StyleSheet, View, TouchableHighlight, Text } from 'react-native'
 import { UserOptions } from './UserOptions'
 
 export const Button = props => (
-  <TouchableHighlight onPress={props.onPress}>
+  <TouchableHighlight onPress={props.onPress} style={s.button}>
     <Text>{props.children}</Text>
   </TouchableHighlight>
 )
@@ -26,21 +26,29 @@ export class SectionTemplate extends Component {
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     return (
-      <View>
-        <Text>{title}</Text>
+      <View style={s.container}>
+        <View style={s.header}>
+          <Text>{title}</Text>
+        </View>
         {options &&
-          <UserOptions options={options} onChange={onOptionsChange} />
+          <View style={s.options}>
+            <UserOptions options={options} onChange={onOptionsChange} />
+          </View>
         }
-        {children}
-        {displayBack &&
-          <Button onPress={this.back}>Back</Button>
-        }
-        {onFire &&
-          <Button onPress={onFire}>Fire</Button>
-        }
-        {onReset &&
-          <Button onPress={onReset}>Reset</Button>
-        }
+        <View style={s.content}>
+          {children}
+        </View>
+        <View style={s.controls}>
+          {displayBack &&
+            <Button onPress={this.back}>Back</Button>
+          }
+          {onFire &&
+            <Button onPress={onFire}>Fire</Button>
+          }
+          {onReset &&
+            <Button onPress={onReset}>Reset</Button>
+          }
+        </View>
       </View>
     )
   }
@@ -64,3 +72,32 @@ SectionTemplate.propTypes = {
 SectionTemplate.contextTypes = {
   back: PropTypes.func,
 }
+
+const s = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  header: {
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#79C753',
+  },
+  controls: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#79C753',
+  },
+  content: {
+    flex: 1,
+  },
+  button: {
+    padding: 20,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  options: {
+    backgroundColor: '#B565A7',
+  },
+})
