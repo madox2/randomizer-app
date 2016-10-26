@@ -1,7 +1,19 @@
 import React, { Component } from 'react'
-import { Text } from 'react-native'
+import { View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+
+const BottleItem = ({ angle, size }) => (
+  <View style={{
+    backgroundColor: 'red',
+    borderTopWidth: 20,
+    borderTopColor: 'blue',
+    width: 3,
+    height: size,
+    transform: [ { rotate: `${angle}deg` } ],
+  }}></View>
+)
 
 export class Bottle extends Component {
 
@@ -24,16 +36,28 @@ export class Bottle extends Component {
   }
 
   render() {
+    const s = makeStyles()
     return (
       <SectionTemplate
         onFire={this.onFire}
         onReset={this.onReset}
         title='Bottle'
       >
-        <Text>{this.state.angle}</Text>
+      <View style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+          <BottleItem angle={this.state.angle} size={s.bottleItem.size} />
+        </View>
       </SectionTemplate>
     )
   }
 
 }
 
+const makeStyles = ResponsiveStyleSheet.create(({ width, height }) => ({
+  bottleItem: {
+    size: Math.min(width, height * 2 / 3),
+  },
+}))
