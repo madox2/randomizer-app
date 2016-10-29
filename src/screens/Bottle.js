@@ -41,27 +41,31 @@ export class Bottle extends Component {
     const f = t => angleStep * t / duration - angleStep
     let time = 0
     // TODO: use animation frame instead?
-    const rotation = setInterval(() => {
+    this.rotation = setInterval(() => {
       this.setState({ angle: this.state.angle + f(time) })
       time += step
       if (time > duration) {
-        clearInterval(rotation)
+        clearInterval(this.rotation)
         this.setState({ rotating: false })
       }
     }, step)
   }
 
   componentWillMount() {
-    // TODO: cancel rotation
     this._panResponder = createPanResponder({
-      onStart: state => this.setState({
-        angle: this.computeAngle(state.x0, state.y0),
-      }),
+      onStart: state => {
+        this.rotation && clearInterval(this.rotation)
+        this.setState({
+          angle: this.computeAngle(state.x0, state.y0),
+          rotating: false,
+        })
+      },
       onMove: state => this.setState({
         angle: this.computeAngle(state.moveX, state.moveY),
       }),
       onEnd: state => {
         const velocity = Math.sqrt(state.vx * state.vx + state.vy * state.vy)
+        // TODO: support both directions for rotation
         this.startRotation(velocity)
       },
     })
