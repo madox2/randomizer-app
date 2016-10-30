@@ -33,22 +33,23 @@ export class Bottle extends Component {
     return rad * 180 / Math.PI
   }
 
-  startRotation() {
-    // TODO: compute velocity
+  startRotation(velocity) {
+    const duration = Math.sqrt(velocity) * 2000
+    const angleStep = Math.sqrt(velocity) * 15
+    const timeStep = 20
     this.setState({ rotating: true })
-    const step = 20, duration = 3000, angleStep = 33
     // TODO: non linear funciton
     const f = t => angleStep * t / duration - angleStep
     let time = 0
     // TODO: use animation frame instead?
     this.rotation = setInterval(() => {
       this.setState({ angle: this.state.angle + f(time) })
-      time += step
+      time += timeStep
       if (time > duration) {
         clearInterval(this.rotation)
         this.setState({ rotating: false })
       }
-    }, step)
+    }, timeStep)
   }
 
   componentWillMount() {
