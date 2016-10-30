@@ -33,7 +33,17 @@ export class Bottle extends Component {
     return rad * 180 / Math.PI
   }
 
-  startRotation(velocity) {
+  computeDirection(x, y, vx, vy) {
+    const curr = this.computeAngle(x, y)
+    const prev = this.computeAngle(x - vx, y - vy)
+    return Math.sign(prev - curr)
+  }
+
+  computeVelocity(vx, vy) {
+    return Math.sqrt(vx * vx + vy * vy)
+  }
+
+  startRotation(velocity, direction) {
     const duration = Math.sqrt(velocity) * 2000
     const angleStep = Math.sqrt(velocity) * 15
     const timeStep = 20
@@ -41,9 +51,8 @@ export class Bottle extends Component {
     // TODO: non linear funciton
     const f = t => angleStep * t / duration - angleStep
     let time = 0
-    // TODO: use animation frame instead?
     this.rotation = setInterval(() => {
-      this.setState({ angle: this.state.angle + f(time) })
+      this.setState({ angle: this.state.angle + direction * f(time) })
       time += timeStep
       if (time > duration) {
         clearInterval(this.rotation)
@@ -65,9 +74,9 @@ export class Bottle extends Component {
         angle: this.computeAngle(state.moveX, state.moveY),
       }),
       onEnd: state => {
-        const velocity = Math.sqrt(state.vx * state.vx + state.vy * state.vy)
-        // TODO: support both directions for rotation
-        this.startRotation(velocity)
+        const velocity = this.computeVelocity(state.vx, state.vy)
+        const direction = this.computeDirection(state.moveX, state.moveY, state.vx, state.vy)
+        this.startRotation(velocity, direction)
       },
     })
   }
