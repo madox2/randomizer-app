@@ -23,6 +23,7 @@ export class SectionTemplate extends Component {
       onFire,
       options,
       onOptionsChange,
+      style,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     return (
@@ -35,7 +36,7 @@ export class SectionTemplate extends Component {
             <UserOptions options={options} onChange={onOptionsChange} />
           </View>
         }
-        <View style={s.content}>
+        <View style={[s.content, style]}>
           {children}
         </View>
         <View style={s.controls}>
