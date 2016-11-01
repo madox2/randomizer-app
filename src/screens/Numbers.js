@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text } from 'react-native'
+import { Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 
@@ -55,11 +55,31 @@ export class Numbers extends Component {
         options={options}
         onOptionsChange={this.onOptionsChange}
         title='Numbers'
+        style={s.container}
       >
-        <Text>{this.state.number}</Text>
+        <TouchableOpacity
+          style={s.touchable}
+          onPress={this.onFire}
+          activeOpacity={0.6}
+        >
+          <Text style={s.text}>{this.state.number}</Text>
+        </TouchableOpacity>
       </SectionTemplate>
     )
   }
 
 }
+
+const s = StyleSheet.create({
+  container: {
+  },
+  touchable: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 150, // TODO: responsive font size?
+  },
+})
 
