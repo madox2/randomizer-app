@@ -24,16 +24,33 @@ export class Numbers extends Component {
       from: options.from.defaultValue,
       to: options.to.defaultValue,
       number: 0,
+      isGenerating: false,
     }
     this.onFire = this.onFire.bind(this)
     this.onReset = this.onReset.bind(this)
+    this.toggleGenerating = this.toggleGenerating.bind(this)
     this.onOptionsChange = this.onOptionsChange.bind(this)
+    this.generate = this.generate.bind(this)
   }
 
-  onFire() {
+  toggleGenerating() {
+    if (this.state.isGenerating) {
+      clearInterval(this.generation)
+      this.setState({ isGenerating: false })
+      return
+    }
+    this.generation = setInterval(this.generate, 75)
+    this.setState({ isGenerating: true })
+  }
+
+  generate() {
     const { from, to } = this.state
     const number = randomNumber(from, to)
     this.setState({ number })
+  }
+
+  onFire() {
+    this.generate()
   }
 
   onReset() {
@@ -59,7 +76,7 @@ export class Numbers extends Component {
       >
         <TouchableOpacity
           style={s.touchable}
-          onPress={this.onFire}
+          onPress={this.toggleGenerating}
           activeOpacity={0.6}
         >
           <Text style={s.text}>{this.state.number}</Text>
