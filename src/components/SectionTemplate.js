@@ -18,7 +18,6 @@ export class SectionTemplate extends Component {
   render() {
     const {
       children,
-      title,
       onReset,
       onFire,
       options,
@@ -28,9 +27,6 @@ export class SectionTemplate extends Component {
     const displayBack = this.props.onBack || this.context.back
     return (
       <View style={s.container}>
-        <View style={s.header}>
-          <Text>{title}</Text>
-        </View>
         {options &&
           <View style={s.options}>
             <UserOptions options={options} onChange={onOptionsChange} />
