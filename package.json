@@ -12,6 +12,7 @@
     "preset": "jest-react-native"
   },
   "dependencies": {
+    "randomcolor": "^0.4.4",
     "react": "^15.3.2",
     "react-native": "0.34.1",
     "react-native-responsive-stylesheet": "github:madox2/react-native-responsive-stylesheet",

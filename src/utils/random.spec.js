@@ -1,6 +1,6 @@
 /*eslint-env jest, jasmine*/
 
-import { randomNumber, randomBoolean } from './random'
+import { randomNumber, randomBoolean, randomColor } from './random'
 
 describe('randomNumber', () => {
 
@@ -64,4 +64,12 @@ describe('randomBoolean', () => {
     expect(randomBoolean()).toBe(true)
   })
 
+})
+
+describe('randomColor', () => {
+  it('should return color string', () => {
+    expect(typeof randomColor()).toBe('string')
+    expect(randomColor().length).toBe(7)
+    expect(randomColor()[0]).toBe('#')
+  })
 })

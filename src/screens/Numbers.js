@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { randomNumber } from '../utils/random'
+import { randomNumber, randomColor } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 
 const options = {
@@ -20,10 +20,12 @@ export class Numbers extends Component {
 
   constructor(...args) {
     super(...args)
+    const from = options.from.defaultValue
+    const to = options.to.defaultValue
+    const number = randomNumber(from, to)
+    const color = randomColor()
     this.state = {
-      from: options.from.defaultValue,
-      to: options.to.defaultValue,
-      number: 0,
+      from, to, number, color,
       isGenerating: false,
     }
     this.onFire = this.onFire.bind(this)
@@ -46,7 +48,8 @@ export class Numbers extends Component {
   generate() {
     const { from, to } = this.state
     const number = randomNumber(from, to)
-    this.setState({ number })
+    const color = randomColor()
+    this.setState({ number, color })
   }
 
   onFire() {
@@ -65,6 +68,7 @@ export class Numbers extends Component {
   }
 
   render() {
+    const { color, number } = this.state
     return (
       <SectionTemplate
         onFire={this.onFire}
@@ -79,7 +83,7 @@ export class Numbers extends Component {
           onPress={this.toggleGenerating}
           activeOpacity={0.6}
         >
-          <Text style={s.text}>{this.state.number}</Text>
+          <Text style={[s.text, { color }]}>{number}</Text>
         </TouchableOpacity>
       </SectionTemplate>
     )
