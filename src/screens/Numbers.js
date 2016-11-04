@@ -62,6 +62,11 @@ export class Numbers extends Component {
     })
   }
 
+  componentWillUnmount() {
+    this.generation && clearInterval(this.generation)
+  }
+
+
   render() {
     const { color, number } = this.state
     return (

@@ -76,6 +76,10 @@ export class Bottle extends Component {
     })
   }
 
+  componentWillUnmount() {
+    this.rotation && clearInterval(this.rotation)
+  }
+
   onBottleLayout(l) {
     this.bottleLayout = l.nativeEvent.layout
   }
