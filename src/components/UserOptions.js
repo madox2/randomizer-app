@@ -29,7 +29,7 @@ export class UserOptions extends Component {
   render() {
     const { editMode } = this.state
     return editMode ? (
-      <View style={s.container}>
+      <View style={[s.container, s.editContainer]}>
         <View style={s.edit}>
           {this.makeInputs()}
         </View>
@@ -43,9 +43,11 @@ export class UserOptions extends Component {
         <View style={s.summary}>
           {this.makeSummary()}
         </View>
-        <View style={s.controls}>
-          <Button onPress={this.change}>Change</Button>
-        </View>
+        {this.props.showChangeButton &&
+          <View style={s.controls}>
+            <Button onPress={this.change}>Change</Button>
+          </View>
+        }
       </View>
     )
   }
@@ -121,16 +123,24 @@ export class UserOptions extends Component {
 UserOptions.propTypes = {
   options: PropTypes.object,
   onChange: PropTypes.func,
+  showChangeButton: PropTypes.bool,
 }
 
 UserOptions.defaultProps = {
   options: {},
   onChange: () => 0,
+  showChangeButton: false,
 }
 
 const s = StyleSheet.create({
   container: {
     padding: 5,
+  },
+  editContainer: {
+    backgroundColor: '#DDD',
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#999',
   },
   summary: {
     flexDirection: 'row',
@@ -147,5 +157,8 @@ const s = StyleSheet.create({
   },
   button: {
     padding: 5,
+    paddingRight: 20,
+    paddingLeft: 20,
+    backgroundColor: '#999',
   },
 })

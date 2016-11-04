@@ -20,18 +20,13 @@ export class Matches extends Component {
       count: options.count.defaultValue,
       selected: 0,
     }
-    this.onFire = this.onFire.bind(this)
-    this.onReset = this.onReset.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
     this.onOptionsChange = this.onOptionsChange.bind(this)
   }
 
-  onFire() {
+  onRefresh() {
     const selected = randomNumber(1, this.state.count)
     this.setState({ selected })
-  }
-
-  onReset() {
-    this.setState({ selected: 0 })
   }
 
   onOptionsChange({ count }) {
@@ -43,8 +38,7 @@ export class Matches extends Component {
   render() {
     return (
       <SectionTemplate
-        onFire={this.onFire}
-        onReset={this.onReset}
+        onRefresh={this.onRefresh}
         options={options}
         onOptionsChange={this.onOptionsChange}
         title='Matches'

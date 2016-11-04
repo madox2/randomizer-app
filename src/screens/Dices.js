@@ -20,20 +20,15 @@ export class Dices extends Component {
       count: options.count.defaultValue,
       results: [],
     }
-    this.onFire = this.onFire.bind(this)
-    this.onReset = this.onReset.bind(this)
     this.onOptionsChange = this.onOptionsChange.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
   }
 
-  onFire() {
+  onRefresh() {
     const results = new Array(this.state.count)
       .fill(0)
       .map(() => randomNumber(1, 6))
     this.setState({ results })
-  }
-
-  onReset() {
-    this.setState({ results: [] })
   }
 
   onOptionsChange({ count }) {
@@ -45,8 +40,7 @@ export class Dices extends Component {
   render() {
     return (
       <SectionTemplate
-        onFire={this.onFire}
-        onReset={this.onReset}
+        onRefresh={this.onRefresh}
         options={options}
         onOptionsChange={this.onOptionsChange}
         title='Dices'

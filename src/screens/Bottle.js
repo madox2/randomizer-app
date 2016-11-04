@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, PanResponder } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
-import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 export class Bottle extends Component {
@@ -10,11 +9,6 @@ export class Bottle extends Component {
     super(...args)
     this.state = { angle: 0, rotating: false }
     this.onBottleLayout = this.onBottleLayout.bind(this)
-  }
-
-  onFire() {
-    const angle = randomNumber(0, 360)
-    this.setState({ angle })
   }
 
   computeAngle(x, y) {

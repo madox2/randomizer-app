@@ -10,24 +10,18 @@ export class Coin extends Component {
     this.state = {
       side: false,
     }
-    this.onFire = this.onFire.bind(this)
-    this.onReset = this.onReset.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
   }
 
-  onFire() {
+  onRefresh() {
     const side = randomBoolean()
     this.setState({ side })
-  }
-
-  onReset() {
-    this.setState({ side: false })
   }
 
   render() {
     return (
       <SectionTemplate
-        onFire={this.onFire}
-        onReset={this.onReset}
+        onRefresh={this.onRefresh}
         title='Coin'
       >
         <Text>{'' + this.state.side}</Text>

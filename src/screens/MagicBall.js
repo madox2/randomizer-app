@@ -33,25 +33,19 @@ export class MagicBall extends Component {
     this.state = {
       selected: null,
     }
-    this.onFire = this.onFire.bind(this)
-    this.onReset = this.onReset.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
   }
 
-  onFire() {
+  onRefresh() {
     const selected = randomNumber(0, answers.length - 1)
     this.setState({ selected })
-  }
-
-  onReset() {
-    this.setState({ selected: null })
   }
 
   render() {
     const { selected } = this.state
     return (
       <SectionTemplate
-        onFire={this.onFire}
-        onReset={this.onReset}
+        onRefresh={this.onRefresh}
         title='Magic 8-Ball'
       >
         <Text>

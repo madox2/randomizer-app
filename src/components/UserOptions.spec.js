@@ -30,8 +30,13 @@ describe('<UserOptions />', () => {
   })
 
   it('should render change button', () => {
-    const wrapper = shallow(<UserOptions />)
+    const wrapper = shallow(<UserOptions showChangeButton={true} />)
     expect(wrapper.find('Button[children="Change"]').length).toBe(1)
+  })
+
+  it('should not render change button', () => {
+    const wrapper = shallow(<UserOptions />)
+    expect(wrapper.find('Button[children="Change"]').length).toBe(0)
   })
 
   it('should display edit mode', () => {
@@ -42,7 +47,7 @@ describe('<UserOptions />', () => {
         defaultValue: 1,
       },
     }
-    const wrapper = shallow(<UserOptions options={options} />)
+    const wrapper = shallow(<UserOptions options={options} showChangeButton={true} />)
     const change = wrapper.find('Button[children="Change"]')
     expect(wrapper.find('Button[children="Cancel"]').length).toBe(0)
     expect(wrapper.find('Button[children="Save"]').length).toBe(0)
@@ -54,6 +59,21 @@ describe('<UserOptions />', () => {
     expect(wrapper.find('InputNumber[label="Number"]').length).toBe(1)
   })
 
+  it('should display edit mode when calling change API', () => {
+    const options = {
+      number: {
+        type: 'number',
+        label: 'Number',
+        defaultValue: 1,
+      },
+    }
+    const wrapper = shallow(<UserOptions options={options} showChangeButton={true} />)
+    wrapper.instance().change()
+    expect(wrapper.find('Button[children="Cancel"]').length).toBe(0)
+    expect(wrapper.find('Button[children="Save"]').length).toBe(0)
+    expect(wrapper.find('InputNumber[label="Number"]').length).toBe(0)
+  })
+
   it('should cancel editing', () => {
     const options = {
       number: {
@@ -62,7 +82,7 @@ describe('<UserOptions />', () => {
         defaultValue: 1,
       },
     }
-    const wrapper = shallow(<UserOptions options={options} />)
+    const wrapper = shallow(<UserOptions options={options} showChangeButton={true} />)
     const change = wrapper.find('Button[children="Change"]')
     change.simulate('press')
     wrapper.update()
@@ -87,7 +107,7 @@ describe('<UserOptions />', () => {
       },
     }
     const onChange = jest.fn()
-    const wrapper = shallow(<UserOptions options={options} onChange={onChange} />)
+    const wrapper = shallow(<UserOptions options={options} onChange={onChange} showChangeButton={true} />)
     const change = wrapper.find('Button[children="Change"]')
     change.simulate('press')
     wrapper.update()
@@ -120,7 +140,7 @@ describe('<UserOptions />', () => {
       },
     }
     const onChange = jest.fn()
-    const wrapper = shallow(<UserOptions options={options} onChange={onChange} />)
+    const wrapper = shallow(<UserOptions options={options} onChange={onChange} showChangeButton={true} />)
     const change = wrapper.find('Button[children="Change"]')
     change.simulate('press')
     wrapper.update()

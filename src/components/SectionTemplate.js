@@ -9,13 +9,13 @@ export class SectionTemplate extends Component {
   constructor(...args) {
     super(...args)
     this.back = this.back.bind(this)
+    this.onSettings = this.onSettings.bind(this)
   }
 
   render() {
     const {
       children,
-      onReset,
-      onFire,
+      onRefresh,
       options,
       onOptionsChange,
       style,
@@ -26,7 +26,11 @@ export class SectionTemplate extends Component {
       <View style={s.container}>
         {options &&
           <View style={s.options}>
-            <UserOptions options={options} onChange={onOptionsChange} />
+            <UserOptions
+              ref={r => this.options = r}
+              options={options}
+              onChange={onOptionsChange}
+            />
           </View>
         }
         <View style={[s.content, style]}>
@@ -37,14 +41,18 @@ export class SectionTemplate extends Component {
             {displayBack && <ControlButton onPress={this.back} type='back' />}
           </View>
           <View style={s.controlButtonContainer}>
-            {onFire && <ControlButton onPress={onFire} type='refresh' />}
+            {onRefresh && <ControlButton onPress={onRefresh} type='refresh' />}
           </View>
           <View style={s.controlButtonContainer}>
-            {onReset && <ControlButton onPress={onReset} type='settings' />}
+            {options && <ControlButton onPress={this.onSettings} type='settings' />}
           </View>
         </View>
       </View>
     )
+  }
+
+  onSettings() {
+    this.options.change()
   }
 
   back() {
@@ -56,8 +64,7 @@ export class SectionTemplate extends Component {
 
 SectionTemplate.propTypes = {
   onBack: PropTypes.func,
-  onFire: PropTypes.func,
-  onReset: PropTypes.func,
+  onRefresh: PropTypes.func,
   options: PropTypes.object,
   onOptionsChange: PropTypes.func,
   title: PropTypes.string,
@@ -84,6 +91,5 @@ const makeStyles = ResponsiveStyleSheet.create(({ width }) => ({
     flex: 1,
   },
   options: {
-    backgroundColor: '#B565A7',
   },
 }))

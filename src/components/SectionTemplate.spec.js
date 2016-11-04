@@ -19,8 +19,9 @@ describe('<SectionTemplate />', () => {
   })
 
   it('should render all buttons', () => {
+    const options = { number: { type: 'number' } }
     const wrapper = shallow(
-      <SectionTemplate onBack={jest.fn()} onFire={jest.fn()} onReset={jest.fn()} />
+      <SectionTemplate onBack={jest.fn()} options={options} onRefresh={jest.fn()} />
     )
     expect(wrapper.find(ControlButton).length).toBe(3)
   })
@@ -30,6 +31,13 @@ describe('<SectionTemplate />', () => {
       <SectionTemplate />
     )
     expect(wrapper.find(ControlButton).length).toBe(0)
+  })
+
+  it('should render not render settings button', () => {
+    const wrapper = shallow(
+      <SectionTemplate />
+    )
+    expect(wrapper.find('ControlButton[type="settings"]').length).toBe(0)
   })
 
   it('should call onBack handler from props', () => {
@@ -48,22 +56,13 @@ describe('<SectionTemplate />', () => {
     expect(context.back).toHaveBeenCalledTimes(1)
   })
 
-  it('should call onFire handler', () => {
-    const onFire = jest.fn()
+  it('should call onRefresh handler', () => {
+    const onRefresh = jest.fn()
     const wrapper = shallow(
-      <SectionTemplate onFire={onFire} />
+      <SectionTemplate onRefresh={onRefresh} />
     )
     wrapper.find('ControlButton[type="refresh"]').simulate('press')
-    expect(onFire).toHaveBeenCalledTimes(1)
-  })
-
-  it('should call onReset handler', () => {
-    const onReset = jest.fn()
-    const wrapper = shallow(
-      <SectionTemplate onReset={onReset} />
-    )
-    wrapper.find('ControlButton[type="settings"]').simulate('press')
-    expect(onReset).toHaveBeenCalledTimes(1)
+    expect(onRefresh).toHaveBeenCalledTimes(1)
   })
 
   it('should display user options', () => {
