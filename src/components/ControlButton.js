@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, Image } from 'react-native'
 
-const BUTTON_SIZE = 80
+const BUTTON_SIZE = 70
 
 export const ControlButton = ({ onPress, type }) => (
   <TouchableOpacity onPress={onPress} style={s.button} activeOpacity={0.5}>
@@ -12,7 +12,7 @@ export const ControlButton = ({ onPress, type }) => (
 const s = StyleSheet.create({
   button: {
     padding: 20,
-    backgroundColor: '#4078c0',
+    backgroundColor: '#888',
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: BUTTON_SIZE / 2,

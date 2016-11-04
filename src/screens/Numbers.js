@@ -28,7 +28,6 @@ export class Numbers extends Component {
       from, to, number, color,
       isGenerating: false,
     }
-    this.onFire = this.onFire.bind(this)
     this.onReset = this.onReset.bind(this)
     this.toggleGenerating = this.toggleGenerating.bind(this)
     this.onOptionsChange = this.onOptionsChange.bind(this)
@@ -52,10 +51,6 @@ export class Numbers extends Component {
     this.setState({ number, color })
   }
 
-  onFire() {
-    this.generate()
-  }
-
   onReset() {
     this.setState({ number: 0 })
   }
@@ -71,7 +66,6 @@ export class Numbers extends Component {
     const { color, number } = this.state
     return (
       <SectionTemplate
-        onFire={this.onFire}
         onReset={this.onReset}
         options={options}
         onOptionsChange={this.onOptionsChange}

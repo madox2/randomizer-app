@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import { UserOptions } from './UserOptions'
 import { ControlButton } from './ControlButton'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 export class SectionTemplate extends Component {
 
@@ -20,6 +21,7 @@ export class SectionTemplate extends Component {
       style,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
+    const s = makeStyles()
     return (
       <View style={s.container}>
         {options &&
@@ -31,15 +33,15 @@ export class SectionTemplate extends Component {
           {children}
         </View>
         <View style={s.controls}>
-          {displayBack &&
-            <ControlButton onPress={this.back} type='back' />
-          }
-          {onFire &&
-            <ControlButton onPress={onFire} type='refresh' />
-          }
-          {onReset &&
-            <ControlButton onPress={onReset} type='settings' />
-          }
+          <View style={s.controlButtonContainer}>
+            {displayBack && <ControlButton onPress={this.back} type='back' />}
+          </View>
+          <View style={s.controlButtonContainer}>
+            {onFire && <ControlButton onPress={onFire} type='refresh' />}
+          </View>
+          <View style={s.controlButtonContainer}>
+            {onReset && <ControlButton onPress={onReset} type='settings' />}
+          </View>
         </View>
       </View>
     )
@@ -65,7 +67,7 @@ SectionTemplate.contextTypes = {
   back: PropTypes.func,
 }
 
-const s = StyleSheet.create({
+const makeStyles = ResponsiveStyleSheet.create(({ width }) => ({
   container: {
     flex: 1,
   },
@@ -74,10 +76,14 @@ const s = StyleSheet.create({
     justifyContent: 'space-around',
     paddingBottom: 20,
   },
+  controlButtonContainer: {
+    width: width / 3,
+    alignItems: 'center',
+  },
   content: {
     flex: 1,
   },
   options: {
     backgroundColor: '#B565A7',
   },
-})
+}))

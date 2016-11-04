@@ -9,18 +9,12 @@ export class Bottle extends Component {
   constructor(...args) {
     super(...args)
     this.state = { angle: 0, rotating: false }
-    this.onFire = this.onFire.bind(this)
-    this.onReset = this.onReset.bind(this)
     this.onBottleLayout = this.onBottleLayout.bind(this)
   }
 
   onFire() {
     const angle = randomNumber(0, 360)
     this.setState({ angle })
-  }
-
-  onReset() {
-    this.setState({ angle: 0 })
   }
 
   computeAngle(x, y) {
@@ -89,7 +83,7 @@ export class Bottle extends Component {
   render() {
     const s = makeStyles()
     return (
-      <SectionTemplate onFire={this.onFire} onReset={this.onReset} title='Bottle'>
+      <SectionTemplate title='Bottle'>
         <View style={s.container} {...this._panResponder.panHandlers}>
           <BottleItem
             angle={this.state.angle}
