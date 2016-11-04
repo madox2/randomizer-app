@@ -2,7 +2,8 @@
 import React from 'react'
 import { View } from 'react-native'
 import { shallow } from 'enzyme'
-import { SectionTemplate, Button } from './SectionTemplate'
+import { SectionTemplate } from './SectionTemplate'
+import { ControlButton } from './ControlButton'
 import { UserOptions } from './UserOptions'
 
 describe('<SectionTemplate />', () => {
@@ -21,14 +22,14 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onBack={jest.fn()} onFire={jest.fn()} onReset={jest.fn()} />
     )
-    expect(wrapper.find(Button).length).toBe(3)
+    expect(wrapper.find(ControlButton).length).toBe(3)
   })
 
   it('should not render buttons if not needed', () => {
     const wrapper = shallow(
       <SectionTemplate />
     )
-    expect(wrapper.find(Button).length).toBe(0)
+    expect(wrapper.find(ControlButton).length).toBe(0)
   })
 
   it('should call onBack handler from props', () => {
@@ -36,14 +37,14 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onBack={onBack} />
     )
-    wrapper.find('Button[children="Back"]').simulate('press')
+    wrapper.find('ControlButton[type="back"]').simulate('press')
     expect(onBack).toHaveBeenCalledTimes(1)
   })
 
   it('should default back function from context', () => {
     const context = { back: jest.fn() }
     const wrapper = shallow(<SectionTemplate />, { context })
-    wrapper.find('Button[children="Back"]').simulate('press')
+    wrapper.find('ControlButton[type="back"]').simulate('press')
     expect(context.back).toHaveBeenCalledTimes(1)
   })
 
@@ -52,7 +53,7 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onFire={onFire} />
     )
-    wrapper.find('Button[children="Fire"]').simulate('press')
+    wrapper.find('ControlButton[type="refresh"]').simulate('press')
     expect(onFire).toHaveBeenCalledTimes(1)
   })
 
@@ -61,7 +62,7 @@ describe('<SectionTemplate />', () => {
     const wrapper = shallow(
       <SectionTemplate onReset={onReset} />
     )
-    wrapper.find('Button[children="Reset"]').simulate('press')
+    wrapper.find('ControlButton[type="settings"]').simulate('press')
     expect(onReset).toHaveBeenCalledTimes(1)
   })
 

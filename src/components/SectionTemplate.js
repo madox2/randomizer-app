@@ -1,12 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet, View, TouchableHighlight, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { UserOptions } from './UserOptions'
-
-export const Button = props => (
-  <TouchableHighlight onPress={props.onPress} style={s.button}>
-    <Text>{props.children}</Text>
-  </TouchableHighlight>
-)
+import { ControlButton } from './ControlButton'
 
 export class SectionTemplate extends Component {
 
@@ -37,13 +32,13 @@ export class SectionTemplate extends Component {
         </View>
         <View style={s.controls}>
           {displayBack &&
-            <Button onPress={this.back}>Back</Button>
+            <ControlButton onPress={this.back} type='back' />
           }
           {onFire &&
-            <Button onPress={onFire}>Fire</Button>
+            <ControlButton onPress={onFire} type='refresh' />
           }
           {onReset &&
-            <Button onPress={onReset}>Reset</Button>
+            <ControlButton onPress={onReset} type='settings' />
           }
         </View>
       </View>
@@ -74,25 +69,13 @@ const s = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: '#79C753',
-  },
   controls: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#79C753',
+    paddingBottom: 20,
   },
   content: {
     flex: 1,
-  },
-  button: {
-    padding: 20,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
   options: {
     backgroundColor: '#B565A7',
