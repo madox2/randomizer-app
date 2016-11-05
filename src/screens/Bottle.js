@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, PanResponder } from 'react-native'
+import { View, PanResponder, Image } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
@@ -12,7 +12,7 @@ export class Bottle extends Component {
   }
 
   computeAngle(x, y) {
-    const PADDING_TOP = 60 // FIXME: how to handle absolute vs relative position?
+    const PADDING_TOP = 0 // FIXME: how to handle absolute vs relative position?
     const mx = this.bottleLayout.x + this.bottleLayout.width / 2
     const my = (this.bottleLayout.y + PADDING_TOP) + this.bottleLayout.height / 2
     const dx = x - mx
@@ -97,7 +97,7 @@ export class Bottle extends Component {
 
 const makeStyles = ResponsiveStyleSheet.create(({ width, height }) => ({
   bottleItem: {
-    size: Math.min(width, height * 2 / 3),
+    size: Math.min(width - 10, height * 2 / 3),
   },
   container: {
     flex: 1,
@@ -107,16 +107,20 @@ const makeStyles = ResponsiveStyleSheet.create(({ width, height }) => ({
 }))
 
 const BottleItem = ({ angle, size, onLayout }) => (
-  <View style={{
-      backgroundColor: 'red',
-      borderTopWidth: 20,
-      borderTopColor: 'blue',
-      width: 3,
-      height: size,
+  <View
+    onLayout={onLayout}
+    style={{
       transform: [ { rotate: `${angle}deg` } ],
     }}
-    onLayout={onLayout}
-  ></View>
+  >
+    <Image
+      source={{ uri: '../resources/bottle-green.svg' }}
+      style={{
+        height: size,
+        width: size / 4,
+      }}
+    />
+  </View>
 )
 
 const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
