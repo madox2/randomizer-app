@@ -2,7 +2,7 @@ import React from 'react'
 import { TouchableOpacity, Text, Image } from 'react-native'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
-export const SectionButton = ({ title, onPress, color, uri }) => {
+export const SectionButton = ({ title, onPress, color, type }) => {
   const s = makeStyles()
   const container = [
     { backgroundColor: color },
@@ -10,7 +10,7 @@ export const SectionButton = ({ title, onPress, color, uri }) => {
   ]
   return (
     <TouchableOpacity style={container} onPress={onPress} activeOpacity={0.5}>
-      <Image style={s.image} source={{ uri }} />
+      <Image style={s.image} source={{ uri: `../resources/icons/${type}.svg` }} />
       <Text>{title}</Text>
     </TouchableOpacity>
   )

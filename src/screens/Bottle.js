@@ -114,7 +114,7 @@ const BottleItem = ({ angle, size, onLayout }) => (
     }}
   >
     <Image
-      source={{ uri: '../resources/bottle-green.svg' }}
+      source={{ uri: '../resources/images/bottle.svg' }}
       style={{
         height: size,
         width: size / 4,

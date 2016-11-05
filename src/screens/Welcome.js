@@ -4,12 +4,12 @@ import { SectionButton } from '../components/SectionButton'
 import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from '.'
 
 const sections = [
-  { title: 'Numbers',      color: '#79C753', uri: '../resources/numbers.svg' },
-  { title: 'Coin',         color: '#F7786B', uri: '../resources/coin.svg' },
-  { title: 'Bottle',       color: '#B18F6A', uri: '../resources/bottle.svg' },
-  { title: 'Magic 8-Ball', color: '#92B6D5', uri: '../resources/ball.svg' },
-  { title: 'Matches',      color: '#FAE03C', uri: '../resources/matches.svg' },
-  { title: 'Dices',        color: '#B565A7', uri: '../resources/dice.svg' },
+  { title: 'Numbers',      color: '#79C753', type: 'numbers' },
+  { title: 'Coin',         color: '#F7786B', type: 'coin' },
+  { title: 'Bottle',       color: '#B18F6A', type: 'bottle' },
+  { title: 'Magic 8-Ball', color: '#92B6D5', type: 'ball' },
+  { title: 'Matches',      color: '#FAE03C', type: 'matches' },
+  { title: 'Dices',        color: '#B565A7', type: 'dice' },
 ]
 
 export const Welcome = (props, { navigate }) => {
