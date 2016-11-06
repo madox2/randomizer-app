@@ -32,10 +32,9 @@ export class Bottle extends Component {
   }
 
   startRotation(velocity, direction) {
-    // TODO: tune parameters for touch events
     const duration = Math.sqrt(velocity) * 2000
-    const angleStep = Math.sqrt(velocity) * 15
-    const timeStep = 20
+    const angleStep = Math.sqrt(velocity) * 33
+    const timeStep = 30
     this.setState({ rotating: true })
     // TODO: non linear funciton
     const f = t => angleStep * t / duration - angleStep
