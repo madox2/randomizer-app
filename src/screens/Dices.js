@@ -40,6 +40,7 @@ export class Dices extends Component {
   render() {
     return (
       <SectionTemplate
+        color={this.props.color}
         onRefresh={this.onRefresh}
         options={options}
         onOptionsChange={this.onOptionsChange}

@@ -23,6 +23,7 @@ export class Coin extends Component {
       <SectionTemplate
         onRefresh={this.onRefresh}
         title='Coin'
+        color={this.props.color}
       >
         <Text>{'' + this.state.side}</Text>
       </SectionTemplate>

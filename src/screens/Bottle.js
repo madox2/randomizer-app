@@ -80,7 +80,7 @@ export class Bottle extends Component {
   render() {
     const s = makeStyles()
     return (
-      <SectionTemplate title='Bottle'>
+      <SectionTemplate title='Bottle' color={this.props.color}>
         <View style={s.container} {...this._panResponder.panHandlers}>
           <BottleItem
             angle={this.state.angle}

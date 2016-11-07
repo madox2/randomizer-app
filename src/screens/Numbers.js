@@ -76,6 +76,7 @@ export class Numbers extends Component {
         onOptionsChange={this.onOptionsChange}
         title='Numbers'
         style={s.container}
+        color={this.props.color}
       >
         <TouchableOpacity
           style={s.touchable}

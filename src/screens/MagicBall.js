@@ -47,6 +47,7 @@ export class MagicBall extends Component {
       <SectionTemplate
         onRefresh={this.onRefresh}
         title='Magic 8-Ball'
+        color={this.props.color}
       >
         <Text>
         {selected === null

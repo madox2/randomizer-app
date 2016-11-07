@@ -3,32 +3,35 @@ import { View, StyleSheet } from 'react-native'
 import { SectionButton } from '../components/SectionButton'
 import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from '.'
 
-const sections = [
-  { title: 'Numbers',      color: '#79C753', type: 'numbers' },
-  { title: 'Coin',         color: '#F7786B', type: 'coin' },
-  { title: 'Bottle',       color: '#B18F6A', type: 'bottle' },
-  { title: 'Magic 8-Ball', color: '#92B6D5', type: 'ball' },
-  { title: 'Matches',      color: '#FAE03C', type: 'matches' },
-  { title: 'Dices',        color: '#B565A7', type: 'dice' },
-]
-
 export const Welcome = (props, { navigate }) => {
 
-  const navig = Screen => () => navigate(() => <Screen />)
+  const data = [
+    { title: 'Numbers',      color: '#79C753', Component: Numbers,   type: 'numbers' },
+    { title: 'Coin',         color: '#F7786B', Component: Coin,      type: 'coin' },
+    { title: 'Bottle',       color: '#B18F6A', Component: Bottle,    type: 'bottle' },
+    { title: 'Magic 8-Ball', color: '#92B6D5', Component: MagicBall, type: 'ball' },
+    { title: 'Matches',      color: '#FAE03C', Component: Matches,   type: 'matches' },
+    { title: 'Dices',        color: '#B565A7', Component: Dices,     type: 'dice' },
+  ]
+
+  const sections = data.map(({ title, color, Component, type }) => ({
+    onPress: () => navigate(() => <Component color={color} />),
+    title, color, type,
+  }))
 
   return (
     <View style={s.container}>
       <View style={s.row}>
-        <SectionButton { ...sections[0] } onPress={navig(Numbers)} />
-        <SectionButton { ...sections[1] } onPress={navig(Coin)} />
+        <SectionButton { ...sections[0] } />
+        <SectionButton { ...sections[1] } />
       </View>
       <View style={s.row}>
-        <SectionButton { ...sections[2] } onPress={navig(Bottle)} />
-        <SectionButton { ...sections[3] } onPress={navig(MagicBall)} />
+        <SectionButton { ...sections[2] } />
+        <SectionButton { ...sections[3] } />
       </View>
       <View style={s.row}>
-        <SectionButton { ...sections[4] } onPress={navig(Matches)} />
-        <SectionButton { ...sections[5] } onPress={navig(Dices)} />
+        <SectionButton { ...sections[4] } />
+        <SectionButton { ...sections[5] } />
       </View>
     </View>
   )

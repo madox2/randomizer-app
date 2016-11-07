@@ -42,6 +42,7 @@ export class Matches extends Component {
         options={options}
         onOptionsChange={this.onOptionsChange}
         title='Matches'
+        color={this.props.color}
       >
         <Text>{this.state.selected}</Text>
       </SectionTemplate>

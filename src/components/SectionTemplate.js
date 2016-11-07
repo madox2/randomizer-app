@@ -19,11 +19,12 @@ export class SectionTemplate extends Component {
       options,
       onOptionsChange,
       style,
+      color,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     const s = makeStyles()
     return (
-      <View style={s.container}>
+      <View style={[s.container, { backgroundColor: color }]}>
         {options &&
           <View style={s.options}>
             <UserOptions
@@ -68,6 +69,7 @@ SectionTemplate.propTypes = {
   options: PropTypes.object,
   onOptionsChange: PropTypes.func,
   title: PropTypes.string,
+  color: PropTypes.string,
 }
 
 SectionTemplate.contextTypes = {
