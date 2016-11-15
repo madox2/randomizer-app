@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
-import { View, PanResponder, Image } from 'react-native'
+import { View, PanResponder, Animated, Image } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+
+const bottleSource = { uri: '../resources/images/bottle.svg' }
 
 export class Bottle extends Component {
 
   constructor(...args) {
     super(...args)
-    this.state = { angle: 0, rotating: false }
+    this.state = {
+      angle: 0,
+      rotation: new Animated.Value(0),
+      rotating: false,
+    }
     this.onBottleLayout = this.onBottleLayout.bind(this)
   }
 
@@ -31,22 +37,35 @@ export class Bottle extends Component {
     return Math.sqrt(vx * vx + vy * vy)
   }
 
-  startRotation(velocity, direction) {
-    const duration = Math.sqrt(velocity) * 2000
-    const angleStep = Math.sqrt(velocity) * 33
-    const timeStep = 30
-    this.setState({ rotating: true })
-    // TODO: non linear funciton
-    const f = t => angleStep * t / duration - angleStep
-    let time = 0
-    this.rotation = setInterval(() => {
-      this.setState({ angle: this.state.angle + direction * f(time) })
-      time += timeStep
-      if (time > duration) {
-        clearInterval(this.rotation)
-        this.setState({ rotating: false })
+  startRotation() {
+    if (this.state.rotating) {
+      return
+    }
+    // TODO: compute start - end position
+    // TODO: direction
+    // TODO: better easing
+    const time = new Animated.Value(0)
+    Animated.timing(time, {
+      toValue: 10,
+      duration: 3000,
+    }).start(() => {
+      // FIXME: @see ./Bottle.js
+      try {
+        this.setState({
+          rotation: new Animated.Value(0),
+        })
+      } catch(e) {
+        console.warn(e)
       }
-    }, timeStep)
+      this.setState({
+        rotation: new Animated.Value(0),
+        rotating: false,
+      })
+    })
+    this.setState({
+      rotation: Animated.modulo(time, 2),
+      rotating: true,
+    })
   }
 
   componentWillMount() {
@@ -78,15 +97,35 @@ export class Bottle extends Component {
   }
 
   render() {
+    const { angle, rotating, rotation } = this.state
     const s = makeStyles()
     return (
       <SectionTemplate title='Bottle' color={this.props.color}>
         <View style={s.container} {...this._panResponder.panHandlers}>
-          <BottleItem
-            angle={this.state.angle}
-            size={s.bottleItem.size}
-            onLayout={this.onBottleLayout}
-          />
+          {!rotating &&
+            <View
+              onLayout={this.onBottleLayout}
+              style={{
+                transform: [ { rotate: `${angle}deg` } ],
+              }}
+            >
+              <Image source={bottleSource} style={s.image} />
+            </View>
+          }
+          {rotating &&
+            <View>
+              <Animated.Image source={bottleSource}
+                style={[s.image, {
+                  transform: [
+                    {rotate: rotation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['0deg', '360deg'],
+                    })},
+                  ],
+                }]}
+              />
+            </View>
+          }
         </View>
       </SectionTemplate>
     )
@@ -95,8 +134,9 @@ export class Bottle extends Component {
 }
 
 const makeStyles = ResponsiveStyleSheet.create(({ width, height }) => ({
-  bottleItem: {
-    size: Math.min(width - 10, height * 2 / 3),
+  image: {
+    height: Math.min(width - 10, height * 2 / 3),
+    width: Math.min(width - 10, height * 2 / 3) / 4,
   },
   container: {
     flex: 1,
@@ -104,23 +144,6 @@ const makeStyles = ResponsiveStyleSheet.create(({ width, height }) => ({
     justifyContent: 'center',
   },
 }))
-
-const BottleItem = ({ angle, size, onLayout }) => (
-  <View
-    onLayout={onLayout}
-    style={{
-      transform: [ { rotate: `${angle}deg` } ],
-    }}
-  >
-    <Image
-      source={{ uri: '../resources/images/bottle.svg' }}
-      style={{
-        height: size,
-        width: size / 4,
-      }}
-    />
-  </View>
-)
 
 const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
   onStartShouldSetPanResponder: () => true,

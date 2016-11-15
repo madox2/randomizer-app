@@ -62,7 +62,7 @@ export class Coin extends Component {
         <TouchableOpacity
           onPress={this.throwCoin}
           activeOpacity={0.6}
-        style={s.touchable}
+          style={s.touchable}
         >
           {!this.state.rotating &&
             <Image
