@@ -30,23 +30,24 @@ export class Bottle extends Component {
   computeDirection(x, y, vx, vy) {
     const curr = this.computeAngle(x, y)
     const prev = this.computeAngle(x - vx, y - vy)
-    return Math.sign(prev - curr)
+    return Math.sign(curr - prev)
   }
 
   computeVelocity(vx, vy) {
     return Math.sqrt(vx * vx + vy * vy)
   }
 
-  startRotation() {
+  startRotation(velocity, direction) {
     if (this.state.rotating) {
       return
     }
+    const { angle } = this.state
     // TODO: compute start - end position
     // TODO: direction
     // TODO: better easing
-    const time = new Animated.Value(0)
+    const time = new Animated.Value(angle)
     Animated.timing(time, {
-      toValue: 10,
+      toValue: direction * 360 * 10 + angle,
       duration: 3000,
     }).start(() => {
       // FIXME: @see ./Bottle.js
@@ -63,7 +64,7 @@ export class Bottle extends Component {
       })
     })
     this.setState({
-      rotation: Animated.modulo(time, 2),
+      rotation: Animated.modulo(time, 360),
       rotating: true,
     })
   }
@@ -118,7 +119,7 @@ export class Bottle extends Component {
                 style={[s.image, {
                   transform: [
                     {rotate: rotation.interpolate({
-                      inputRange: [0, 1],
+                      inputRange: [0, 360],
                       outputRange: ['0deg', '360deg'],
                     })},
                   ],
