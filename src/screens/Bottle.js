@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, PanResponder, Animated, Image } from 'react-native'
+import { View, PanResponder, Animated, Easing, Image } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { randomNumber } from '../utils/random'
 
 const bottleSource = { uri: '../resources/images/bottle.svg' }
 
@@ -42,13 +43,13 @@ export class Bottle extends Component {
       return
     }
     const { angle } = this.state
-    // TODO: compute start - end position
-    // TODO: direction
-    // TODO: better easing
+    const newAngle = randomNumber(0, 360)
+    // TODO: velocity
     const time = new Animated.Value(angle)
     Animated.timing(time, {
-      toValue: direction * 360 * 10 + angle,
+      toValue: direction * 360 * 10 + newAngle,
       duration: 3000,
+      easing: Easing.out(Easing.cubic),
     }).start(() => {
       // FIXME: @see ./Bottle.js
       try {
@@ -66,6 +67,7 @@ export class Bottle extends Component {
     this.setState({
       rotation: Animated.modulo(time, 360),
       rotating: true,
+      angle: newAngle,
     })
   }
 
