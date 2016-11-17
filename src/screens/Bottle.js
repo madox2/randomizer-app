@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { View, PanResponder, Animated, Easing, Image } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-import { randomNumber } from '../utils/random'
 
 const bottleSource = { uri: '../resources/images/bottle.svg' }
 
@@ -43,12 +42,14 @@ export class Bottle extends Component {
       return
     }
     const { angle } = this.state
-    const newAngle = randomNumber(0, 360)
-    // TODO: velocity
-    const time = new Animated.Value(angle)
-    Animated.timing(time, {
-      toValue: direction * 360 * 10 + newAngle,
-      duration: 3000,
+    velocity = Math.max(0.1, velocity)
+    const duration = Math.sqrt(velocity) * 2500
+    const spin = velocity * 5 // TODO: non linear function
+    const anim = new Animated.Value(angle)
+    const newAngle = Math.floor(direction * 360 * spin)
+    Animated.timing(anim, {
+      toValue: newAngle,
+      duration,
       easing: Easing.out(Easing.cubic),
     }).start(() => {
       // FIXME: @see ./Bottle.js
@@ -65,7 +66,7 @@ export class Bottle extends Component {
       })
     })
     this.setState({
-      rotation: Animated.modulo(time, 360),
+      rotation: Animated.modulo(anim, 360),
       rotating: true,
       angle: newAngle,
     })
