@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, StyleSheet, Animated, Easing, Image } from 'react-native'
+import { TouchableOpacity, StyleSheet, Animated, Easing, View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
-import { randomBoolean } from '../utils/random'
+import { randomNumber } from '../utils/random'
 
 export class Coin extends Component {
 
   constructor(...args) {
     super(...args)
     this.state = {
-      side: randomBoolean(),
       animationIdx: 0,
       rotation: new Animated.Value(0),
     }
@@ -21,7 +20,7 @@ export class Coin extends Component {
     }
     const time = new Animated.Value(0)
     Animated.timing(time, {
-      toValue: 20,
+      toValue: 15 + randomNumber(0, 1),
       duration: 1000,
       easing: Easing.linear,
     }).start(() => {
@@ -29,28 +28,18 @@ export class Coin extends Component {
       // it fails to set state for the first time and animated value
       // must be set to prevent from next fails. is it web related only?
       // quickfix: set animated value and catch error for the first setState
-      try {
-        this.setState({
-          rotation: new Animated.Value(0),
-        })
-      } catch(e) {
-        console.warn(e)
-      }
+      // quickfix is needed for each animated element in view
+      try { this.setState({ rotation: new Animated.Value(0) }) } catch(e) { console.warn(e) }
+      try { this.setState({ rotation: new Animated.Value(0) }) } catch(e) { console.warn(e) }
       this.setState({
         rotation: new Animated.Value(0),
         rotating: false,
-        side: randomBoolean(),
       })
     })
     this.setState({
       rotation: Animated.modulo(time, 2),
       rotating: true,
     })
-  }
-
-  makeUri() {
-    const idx = this.state.side ? 0 : 1
-    return `../resources/images/coin${idx}.svg`
   }
 
   render() {
@@ -64,25 +53,33 @@ export class Coin extends Component {
           activeOpacity={0.6}
           style={s.touchable}
         >
-          {!this.state.rotating &&
-            <Image
-              source={{ uri: this.makeUri()}}
-              style={s.image}
-            />
-          }
-          {this.state.rotating &&
+          <View style={{position:'relative'}}>
             <Animated.Image
-              source={{ uri: '../resources/images/coin2.svg' }}
+              source={{ uri: '../resources/images/coin0.svg' }}
               style={[s.image, {
                 transform: [
-                  {scaleY: this.state.rotation.interpolate({
+                  {rotateX: this.state.rotation.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [1, 0],
+                    outputRange: ['0deg', '180deg'],
+                  })},
+                ],
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }]}
+            />
+            <Animated.Image
+              source={{ uri: '../resources/images/coin1.svg' }}
+              style={[s.image, {
+                transform: [
+                  {rotateX: this.state.rotation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['180deg', '0deg'],
                   })},
                 ],
               }]}
             />
-          }
+          </View>
         </TouchableOpacity>
       </SectionTemplate>
     )
@@ -99,5 +96,6 @@ const s = StyleSheet.create({
   image: {
     width: 230,
     height: 230,
+    backfaceVisibility: 'hidden',
   },
 })
