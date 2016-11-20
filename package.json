@@ -16,7 +16,8 @@
     "react": "^15.3.2",
     "react-native": "0.34.1",
     "react-native-responsive-stylesheet": "github:madox2/react-native-responsive-stylesheet",
-    "react-native-web": "0.0.45"
+    "react-native-web": "0.0.45",
+    "animated": "madox2/animated#unknown-method-invocation"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
