@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Text } from 'react-native'
+import { Text, Image, View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 const answers = [
   { text: 'It is certain', type: 'positive' },
@@ -26,12 +27,15 @@ const answers = [
   { text: 'Very doubtful', type: 'negative' },
 ]
 
+const ballSource = { uri: '../resources/images/ball.svg' }
+const ballTriangleSource = { uri: '../resources/images/ball-triangle.svg' }
+
 export class MagicBall extends Component {
 
   constructor(...args) {
     super(...args)
     this.state = {
-      selected: null,
+      selected: randomNumber(0, answers.length - 1),
     }
     this.onRefresh = this.onRefresh.bind(this)
   }
@@ -42,21 +46,85 @@ export class MagicBall extends Component {
   }
 
   render() {
+    // TODO: animation
     const { selected } = this.state
+    const s = makeStyles()
     return (
       <SectionTemplate
         onRefresh={this.onRefresh}
         title='Magic 8-Ball'
         color={this.props.color}
       >
-        <Text>
-        {selected === null
-          ? null
-          : answers[selected].text
-        }
-        </Text>
+        <View style={s.container}>
+          <View>
+            <Image source={ballSource} style={s.image} />
+            <View style={s.holeFrame} />
+            <View style={s.hole}>
+              <Image source={ballTriangleSource} style={s.triangle} />
+              <Text style={s.text}>{answers[selected].text}</Text>
+            </View>
+          </View>
+        </View>
       </SectionTemplate>
     )
   }
 
 }
+
+const makeStyles = ResponsiveStyleSheet.create(({ width }) => {
+  // TODO: responsiveness
+  const size = width - 50
+  const y = 0.275 * size
+  const x = 0.196 * size
+  const r = 0.25 * size
+  const d = r * 2
+  const triangleA = r * Math.sqrt(3)
+  const frameWidth = 2
+  return {
+    image: {
+      height: size,
+      width: size,
+    },
+    text: {
+      position: 'absolute',
+      color: 'white',
+      top: r / 2,
+      paddingTop: 10,
+      width: r,
+      textAlign: 'center',
+    },
+    hole: {
+      position: 'absolute',
+      top: y,
+      left: x,
+      width: d,
+      height: d,
+      borderRadius: r,
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'black',
+    },
+    holeFrame: {
+      position: 'absolute',
+      top: y - frameWidth,
+      left: x - frameWidth,
+      width: d + frameWidth * 2,
+      height: d + frameWidth * 2,
+      borderRadius: (d + frameWidth * 2) / 2,
+      backgroundColor: 'white',
+    },
+    triangle: {
+      width: triangleA,
+      position: 'absolute',
+      left: r - triangleA / 2,
+      bottom: 0,
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  }
+})
+
