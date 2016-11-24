@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Image, View } from 'react-native'
+import { Text, Image, View, TouchableOpacity } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
@@ -37,10 +37,10 @@ export class MagicBall extends Component {
     this.state = {
       selected: randomNumber(0, answers.length - 1),
     }
-    this.onRefresh = this.onRefresh.bind(this)
+    this.ask = this.ask.bind(this)
   }
 
-  onRefresh() {
+  ask() {
     const selected = randomNumber(0, answers.length - 1)
     this.setState({ selected })
   }
@@ -51,11 +51,14 @@ export class MagicBall extends Component {
     const s = makeStyles()
     return (
       <SectionTemplate
-        onRefresh={this.onRefresh}
         title='Magic 8-Ball'
         color={this.props.color}
       >
-        <View style={s.container}>
+        <TouchableOpacity
+          onPress={this.ask}
+          activeOpacity={0.6}
+          style={s.container}
+        >
           <View>
             <Image source={ballSource} style={s.image} />
             <View style={s.holeFrame} />
@@ -64,7 +67,7 @@ export class MagicBall extends Component {
               <Text style={s.text}>{answers[selected].text}</Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </SectionTemplate>
     )
   }
