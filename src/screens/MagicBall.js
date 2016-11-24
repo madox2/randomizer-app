@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Image, View, TouchableOpacity } from 'react-native'
+import { Image, View, TouchableOpacity, Animated, Easing } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
@@ -38,15 +38,21 @@ export class MagicBall extends Component {
       selected: randomNumber(0, answers.length - 1),
     }
     this.ask = this.ask.bind(this)
+    this.fade = new Animated.Value(1)
   }
 
   ask() {
     const selected = randomNumber(0, answers.length - 1)
     this.setState({ selected })
+    this.fade.setValue(0)
+    Animated.timing( this.fade, {
+      toValue: 1,
+      duration: 3000,
+      easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
+    }).start()
   }
 
   render() {
-    // TODO: animation
     const { selected } = this.state
     const s = makeStyles()
     return (
@@ -63,8 +69,12 @@ export class MagicBall extends Component {
             <Image source={ballSource} style={s.image} />
             <View style={s.holeFrame} />
             <View style={s.hole}>
-              <Image source={ballTriangleSource} style={s.triangle} />
-              <Text style={s.text}>{answers[selected].text}</Text>
+              <Animated.Image source={ballTriangleSource} style={[s.triangle, {
+                opacity: this.fade,
+              }]} />
+              <Animated.Text style={[s.text, {
+                opacity: this.fade,
+              }]}>{answers[selected].text}</Animated.Text>
             </View>
           </View>
         </TouchableOpacity>
