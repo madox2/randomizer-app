@@ -58,6 +58,13 @@ export class Dices extends Component {
     })
   }
 
+  componentWillUnmount() {
+    if (this.interval) {
+      clearInterval(this.interval)
+      this.interval = null
+    }
+  }
+
   render() {
     const { throwNumber, results } = this.state
     const s = makeStyles()
