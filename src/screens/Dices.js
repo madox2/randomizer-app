@@ -34,10 +34,22 @@ export class Dices extends Component {
   }
 
   throwDices() {
-    this.setState({
-      results: this.generate(this.state.count),
-      thrownNumber: this.state.throwNumber + 1,
-    })
+    this.duration = 1000
+    if (this.interval) {
+      return
+    }
+    const step = 100
+    this.interval = setInterval(() => {
+      this.setState({
+        results: this.generate(this.state.count),
+        thrownNumber: this.state.throwNumber + 1,
+      })
+      this.duration -= step
+      if (this.duration < 0) {
+        clearInterval(this.interval)
+        this.interval = null
+      }
+    }, step)
   }
 
   onOptionsChange({ count }) {
