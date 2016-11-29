@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg5034"
+   sodipodi:docname="match-burned.svg"
+   inkscape:export-filename="/home/chaunce/Documents/runeman.org/clipart/match-burned.png"
+   viewBox="0 0 28.04414 354.7678"
+   inkscape:export-xdpi="33.474209"
+   version="1.1"
+   inkscape:export-ydpi="33.474209"
+   inkscape:version="0.91 r13725"
+   width="28.04414"
+   height="354.76779">
+  <title
+     id="title5080">Burned Match</title>
+  <defs
+     id="defs5036">
+    <filter
+       id="filter4865"
+       inkscape:label="Drop Shadow"
+       style="color-interpolation-filters:sRGB">
+      <feFlood
+         id="feFlood4867"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity=".6" />
+      <feComposite
+         id="feComposite4869"
+         operator="in"
+         result="composite1"
+         in2="SourceGraphic"
+         in="flood" />
+      <feGaussianBlur
+         id="feGaussianBlur4871"
+         stdDeviation="1"
+         result="blur" />
+      <feOffset
+         id="feOffset4873"
+         result="offset"
+         dx="4"
+         dy="4" />
+      <feComposite
+         id="feComposite4875"
+         operator="over"
+         result="composite2"
+         in2="offset"
+         in="SourceGraphic" />
+    </filter>
+    <filter
+       id="filter5697-6"
+       height="1.7474"
+       width="1.3038"
+       y="-0.37369999"
+       x="-0.15189999"
+       inkscape:collect="always">
+      <feGaussianBlur
+         id="feGaussianBlur5699-2"
+         stdDeviation="1.7786263"
+         inkscape:collect="always" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter4865-3"
+       inkscape:label="Drop Shadow">
+      <feFlood
+         id="feFlood4867-6"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity=".6" />
+      <feComposite
+         id="feComposite4869-7"
+         operator="in"
+         result="composite1"
+         in2="SourceGraphic"
+         in="flood" />
+      <feGaussianBlur
+         id="feGaussianBlur4871-5"
+         stdDeviation="1"
+         result="blur" />
+      <feOffset
+         id="feOffset4873-3"
+         result="offset"
+         dx="4"
+         dy="4" />
+      <feComposite
+         id="feComposite4875-5"
+         operator="over"
+         result="composite2"
+         in2="offset"
+         in="SourceGraphic" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     inkscape:pageshadow="2"
+     inkscape:window-y="24"
+     fit-margin-left="0"
+     pagecolor="#ffffff"
+     fit-margin-top="0"
+     inkscape:window-maximized="1"
+     inkscape:zoom="2"
+     inkscape:window-x="65"
+     inkscape:window-height="1026"
+     showgrid="false"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="86.495796"
+     inkscape:cy="247.56138"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1615"
+     inkscape:pageopacity="0.0"
+     inkscape:document-units="px" />
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(-64.299001,67.5339)">
+    <g
+       id="g4877-9"
+       style="filter:url(#filter4865-3)"
+       transform="matrix(0.67904049,0.00370355,-0.00370355,0.67904049,-97.912607,-236.58879)">
+      <path
+         id="path4879-1"
+         d="m 266,292.36 c -6.1592,-2.5512 -1.2226,-0.63486 -7.3818,1.9164 -4.3552,1.804 -8.196,5.6448 -10,10 -3.8268,9.2388 -2.2975,20.268 0,30 1.7125,7.2542 6,20 6,20 l 15.38,-1.92 c 0,0 4.2875,-12.746 6,-20 2.2975,-9.7325 3.8268,-20.761 0,-30 -1.804,-4.3552 -5.6448,-8.196 -10,-10 z"
+         sodipodi:nodetypes="ssssccsss"
+         style="fill:#000000"
+         inkscape:connector-curvature="0" />
+      <path
+         id="path4881-2"
+         d="m 255.54,354.66 c 0.51044,50.795 5.2104,93.013 -1.5536,141.7 -10.247,73.761 -2.9385,151.6 -3.9882,226 l 10,4 10,-4 -8.3818,-368.06 z"
+         sodipodi:nodetypes="csccccc"
+         style="fill:#ffe680"
+         inkscape:connector-curvature="0" />
+      <path
+         id="path4883-7"
+         d="m 260,352.36 0,374 10,-4 -4.0778,-370.61 z"
+         sodipodi:nodetypes="ccccc"
+         style="fill:#d4aa00"
+         inkscape:connector-curvature="0" />
+    </g>
+    <path
+       id="path5067-0"
+       sodipodi:nodetypes="cccccccc"
+       style="fill:#000000;stroke:#000000;stroke-width:0.6790483px"
+       inkscape:connector-curvature="0"
+       d="m 73.515855,4.9257103 c 4.16842,33.9332397 5.66883,66.7415697 -0.12431,96.4773597 l 3.69145,-8.76071 1.08257,16.66726 2.43992,-9.28807 2.16884,19.33558 0.36011,-116.2734497 z" />
+    <path
+       id="path5111-6"
+       style="fill:#ffff00;stroke:#000000;stroke-width:1px;filter:url(#filter5697-6)"
+       d="m 506.02,497.86 c 0,0 9.8876,-8.5189 16,-10 3.901,-0.94525 11.068,-2.9042 12,1 1.181,4.9491 -8.153,6.4521 -13,8 -4.7736,1.5244 -15,1 -15,1 z"
+       sodipodi:nodetypes="csssc"
+       inkscape:connector-curvature="0"
+       transform="matrix(0.26594241,-0.63114685,0.29079313,0.12252969,-207.57563,246.42686)" />
+  </g>
+  <metadata
+     id="metadata4341">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Burned Match</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

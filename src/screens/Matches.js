@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Text } from 'react-native'
+import { TouchableOpacity, View, Image } from 'react-native'
 import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 const options = {
   count: {
@@ -12,21 +13,31 @@ const options = {
   },
 }
 
+const matchSource = { uri: '../resources/images/match.svg' }
+const matchBurnedSource = { uri: '../resources/images/match-burned.svg' }
+
 export class Matches extends Component {
 
   constructor(...args) {
     super(...args)
     this.state = {
       count: options.count.defaultValue,
+      states: this.getNewStates(options.count.defaultValue),
       selected: 0,
+      throwNumber: 0,
     }
     this.onRefresh = this.onRefresh.bind(this)
     this.onOptionsChange = this.onOptionsChange.bind(this)
   }
 
+  getNewStates(count) {
+    return new Array(count).fill(false)
+  }
+
   onRefresh() {
-    const selected = randomNumber(1, this.state.count)
-    this.setState({ selected })
+    const { count } = this.state
+    const selected = randomNumber(0, count - 1)
+    this.setState({ selected, states: this.getNewStates(count) })
   }
 
   onOptionsChange({ count }) {
@@ -35,7 +46,15 @@ export class Matches extends Component {
     })
   }
 
+  showMatch(idx) {
+    this.setState({
+      states: this.state.states.map((s, i) => i === idx ? true : s),
+    })
+  }
+
   render() {
+    const s = makeStyles()
+    const { throwNumber, states, selected } = this.state
     return (
       <SectionTemplate
         onRefresh={this.onRefresh}
@@ -44,10 +63,43 @@ export class Matches extends Component {
         title='Matches'
         color={this.props.color}
       >
-        <Text>{this.state.selected}</Text>
+        <View style={s.container}>
+          {states.map((a, i) => (
+            <TouchableOpacity
+              key={`${throwNumber}-${i}`}
+              onPress={() => this.showMatch(i)}
+              style={s.imageContainer}
+            >
+              <Image
+                style={[s.imageMatch, {
+                  bottom: a ? 50 : 0,
+                }]}
+                source={a && i === selected ? matchBurnedSource : matchSource}
+              />
+            </TouchableOpacity>
+          ))}
+        </View>
       </SectionTemplate>
     )
   }
 
 }
 
+
+const makeStyles = ResponsiveStyleSheet.create(({ height }) => ({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+  },
+  imageContainer: {
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
+  imageMatch: {
+    height: height - 180,
+    position: 'relative',
+  },
+}))

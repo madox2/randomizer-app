@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg4940"
+   sodipodi:docname="match.svg"
+   viewBox="0 0 29.6268 349.41288"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   width="29.626801"
+   height="349.41287">
+  <title
+     id="title4993">Kitchen Matches</title>
+  <defs
+     id="defs4942">
+    <filter
+       id="filter4865"
+       inkscape:label="Drop Shadow"
+       style="color-interpolation-filters:sRGB">
+      <feFlood
+         id="feFlood4867"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity=".6" />
+      <feComposite
+         id="feComposite4869"
+         operator="in"
+         result="composite1"
+         in2="SourceGraphic"
+         in="flood" />
+      <feGaussianBlur
+         id="feGaussianBlur4871"
+         stdDeviation="1"
+         result="blur" />
+      <feOffset
+         id="feOffset4873"
+         result="offset"
+         dx="4"
+         dy="4" />
+      <feComposite
+         id="feComposite4875"
+         operator="over"
+         result="composite2"
+         in2="offset"
+         in="SourceGraphic" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter4865-3"
+       inkscape:label="Drop Shadow">
+      <feFlood
+         id="feFlood4867-6"
+         result="flood"
+         flood-color="rgb(0,0,0)"
+         flood-opacity=".6" />
+      <feComposite
+         id="feComposite4869-7"
+         operator="in"
+         result="composite1"
+         in2="SourceGraphic"
+         in="flood" />
+      <feGaussianBlur
+         id="feGaussianBlur4871-5"
+         stdDeviation="1"
+         result="blur" />
+      <feOffset
+         id="feOffset4873-3"
+         result="offset"
+         dx="4"
+         dy="4" />
+      <feComposite
+         id="feComposite4875-5"
+         operator="over"
+         result="composite2"
+         in2="offset"
+         in="SourceGraphic" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     inkscape:pageshadow="2"
+     inkscape:window-y="24"
+     fit-margin-left="0"
+     pagecolor="#ffffff"
+     fit-margin-top="0"
+     inkscape:window-maximized="1"
+     inkscape:zoom="1.4142136"
+     inkscape:window-x="65"
+     inkscape:window-height="1026"
+     showgrid="false"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="-196.45415"
+     inkscape:cy="128.80554"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1615"
+     inkscape:pageopacity="0.0"
+     inkscape:document-units="px" />
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(-377.14733,-429.26274)">
+    <g
+       id="g4857"
+       style="filter:url(#filter4865)"
+       transform="matrix(0.66793194,-4.6060581e-4,4.6060581e-4,0.66793194,218.06425,264.51012)">
+      <path
+         id="path4859"
+         sodipodi:nodetypes="ssssccsss"
+         style="fill:#ff0000"
+         inkscape:connector-curvature="0"
+         d="m 266,292.36 c -6.1592,-2.5512 -5.8408,-2.5512 -12,0 -4.3552,1.804 -8.196,5.6448 -10,10 -3.8268,9.2388 -2.2975,20.268 0,30 1.7125,7.2542 6,20 6,20 l 20,0 c 0,0 4.2875,-12.746 6,-20 2.2975,-9.7325 3.8268,-20.761 0,-30 -1.804,-4.3552 -5.6448,-8.196 -10,-10 z" />
+      <path
+         id="path4861"
+         sodipodi:nodetypes="cccccc"
+         style="fill:#ffe680"
+         inkscape:connector-curvature="0"
+         d="m 250,352.36 0,370 10,4 10,-4 0,-370 z" />
+      <path
+         id="path4863"
+         sodipodi:nodetypes="ccccc"
+         style="fill:#d4aa00"
+         inkscape:connector-curvature="0"
+         d="m 260,352.36 0,374 10,-4 0,-370 z" />
+    </g>
+  </g>
+  <metadata
+     id="metadata4257">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Kitchen Matches</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
