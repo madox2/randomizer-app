@@ -1,17 +1,18 @@
 import React, { PropTypes } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import { SectionButton } from '../components/SectionButton'
 import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from '.'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 export const Welcome = (props, { navigate }) => {
 
   const data = [
-    { title: 'Numbers',      color: '#79C753', Component: Numbers,   type: 'numbers' },
-    { title: 'Coin',         color: '#F7786B', Component: Coin,      type: 'coin' },
-    { title: 'Bottle',       color: '#B18F6A', Component: Bottle,    type: 'bottle' },
-    { title: 'Magic 8-Ball', color: '#92B6D5', Component: MagicBall, type: 'ball' },
-    { title: 'Matches',      color: '#FAE03C', Component: Matches,   type: 'matches' },
-    { title: 'Dices',        color: '#B565A7', Component: Dices,     type: 'dice' },
+    { title: 'Numbers',      color: '#f9be3e', Component: Numbers,   type: 'numbers' },
+    { title: 'Coin',         color: '#067b82', Component: Coin,      type: 'coin' },
+    { title: 'Bottle',       color: '#f06060', Component: Bottle,    type: 'bottle' },
+    { title: 'Magic 8-Ball', color: '#86a73f', Component: MagicBall, type: 'ball' },
+    { title: 'Matches',      color: '#92c2b8', Component: Matches,   type: 'matches' },
+    { title: 'Dices',        color: '#e5a959', Component: Dices,     type: 'dice' },
   ]
 
   const sections = data.map(({ title, color, Component, type }) => ({
@@ -19,25 +20,32 @@ export const Welcome = (props, { navigate }) => {
     title, color, type,
   }))
 
+  const s = makeStyles()
+
   return (
     <View style={s.container}>
       <View style={s.row}>
         <SectionButton { ...sections[0] } />
+        <View style={s.vdivider} />
         <SectionButton { ...sections[1] } />
       </View>
+      <View style={s.hdivider} />
       <View style={s.row}>
         <SectionButton { ...sections[2] } />
+        <View style={s.vdivider} />
         <SectionButton { ...sections[3] } />
       </View>
+      <View style={s.hdivider} />
       <View style={s.row}>
         <SectionButton { ...sections[4] } />
+        <View style={s.vdivider} />
         <SectionButton { ...sections[5] } />
       </View>
     </View>
   )
 }
 
-const s = StyleSheet.create({
+const makeStyles = ResponsiveStyleSheet.create(({ dividerWidth }) => ({
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -46,7 +54,13 @@ const s = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-})
+  vdivider: {
+    width: dividerWidth,
+  },
+  hdivider: {
+    height: dividerWidth,
+  },
+}))
 
 Welcome.contextTypes = {
   navigate: PropTypes.func,
