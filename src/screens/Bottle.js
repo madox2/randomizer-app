@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, PanResponder, Animated, Easing, Image } from 'react-native'
+import { View, PanResponder, Animated, Easing } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
@@ -9,11 +9,8 @@ export class Bottle extends Component {
 
   constructor(...args) {
     super(...args)
-    this.state = {
-      angle: 0,
-      rotation: new Animated.Value(0),
-      rotating: false,
-    }
+    this.anim = new Animated.Value(0)
+    this.rotation = Animated.modulo(this.anim, 360),
     this.onBottleLayout = this.onBottleLayout.bind(this)
   }
 
@@ -38,52 +35,25 @@ export class Bottle extends Component {
   }
 
   startRotation(velocity, direction) {
-    if (this.state.rotating) {
-      return
-    }
-    const { angle } = this.state
     velocity = Math.max(0.1, velocity)
     const duration = Math.sqrt(velocity) * 2500
     const spin = velocity * 5 // TODO: non linear function
-    const anim = new Animated.Value(angle)
     const newAngle = Math.floor(direction * 360 * spin)
-    Animated.timing(anim, {
+    Animated.timing(this.anim, {
       toValue: newAngle,
       duration,
       easing: Easing.out(Easing.cubic),
-    }).start(() => {
-      // FIXME: @see ./Bottle.js
-      try {
-        this.setState({
-          rotation: new Animated.Value(0),
-        })
-      } catch(e) {
-        console.warn(e)
-      }
-      this.setState({
-        rotation: new Animated.Value(0),
-        rotating: false,
-      })
-    })
-    this.setState({
-      rotation: Animated.modulo(anim, 360),
-      rotating: true,
-      angle: newAngle,
-    })
+    }).start()
   }
 
   componentWillMount() {
     this._panResponder = createPanResponder({
       onStart: state => {
-        this.rotation && clearInterval(this.rotation)
-        this.setState({
-          angle: this.computeAngle(state.x0, state.y0),
-          rotating: false,
-        })
+        this.anim.setValue(this.computeAngle(state.x0, state.y0))
       },
-      onMove: state => this.setState({
-        angle: this.computeAngle(state.moveX, state.moveY),
-      }),
+      onMove: state => {
+        this.anim.setValue(this.computeAngle(state.moveX, state.moveY))
+      },
       onEnd: state => {
         const velocity = this.computeVelocity(state.vx, state.vy)
         const direction = this.computeDirection(state.moveX, state.moveY, state.vx, state.vy)
@@ -92,44 +62,28 @@ export class Bottle extends Component {
     })
   }
 
-  componentWillUnmount() {
-    this.rotation && clearInterval(this.rotation)
-  }
-
   onBottleLayout(l) {
     this.bottleLayout = l.nativeEvent.layout
   }
 
   render() {
-    const { angle, rotating, rotation } = this.state
     const s = makeStyles()
     return (
       <SectionTemplate title='Bottle' color={this.props.color}>
         <View style={s.container} {...this._panResponder.panHandlers}>
-          {!rotating &&
-            <View
-              onLayout={this.onBottleLayout}
-              style={{
-                transform: [ { rotate: `${angle}deg` } ],
-              }}
-            >
-              <Image source={bottleSource} style={s.image} />
-            </View>
-          }
-          {rotating &&
-            <View>
-              <Animated.Image source={bottleSource}
-                style={[s.image, {
-                  transform: [
-                    {rotate: rotation.interpolate({
-                      inputRange: [0, 360],
-                      outputRange: ['0deg', '360deg'],
-                    })},
-                  ],
-                }]}
-              />
-            </View>
-          }
+          <View onLayout={this.onBottleLayout}>
+            <Animated.Image
+              source={bottleSource}
+              style={[s.image, {
+                transform: [
+                  {rotate: this.rotation.interpolate({
+                    inputRange: [0, 360],
+                    outputRange: ['0deg', '360deg'],
+                  })},
+                ],
+              }]}
+            />
+          </View>
         </View>
       </SectionTemplate>
     )
