@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, StyleSheet, Animated, Easing, View } from 'react-native'
+import { PanResponder, Animated, Easing, View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+
+// TODO: responsive coin position
+const UPPER_POSITION = -150
+const INITIAL_POSITION = 50
 
 export class Coin extends Component {
 
@@ -9,73 +14,139 @@ export class Coin extends Component {
     super(...args)
     this.throwCoin = this.throwCoin.bind(this)
     this.time = new Animated.Value(0)
+    this.prevPosition = INITIAL_POSITION
     this.rotation = Animated.modulo(this.time, 2)
+    this.position = new Animated.Value(this.prevPosition)
+    this.onLayout = this.onLayout.bind(this)
+  }
+
+  onLayout(l) {
+    this.layout = l.nativeEvent.layout
+  }
+
+  computePosition(y0, y) {
+    return y - y0 + this.prevPosition
+  }
+
+  componentWillMount() {
+    this._panResponder = createPanResponder({
+      onStart: () => {
+      },
+      onMove: state => {
+        // TODO: how to grap coin during animation
+        this.position.setValue(this.computePosition(state.y0, state.moveY))
+      },
+      onEnd: state => {
+        this.prevPosition = this.computePosition(state.y0, state.moveY)
+        this.throwCoin()
+      },
+    })
   }
 
   throwCoin() {
     this.time.setValue(0)
-    Animated.timing(this.time, {
-      toValue: 15 + randomNumber(0, 1),
-      duration: 1000,
-      easing: Easing.linear,
-    }).start()
+    this.prevPosition = INITIAL_POSITION
+    Animated.parallel([
+      Animated.timing(this.time, {
+        toValue: 15 + randomNumber(0, 1),
+        duration: 800,
+        easing: Easing.linear,
+      }),
+      Animated.sequence([
+        Animated.timing(this.position, {
+          delay: 0,
+          toValue: UPPER_POSITION,
+          duration: 400,
+          easing: Easing.bezier(0.19, 1, 0.22, 1),
+        }),
+        Animated.timing(this.position, {
+          delay: 0,
+          toValue: INITIAL_POSITION,
+          duration: 400,
+          easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
+        }),
+      ]),
+    ]).start()
   }
 
   render() {
+    const s = makeStyles()
     return (
       <SectionTemplate
         title='Coin'
         color={this.props.color}
       >
-        <TouchableOpacity
-          onPress={this.throwCoin}
-          activeOpacity={0.6}
-          style={s.touchable}
-        >
-          <View style={{position:'relative'}}>
-            <Animated.Image
-              ref={r => this.image1 = r}
-              source={{ uri: '../resources/images/coin0.svg' }}
-              style={[s.image, {
-                transform: [
-                  {rotateX: this.rotation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '180deg'],
-                  })},
-                ],
-                position: 'absolute',
-                top: 0,
-                left: 0,
+        <View style={s.container}>
+          <View style={s.imageContainer}>
+            <Animated.View
+              style={[s.positionContainer, {
+                top: this.position,
               }]}
-            />
-            <Animated.Image
-              source={{ uri: '../resources/images/coin1.svg' }}
-              style={[s.image, {
-                transform: [
-                  {rotateX: this.rotation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['180deg', '0deg'],
-                  })},
-                ],
-              }]}
-            />
+              onLayout={this.onLayout}
+              {...this._panResponder.panHandlers}
+            >
+              <Animated.Image
+                source={{ uri: '../resources/images/coin0.svg' }}
+                style={[s.image, {
+                  transform: [
+                    {rotateX: this.rotation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['0deg', '180deg'],
+                    })},
+                  ],
+                }]}
+              />
+              <Animated.Image
+                source={{ uri: '../resources/images/coin1.svg' }}
+                style={[s.image, {
+                  transform: [
+                    {rotateX: this.rotation.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['180deg', '0deg'],
+                    })},
+                  ],
+                }]}
+              />
+            </Animated.View>
           </View>
-        </TouchableOpacity>
+        </View>
       </SectionTemplate>
     )
   }
 
 }
 
-const s = StyleSheet.create({
-  touchable: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: {
-    width: 230,
-    height: 230,
-    backfaceVisibility: 'hidden',
-  },
+const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
+  onStartShouldSetPanResponder: () => true,
+  onStartShouldSetPanResponderCapture: () => true,
+  onPanResponderTerminationRequest: () => true,
+  onPanResponderGrant: (evt, state) => onStart(state),
+  onPanResponderMove: (evt, state) => onMove(state),
+  onPanResponderRelease: (evt, state) => onEnd(state),
+})
+
+const makeStyles = ResponsiveStyleSheet.create(() => {
+  const imageSize = 230
+  return {
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    image: {
+      width: imageSize,
+      height: imageSize,
+      backfaceVisibility: 'hidden',
+      position: 'absolute',
+    },
+    imageContainer: {
+      height: imageSize,
+      width: imageSize,
+    },
+    positionContainer: {
+      position: 'relative',
+      width: imageSize,
+      height: imageSize,
+    },
+  }
 })
