@@ -38,13 +38,13 @@ export class SectionTemplate extends Component {
           {children}
         </View>
         <View style={s.controls}>
-          <View style={s.controlButtonContainer}>
+          <View style={s.controlButtonContainerLeft}>
             {displayBack && <ControlButton onPress={this.back} type='back' />}
           </View>
-          <View style={s.controlButtonContainer}>
+          <View style={s.controlButtonContainerCenter}>
             {onRefresh && <ControlButton onPress={onRefresh} type='refresh' />}
           </View>
-          <View style={s.controlButtonContainer}>
+          <View style={s.controlButtonContainerRight}>
             {options && <ControlButton onPress={this.onSettings} type='settings' />}
           </View>
         </View>
@@ -76,22 +76,38 @@ SectionTemplate.contextTypes = {
   back: PropTypes.func,
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ width }) => ({
-  container: {
-    flex: 1,
-  },
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingBottom: 20,
-  },
-  controlButtonContainer: {
+const makeStyles = ResponsiveStyleSheet.create(({ width, controlsSize }) => {
+  const controlsButtonContainer = {
     width: width / 3,
-    alignItems: 'center',
-  },
-  content: {
-    flex: 1,
-  },
-  options: {
-  },
-}))
+    justifyContent: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+  }
+  return ({
+    container: {
+      flex: 1,
+    },
+    controls: {
+      height: controlsSize,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+    },
+    controlButtonContainerLeft: {
+      ...controlsButtonContainer,
+      alignItems: 'flex-start',
+    },
+    controlButtonContainerCenter: {
+      ...controlsButtonContainer,
+      alignItems: 'center',
+    },
+    controlButtonContainerRight: {
+      ...controlsButtonContainer,
+      alignItems: 'flex-end',
+    },
+    content: {
+      flex: 1,
+    },
+    options: {
+    },
+  })
+})
