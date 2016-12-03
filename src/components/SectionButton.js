@@ -22,7 +22,13 @@ export const SectionButton = ({ title, onPress, color, type }) => {
   )
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ width, height, dividerWidth, landscape }) => {
+const makeStyles = ResponsiveStyleSheet.create(({
+  width,
+  height,
+  dividerWidth,
+  landscape,
+  headingFontSize,
+}) => {
   const buttonWidth = width / 2 - dividerWidth / 2
   const imageHeight = Math.min(150, (height / 3) * 2 / 3)
   return ({
@@ -43,11 +49,11 @@ const makeStyles = ResponsiveStyleSheet.create(({ width, height, dividerWidth, l
     textWrapper: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: landscape ? 'center' : 'flex-start',
+      alignItems: 'center',
     },
     text: {
       color: 'white',
-      fontSize: 18,
+      fontSize: headingFontSize,
       paddingBottom: 10,
       paddingLeft: 10,
     },

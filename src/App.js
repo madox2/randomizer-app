@@ -8,7 +8,8 @@ ResponsiveStyleSheet.setExtension(({ width, height }) => {
   const length = Math.max(width, height)
   const controlsSize = 100
   const contentSize = length - controlsSize
-  return { dividerWidth, controlsSize, contentSize }
+  const headingFontSize = length > 700 ? 28 : 18
+  return { dividerWidth, controlsSize, contentSize, headingFontSize }
 })
 
 export class App extends React.Component {
