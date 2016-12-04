@@ -47,7 +47,7 @@ export class MagicBall extends Component {
     this.fade.setValue(0)
     Animated.timing( this.fade, {
       toValue: 1,
-      duration: 3000,
+      duration: 2500,
       easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
     }).start()
   }
@@ -84,9 +84,9 @@ export class MagicBall extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ width }) => {
+const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight }) => {
   // TODO: responsiveness
-  const size = width - 50
+  const size = Math.min(contentWidth, contentHeight)
   const y = 0.275 * size
   const x = 0.196 * size
   const r = 0.25 * size
@@ -102,9 +102,10 @@ const makeStyles = ResponsiveStyleSheet.create(({ width }) => {
       position: 'absolute',
       color: 'white',
       top: r / 2,
-      paddingTop: 10,
+      paddingTop: size * 0.03,
       width: r,
       textAlign: 'center',
+      fontSize: size * 0.045,
     },
     hole: {
       position: 'absolute',

@@ -91,10 +91,10 @@ export class Bottle extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ width, height }) => ({
+const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight }) => ({
   image: {
-    height: Math.min(width - 10, height * 2 / 3),
-    width: Math.min(width - 10, height * 2 / 3) / 4,
+    height: Math.min(contentWidth, contentHeight),
+    width: Math.min(contentWidth, contentHeight) / 4,
   },
   container: {
     flex: 1,

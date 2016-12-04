@@ -76,9 +76,9 @@ SectionTemplate.contextTypes = {
   back: PropTypes.func,
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ width, controlsSize }) => {
+const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, controlsSize }) => {
   const controlsButtonContainer = {
-    width: width / 3,
+    width: contentWidth / 3,
     justifyContent: 'center',
     paddingLeft: 20,
     paddingRight: 20,

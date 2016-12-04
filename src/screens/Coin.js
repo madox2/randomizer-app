@@ -5,16 +5,12 @@ import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 // TODO: responsive coin position
-const UPPER_POSITION = -150
-const INITIAL_POSITION = 50
-
 export class Coin extends Component {
 
   constructor(...args) {
     super(...args)
     this.throwCoin = this.throwCoin.bind(this)
     this.time = new Animated.Value(0)
-    this.prevPosition = INITIAL_POSITION
     this.rotation = Animated.modulo(this.time, 2)
     this.position = new Animated.Value(this.prevPosition)
     this.onLayout = this.onLayout.bind(this)
@@ -28,13 +24,35 @@ export class Coin extends Component {
     return y - y0 + this.prevPosition
   }
 
+  updateCoinProperties() {
+    const { contentPadding, contentHeight } = ResponsiveStyleSheet.getProperties()
+    this.imageSize = contentHeight * 0.55
+    this.upperPosition = -this.imageSize / 2 + contentPadding
+    this.lowerPosition = this.imageSize / 2
+    this.initialPosition = this.imageSize / 4
+    this.prevPosition = this.initialPosition
+    this.position = new Animated.Value(this.prevPosition)
+  }
+
+  componentWillUpdate() {
+    this.updateCoinProperties()
+  }
+
   componentWillMount() {
+    this.updateCoinProperties()
     this._panResponder = createPanResponder({
       onStart: () => {
       },
       onMove: state => {
-        // TODO: how to grap coin during animation
-        this.position.setValue(this.computePosition(state.y0, state.moveY))
+        // TODO: how to grab coin during animation
+        const position = this.computePosition(state.y0, state.moveY)
+        if (position < this.upperPosition) {
+          return this.position.setValue(this.upperPosition)
+        }
+        if (position > this.lowerPosition) {
+          return this.position.setValue(this.lowerPosition)
+        }
+        this.position.setValue(position)
       },
       onEnd: state => {
         this.prevPosition = this.computePosition(state.y0, state.moveY)
@@ -45,7 +63,7 @@ export class Coin extends Component {
 
   throwCoin() {
     this.time.setValue(0)
-    this.prevPosition = INITIAL_POSITION
+    this.prevPosition = this.initialPosition
     Animated.parallel([
       Animated.timing(this.time, {
         toValue: 15 + randomNumber(0, 1),
@@ -55,13 +73,13 @@ export class Coin extends Component {
       Animated.sequence([
         Animated.timing(this.position, {
           delay: 0,
-          toValue: UPPER_POSITION,
+          toValue: this.upperPosition,
           duration: 400,
           easing: Easing.bezier(0.19, 1, 0.22, 1),
         }),
         Animated.timing(this.position, {
           delay: 0,
-          toValue: INITIAL_POSITION,
+          toValue: this.initialPosition,
           duration: 400,
           easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
         }),
@@ -70,7 +88,7 @@ export class Coin extends Component {
   }
 
   render() {
-    const s = makeStyles()
+    const s = makeStyles({ imageSize: this.imageSize })
     return (
       <SectionTemplate
         title='Coin'
@@ -125,8 +143,9 @@ const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
   onPanResponderRelease: (evt, state) => onEnd(state),
 })
 
-const makeStyles = ResponsiveStyleSheet.create(() => {
-  const imageSize = 230
+const makeStyles = ResponsiveStyleSheet.create(({ imageSize, contentHeight }) => {
+  // TODO: fix responsive stylesheet
+  imageSize = contentHeight * 0.55
   return {
     container: {
       flex: 1,

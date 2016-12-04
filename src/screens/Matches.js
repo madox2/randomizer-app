@@ -23,7 +23,7 @@ export class Matches extends Component {
     this.state = {
       count: options.count.defaultValue,
       states: this.getNewStates(options.count.defaultValue),
-      selected: 0,
+      selected: randomNumber(0, options.count.defaultValue - 1),
       throwNumber: 0,
     }
     this.onRefresh = this.onRefresh.bind(this)
@@ -68,14 +68,15 @@ export class Matches extends Component {
             <TouchableOpacity
               key={`${throwNumber}-${i}`}
               onPress={() => this.showMatch(i)}
-              style={s.imageContainer}
             >
-              <Image
-                style={[s.imageMatch, {
-                  bottom: a ? 50 : 0,
-                }]}
-                source={a && i === selected ? matchBurnedSource : matchSource}
-              />
+              <View
+                style={s.imageContainer}
+              >
+                <Image
+                  style={[s.imageMatch, a ? s.showed : {}]}
+                  source={a && i === selected ? matchBurnedSource : matchSource}
+                />
+              </View>
             </TouchableOpacity>
           ))}
         </View>
@@ -85,21 +86,31 @@ export class Matches extends Component {
 
 }
 
-
-const makeStyles = ResponsiveStyleSheet.create(({ height }) => ({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-  },
-  imageContainer: {
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  imageMatch: {
-    height: height - 180,
-    position: 'relative',
-  },
-}))
+const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth }) => {
+  const pullLength = contentHeight * 0.15
+  const matchPadding = contentWidth * 0.03
+  const matchHeight = contentHeight - pullLength
+  return ({
+    container: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+    },
+    imageContainer: {
+      paddingLeft: matchPadding,
+      paddingRight: matchPadding,
+      height: matchHeight,
+    },
+    imageMatch: {
+      position: 'relative',
+      resizeMode: 'stretch',
+      height: matchHeight,
+      width: matchHeight / 10.1,
+    },
+    showed: {
+      bottom: pullLength,
+    },
+  })
+})
