@@ -12,6 +12,7 @@ ResponsiveStyleSheet.setExtension(({ width, height }) => {
   const contentHeight = height - controlsSize - contentPadding
   const contentWidth = width - contentPadding
   const headingFontSize = size > 700 ? 28 : 18
+  const settingsHeight = 22
   return {
     dividerWidth,
     controlsSize,
@@ -19,6 +20,7 @@ ResponsiveStyleSheet.setExtension(({ width, height }) => {
     contentWidth,
     contentPadding,
     headingFontSize,
+    settingsHeight,
   }
 })
 

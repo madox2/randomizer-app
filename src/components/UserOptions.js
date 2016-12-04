@@ -1,10 +1,11 @@
 import React, { PropTypes, Component } from 'react'
-import { StyleSheet, View, Text, TouchableHighlight } from 'react-native'
+import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { mapProps, reduceProps, someProp } from '../utils/functional'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 export const Button = ({ children, onPress }) => (
-  <TouchableHighlight onPress={onPress} style={s.button}>
+  <TouchableHighlight onPress={onPress} style={staticStyles.button}>
     <Text>{children}</Text>
   </TouchableHighlight>
 )
@@ -28,6 +29,7 @@ export class UserOptions extends Component {
 
   render() {
     const { editMode } = this.state
+    const s = makeStyles()
     return editMode ? (
       <View style={[s.container, s.editContainer]}>
         <View style={s.edit}>
@@ -41,7 +43,7 @@ export class UserOptions extends Component {
     ) : (
       <View style={s.container}>
         <View style={s.summary}>
-          {this.makeSummary()}
+          {this.makeSummary(s)}
         </View>
         {this.props.showChangeButton &&
           <View style={s.controls}>
@@ -109,7 +111,7 @@ export class UserOptions extends Component {
     })
   }
 
-  makeSummary() {
+  makeSummary(s) {
     return mapProps(this.state.options, ([ key, obj ]) => {
       const text = `${obj.label}: ${obj.value}`
       return (
@@ -132,7 +134,7 @@ UserOptions.defaultProps = {
   showChangeButton: false,
 }
 
-const s = StyleSheet.create({
+const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight }) => ({
   container: {
     padding: 5,
   },
@@ -144,6 +146,7 @@ const s = StyleSheet.create({
   },
   summary: {
     flexDirection: 'row',
+    height: settingsHeight,
   },
   summaryItem: {
     marginRight: 15,
@@ -155,7 +158,10 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  button: {
+}))
+
+const staticStyles = StyleSheet.create({
+  buttion: {
     padding: 5,
     paddingRight: 20,
     paddingLeft: 20,

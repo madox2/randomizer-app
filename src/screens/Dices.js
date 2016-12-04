@@ -66,8 +66,8 @@ export class Dices extends Component {
   }
 
   render() {
-    const { throwNumber, results } = this.state
-    const s = makeStyles()
+    const { throwNumber, results, count } = this.state
+    const s = makeStyles({ count })
     return (
       <SectionTemplate
         color={this.props.color}
@@ -81,7 +81,7 @@ export class Dices extends Component {
           style={s.container}
         >
           {results.map((r, i) => (
-            <DiceGraphic result={r} key={`${throwNumber}-${i}`} />
+            <DiceGraphic result={r} key={`${throwNumber}-${i}`} s={s} />
           ))}
         </TouchableOpacity>
       </SectionTemplate>
@@ -92,9 +92,7 @@ export class Dices extends Component {
 
 const diceSource = num => ({ uri: `../resources/images/dice${num}.svg` })
 
-const DiceGraphic = ({ result }) => {
-  // TODO: responsiveness
-  const s = makeStyles()
+const DiceGraphic = ({ result, s }) => {
   if (result > 6 || result < 0) {
     // not implemented yet
     return (
@@ -108,22 +106,31 @@ const DiceGraphic = ({ result }) => {
   )
 }
 
-const makeStyles = ResponsiveStyleSheet.create(() => ({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-  },
-  diceImage: {
-    margin: 30,
-    width: 100,
-    height: 100,
-  },
-  diceTextContainer: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-}))
+const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHeight, settingsHeight }) => {
+  const area = contentWidth * (contentHeight - settingsHeight)
+  const evenCount = count + count % 2
+  const diceArea = Math.sqrt(area / evenCount + 1)
+  const sizeRatio = 0.7
+  const size = diceArea * sizeRatio
+  const margin = diceArea * (1 - sizeRatio) / 6
+  console.log(size)
+  return {
+    container: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+    },
+    diceImage: {
+      margin: margin,
+      width: size,
+      height: size,
+    },
+    diceTextContainer: {
+      backgroundColor: 'white',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  }
+})
