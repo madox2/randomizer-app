@@ -85,7 +85,6 @@ export class MagicBall extends Component {
 }
 
 const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight }) => {
-  // TODO: responsiveness
   const size = Math.min(contentWidth, contentHeight)
   const y = 0.275 * size
   const x = 0.196 * size

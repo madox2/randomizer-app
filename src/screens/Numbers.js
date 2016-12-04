@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import { randomNumber, randomColor } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
+import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 const options = {
   from: {
@@ -68,7 +69,8 @@ export class Numbers extends Component {
 
 
   render() {
-    const { color, number } = this.state
+    const { color, number, from, to } = this.state
+    const s = makeStyles({ from, to })
     return (
       <SectionTemplate
         onReset={this.onReset}
@@ -91,16 +93,21 @@ export class Numbers extends Component {
 
 }
 
-const s = StyleSheet.create({
-  container: {
-  },
-  touchable: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 150, // TODO: responsive font size?
-  },
+const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth, from, to }) => {
+  const decimals = Math.max(`${to}`.length, `${from}`.length)
+  const maxWidth = contentWidth * 2 * 0.8 / decimals
+  const maxHeight = contentHeight * 0.5
+  const fontSize = Math.min(maxWidth, maxHeight)
+  return {
+    container: {
+    },
+    touchable: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    text: {
+      fontSize: fontSize,
+    },
+  }
 })
-

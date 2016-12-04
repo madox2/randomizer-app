@@ -4,7 +4,6 @@ import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
-// TODO: responsive coin position
 export class Coin extends Component {
 
   constructor(...args) {
