@@ -143,9 +143,7 @@ const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
   onPanResponderRelease: (evt, state) => onEnd(state),
 })
 
-const makeStyles = ResponsiveStyleSheet.create(({ imageSize, contentHeight }) => {
-  // TODO: fix responsive stylesheet
-  imageSize = contentHeight * 0.55
+const makeStyles = ResponsiveStyleSheet.create(({ imageSize }) => {
   return {
     container: {
       flex: 1,
