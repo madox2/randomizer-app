@@ -2,8 +2,6 @@ import React from 'react'
 import { TouchableOpacity, Image } from 'react-native'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
-const BUTTON_SIZE = 70
-
 export const ControlButton = ({ onPress, type, backgroundColor }) => {
   const s = makeStyles()
   return (
@@ -17,11 +15,11 @@ export const ControlButton = ({ onPress, type, backgroundColor }) => {
   )
 }
 
-const makeStyles = ResponsiveStyleSheet.create(() => ({
+const makeStyles = ResponsiveStyleSheet.create(({ controlButtonSize }) => ({
   button: {
     padding: 20,
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
-    borderRadius: BUTTON_SIZE / 2,
+    width: controlButtonSize,
+    height: controlButtonSize,
+    borderRadius: controlButtonSize / 2,
   },
 }))

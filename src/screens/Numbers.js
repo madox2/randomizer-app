@@ -87,13 +87,16 @@ export class Numbers extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth, from, to }) => {
+const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth, from, to, controlsHeight, settingsHeight }) => {
   const decimals = Math.max(`${to}`.length, `${from}`.length)
+  const availableHeight = contentHeight - settingsHeight - controlsHeight / 2
   const maxWidth = contentWidth * 2 * 0.8 / decimals
-  const maxHeight = contentHeight * 0.5
+  const maxHeight = availableHeight * 0.6
   const fontSize = Math.min(maxWidth, maxHeight)
   return {
     container: {
+      marginTop: settingsHeight,
+      marginBottom: controlsHeight / 2,
     },
     touchable: {
       flex: 1,

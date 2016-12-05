@@ -29,16 +29,14 @@ export class SectionTemplate extends Component {
         <View style={[s.content, style]}>
           {children}
         </View>
-        <View style={s.controls}>
-          <View style={s.controlButtonContainerLeft}>
-            {displayBack && <ControlButton onPress={this.back} type='back' backgroundColor={buttonColor} />}
-          </View>
-          <View style={s.controlButtonContainerCenter}>
-            {onRefresh && <ControlButton onPress={onRefresh} type='refresh' backgroundColor={buttonColor} />}
-          </View>
-          <View style={s.controlButtonContainerRight}>
-            {options && <ControlButton onPress={this.onSettings} type='settings' backgroundColor={buttonColor} />}
-          </View>
+        <View style={s.controlButtonContainerLeft}>
+          {displayBack && <ControlButton onPress={this.back} type='back' backgroundColor={buttonColor} />}
+        </View>
+        <View style={s.controlButtonContainerCenter}>
+          {onRefresh && <ControlButton onPress={onRefresh} type='refresh' backgroundColor={buttonColor} />}
+        </View>
+        <View style={s.controlButtonContainerRight}>
+          {options && <ControlButton onPress={this.onSettings} type='settings' backgroundColor={buttonColor} />}
         </View>
         {options &&
           <View style={s.options}>
@@ -77,33 +75,27 @@ SectionTemplate.contextTypes = {
   back: PropTypes.func,
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, controlsSize }) => {
+const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, width, contentPadding, controlButtonSize }) => {
   const controlsButtonContainer = {
-    width: contentWidth / 3,
     justifyContent: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
+    position: 'absolute',
+    bottom: contentPadding,
   }
   return ({
     container: {
       flex: 1,
     },
-    controls: {
-      height: controlsSize,
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-    },
     controlButtonContainerLeft: {
       ...controlsButtonContainer,
-      alignItems: 'flex-start',
+      left: contentPadding,
     },
     controlButtonContainerCenter: {
       ...controlsButtonContainer,
-      alignItems: 'center',
+      left: width / 2 - controlButtonSize / 2,
     },
     controlButtonContainerRight: {
       ...controlsButtonContainer,
-      alignItems: 'flex-end',
+      left: width - contentPadding - controlButtonSize,
     },
     content: {
       flex: 1,

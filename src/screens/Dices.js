@@ -108,14 +108,13 @@ const DiceGraphic = ({ result, s }) => {
   )
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHeight, settingsHeight }) => {
-  const area = contentWidth * (contentHeight - settingsHeight)
+const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHeight, settingsHeight, controlsHeight, contentPadding }) => {
+  const area = contentWidth * (contentHeight - settingsHeight - controlsHeight)
   const evenCount = count + count % 2
   const diceArea = Math.sqrt(area / evenCount + 1)
   const sizeRatio = 0.7
   const size = diceArea * sizeRatio
   const margin = diceArea * (1 - sizeRatio) / 6
-  console.log(size)
   return {
     container: {
       flex: 1,
@@ -123,6 +122,8 @@ const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHe
       alignItems: 'center',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      marginTop: settingsHeight + contentPadding,
+      marginBottom: controlsHeight,
     },
     diceImage: {
       margin: margin,

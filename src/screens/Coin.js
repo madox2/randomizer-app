@@ -25,10 +25,10 @@ export class Coin extends Component {
 
   updateCoinProperties() {
     const { contentPadding, contentHeight } = ResponsiveStyleSheet.getProperties()
-    this.imageSize = contentHeight * 0.55
+    this.imageSize = contentHeight * 0.5
     this.upperPosition = -this.imageSize / 2 + contentPadding
-    this.lowerPosition = this.imageSize / 2
-    this.initialPosition = this.imageSize / 4
+    this.lowerPosition = this.imageSize / 2 - contentPadding
+    this.initialPosition = this.lowerPosition * 0.3
     this.prevPosition = this.initialPosition
     this.position = new Animated.Value(this.prevPosition)
   }

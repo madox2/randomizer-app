@@ -7,20 +7,22 @@ ResponsiveStyleSheet.setExtension(({ width, height }) => {
   const dividerWidth = 4
   const size = Math.max(width, height)
   const minSize = Math.min(width, height)
-  const controlsSize = 100
-  const contentPadding = minSize * 0.06
-  const contentHeight = height - controlsSize - contentPadding
-  const contentWidth = width - contentPadding
+  const controlsHeight = 100
+  const contentPadding = minSize * 0.04
+  const contentHeight = height - 2 * contentPadding
+  const contentWidth = width - 2 * contentPadding
   const headingFontSize = size > 700 ? 28 : 18
   const settingsHeight = 22
+  const controlButtonSize = 70
   return {
     dividerWidth,
-    controlsSize,
+    controlsHeight,
     contentHeight,
     contentWidth,
     contentPadding,
     headingFontSize,
     settingsHeight,
+    controlButtonSize,
   }
 })
 

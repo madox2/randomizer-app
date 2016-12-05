@@ -90,10 +90,16 @@ export class Matches extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth }) => {
-  const pullLength = contentHeight * 0.15
+const makeStyles = ResponsiveStyleSheet.create(({
+  contentHeight,
+  contentWidth,
+  controlsHeight,
+  settingsHeight,
+}) => {
+  const availableHeight = contentHeight - controlsHeight - settingsHeight
+  const pullLength = availableHeight * 0.15
   const matchPadding = contentWidth * 0.03
-  const matchHeight = contentHeight - pullLength
+  const matchHeight = availableHeight - pullLength
   return ({
     container: {
       flex: 1,
@@ -112,9 +118,10 @@ const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth })
       resizeMode: 'stretch',
       height: matchHeight,
       width: matchHeight / 10.1,
+      bottom: controlsHeight,
     },
     showed: {
-      bottom: pullLength,
+      bottom: pullLength + controlsHeight,
     },
   })
 })
