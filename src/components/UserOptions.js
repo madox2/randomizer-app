@@ -5,7 +5,7 @@ import { mapProps, reduceProps, someProp } from '../utils/functional'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 export const Button = ({ children, onPress }) => (
-  <TouchableHighlight onPress={onPress} style={staticStyles.button}>
+  <TouchableHighlight onPress={onPress} style={staticStyles.button} underlayColor='#ddd'>
     <Text>{children}</Text>
   </TouchableHighlight>
 )
@@ -36,8 +36,8 @@ export class UserOptions extends Component {
           {this.makeInputs()}
         </View>
         <View style={s.controls}>
-          <Button onPress={this.cancel}>Cancel</Button>
           <Button onPress={this.save}>Save</Button>
+          <Button onPress={this.cancel}>Cancel</Button>
         </View>
       </View>
     ) : (
@@ -134,15 +134,16 @@ UserOptions.defaultProps = {
   showChangeButton: false,
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight }) => ({
+const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight, height, width }) => ({
   container: {
     padding: 5,
   },
   editContainer: {
-    backgroundColor: '#DDD',
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#999',
+    backgroundColor: 'white',
+    height: height,
+    width: width,
   },
   summary: {
     flexDirection: 'row',
@@ -150,9 +151,12 @@ const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight }) => ({
   },
   summaryItem: {
     marginRight: 15,
+    color: '#444',
+    fontStyle: 'italic',
   },
   edit: {
     flexDirection: 'column',
+    flex: 1,
   },
   controls: {
     flexDirection: 'row',
@@ -161,10 +165,11 @@ const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight }) => ({
 }))
 
 const staticStyles = StyleSheet.create({
-  buttion: {
-    padding: 5,
+  button: {
+    padding: 14,
     paddingRight: 20,
     paddingLeft: 20,
-    backgroundColor: '#999',
+    flex: 1,
+    alignItems: 'center',
   },
 })

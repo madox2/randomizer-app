@@ -25,15 +25,6 @@ export class SectionTemplate extends Component {
     const s = makeStyles()
     return (
       <View style={[s.container, { backgroundColor: color }]}>
-        {options &&
-          <View style={s.options}>
-            <UserOptions
-              ref={r => this.options = r}
-              options={options}
-              onChange={onOptionsChange}
-            />
-          </View>
-        }
         <View style={[s.content, style]}>
           {children}
         </View>
@@ -48,6 +39,15 @@ export class SectionTemplate extends Component {
             {options && <ControlButton onPress={this.onSettings} type='settings' />}
           </View>
         </View>
+        {options &&
+          <View style={s.options}>
+            <UserOptions
+              ref={r => this.options = r}
+              options={options}
+              onChange={onOptionsChange}
+            />
+          </View>
+        }
       </View>
     )
   }
@@ -108,6 +108,9 @@ const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, controlsSize }) 
       flex: 1,
     },
     options: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
     },
   })
 })

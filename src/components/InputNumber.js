@@ -18,14 +18,14 @@ const length = x => `${x}`.length
 const sanitize = n => /^\-?\d+$/.test(n) && length(n) === length(+n) ? +n : n
 
 const Error = ({ children }) => (
-  <Text>{children}</Text>
+  <Text style={s.error}>{children}</Text>
 )
 
 export const InputNumber = ({ label, onChange, value, err, constraints }) => {
   const onChangeText = n => onChange(sanitize(n), validate(sanitize(n), constraints))
   return (
     <View style={s.container}>
-      <Text style={s.label}>{`${label}: `}</Text>
+      <Text style={s.label}>{`${label} `}</Text>
       <TextInput onChangeText={onChangeText} value={`${value}`} style={s.input} />
       {err && (
         <Error>{err}</Error>
@@ -36,13 +36,25 @@ export const InputNumber = ({ label, onChange, value, err, constraints }) => {
 
 const s = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    marginBottom: 5,
+    flexDirection: 'column',
+    padding: 10,
+    margin: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: 'silver',
   },
   label: {
     width: 70,
+    padding: 5,
   },
   input: {
-    borderWidth: 1,
+    borderWidth: 0,
+    fontSize: 14,
+    color: 'gray',
+    padding: 5,
+  },
+  error: {
+    fontSize: 14,
+    color: 'red',
+    padding: 5,
   },
 })
