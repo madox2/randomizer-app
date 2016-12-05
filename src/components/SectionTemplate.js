@@ -20,6 +20,7 @@ export class SectionTemplate extends Component {
       onOptionsChange,
       style,
       color,
+      buttonColor,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     const s = makeStyles()
@@ -30,13 +31,13 @@ export class SectionTemplate extends Component {
         </View>
         <View style={s.controls}>
           <View style={s.controlButtonContainerLeft}>
-            {displayBack && <ControlButton onPress={this.back} type='back' />}
+            {displayBack && <ControlButton onPress={this.back} type='back' backgroundColor={buttonColor} />}
           </View>
           <View style={s.controlButtonContainerCenter}>
-            {onRefresh && <ControlButton onPress={onRefresh} type='refresh' />}
+            {onRefresh && <ControlButton onPress={onRefresh} type='refresh' backgroundColor={buttonColor} />}
           </View>
           <View style={s.controlButtonContainerRight}>
-            {options && <ControlButton onPress={this.onSettings} type='settings' />}
+            {options && <ControlButton onPress={this.onSettings} type='settings' backgroundColor={buttonColor} />}
           </View>
         </View>
         {options &&

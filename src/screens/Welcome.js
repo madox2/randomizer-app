@@ -7,16 +7,16 @@ import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 export const Welcome = (props, { navigate }) => {
 
   const data = [
-    { title: 'Numbers',      color: '#f9be3e', Component: Numbers,   type: 'numbers' },
-    { title: 'Coin',         color: '#067b82', Component: Coin,      type: 'coin' },
-    { title: 'Bottle',       color: '#f06060', Component: Bottle,    type: 'bottle' },
-    { title: 'Magic 8-Ball', color: '#86a73f', Component: MagicBall, type: 'ball' },
-    { title: 'Matches',      color: '#92c2b8', Component: Matches,   type: 'matches' },
-    { title: 'Dices',        color: '#e5a959', Component: Dices,     type: 'dice' },
+    { title: 'Numbers',      color: '#f9be3e', bColor: '#d89c19', Component: Numbers,   type: 'numbers' },
+    { title: 'Coin',         color: '#067b82', bColor: '#07565a', Component: Coin,      type: 'coin' },
+    { title: 'Bottle',       color: '#f06060', bColor: '#c33939', Component: Bottle,    type: 'bottle' },
+    { title: 'Magic 8-Ball', color: '#86a73f', bColor: '#5d7d17', Component: MagicBall, type: 'ball' },
+    { title: 'Matches',      color: '#92c2b8', bColor: '#63a094', Component: Matches,   type: 'matches' },
+    { title: 'Dices',        color: '#e5a959', bColor: '#c78123', Component: Dices,     type: 'dice' },
   ]
 
-  const sections = data.map(({ title, color, Component, type }) => ({
-    onPress: () => navigate(() => <Component color={color} />),
+  const sections = data.map(({ title, color, bColor, Component, type }) => ({
+    onPress: () => navigate(() => <Component color={color} buttonColor={bColor} />),
     title, color, type,
   }))
 

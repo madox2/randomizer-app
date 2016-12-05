@@ -59,6 +59,7 @@ export class MagicBall extends Component {
       <SectionTemplate
         title='Magic 8-Ball'
         color={this.props.color}
+        buttonColor={this.props.buttonColor}
       >
         <TouchableOpacity
           onPress={this.ask}

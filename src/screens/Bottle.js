@@ -69,7 +69,11 @@ export class Bottle extends Component {
   render() {
     const s = makeStyles()
     return (
-      <SectionTemplate title='Bottle' color={this.props.color}>
+      <SectionTemplate
+        title='Bottle'
+        color={this.props.color}
+        buttonColor={this.props.buttonColor}
+      >
         <View style={s.container} {...this._panResponder.panHandlers}>
           <View onLayout={this.onBottleLayout}>
             <Animated.Image

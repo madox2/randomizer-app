@@ -72,6 +72,7 @@ export class Numbers extends Component {
         title='Numbers'
         style={s.container}
         color={this.props.color}
+        buttonColor={this.props.buttonColor}
       >
         <TouchableOpacity
           style={s.touchable}

@@ -65,6 +65,7 @@ export class Matches extends Component {
         onOptionsChange={this.onOptionsChange}
         title='Matches'
         color={this.props.color}
+        buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
           {states.map((a, i) => (

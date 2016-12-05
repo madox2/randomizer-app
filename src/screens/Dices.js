@@ -72,6 +72,7 @@ export class Dices extends Component {
     return (
       <SectionTemplate
         color={this.props.color}
+        buttonColor={this.props.buttonColor}
         options={options}
         onOptionsChange={this.onOptionsChange}
         title='Dices'

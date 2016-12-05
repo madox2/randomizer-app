@@ -92,6 +92,7 @@ export class Coin extends Component {
       <SectionTemplate
         title='Coin'
         color={this.props.color}
+        buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
           <View style={s.imageContainer}>
