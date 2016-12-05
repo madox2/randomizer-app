@@ -55,6 +55,7 @@ export class Dices extends Component {
   onOptionsChange({ count }) {
     this.setState({
       count: count.value,
+      results: this.generate(count.value),
     })
   }
 

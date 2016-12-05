@@ -41,8 +41,11 @@ export class Matches extends Component {
   }
 
   onOptionsChange({ count }) {
+    const selected = randomNumber(0, count.value - 1)
     this.setState({
       count: count.value,
+      states: this.getNewStates(count.value),
+      selected,
     })
   }
 
