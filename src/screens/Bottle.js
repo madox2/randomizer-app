@@ -35,7 +35,9 @@ export class Bottle extends Component {
   }
 
   startRotation(velocity, direction) {
-    velocity = Math.max(0.1, velocity)
+    if (velocity < 0.1) {
+      return
+    }
     const duration = Math.sqrt(velocity) * 2500
     const spin = velocity * 5 // TODO: non linear function
     const newAngle = Math.floor(direction * 360 * spin)
