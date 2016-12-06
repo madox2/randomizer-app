@@ -140,7 +140,6 @@ const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight, height, width 
   },
   editContainer: {
     paddingBottom: 10,
-    borderBottomWidth: 1,
     backgroundColor: 'white',
     height: height,
     width: width,
