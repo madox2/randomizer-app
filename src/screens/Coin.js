@@ -20,7 +20,10 @@ export class Coin extends Component {
   }
 
   computePosition(y0, y) {
-    return y - y0 + this.prevPosition
+    let pos = y - y0 + this.prevPosition
+    pos < this.upperPosition && (pos = this.upperPosition)
+    pos > this.lowerPosition && (pos = this.lowerPosition)
+    return pos
   }
 
   updateCoinProperties() {
@@ -45,12 +48,6 @@ export class Coin extends Component {
       onMove: state => {
         // TODO: how to grab coin during animation
         const position = this.computePosition(state.y0, state.moveY)
-        if (position < this.upperPosition) {
-          return this.position.setValue(this.upperPosition)
-        }
-        if (position > this.lowerPosition) {
-          return this.position.setValue(this.lowerPosition)
-        }
         this.position.setValue(position)
       },
       onEnd: state => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, View, Image } from 'react-native'
+import { Image, View, Animated, PanResponder } from 'react-native'
 import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
@@ -16,6 +16,8 @@ const options = {
 const matchSource = { uri: '../resources/images/match.svg' }
 const matchBurnedSource = { uri: '../resources/images/match-burned.svg' }
 
+const MIN_PULL_LENGTH = 10
+
 export class Matches extends Component {
 
   constructor(...args) {
@@ -30,8 +32,47 @@ export class Matches extends Component {
     this.onOptionsChange = this.onOptionsChange.bind(this)
   }
 
+  computePosition(y0, y) {
+    let pos = y0 - y
+    pos > this.upperPosition && (pos = this.upperPosition)
+    pos < this.lowerPosition && (pos = this.lowerPosition)
+    return pos
+  }
+
+  makeMatchPanResponder(position, idx) {
+    const isPulled = () => this.state.states.find((a, i) => i === idx).pulled
+    return createPanResponder({
+      onStart: () => true,
+      onMove: state => {
+        if (isPulled()) {
+          return
+        }
+        position.setValue(this.computePosition(state.y0, state.moveY))
+      },
+      onEnd: state => {
+        if (isPulled()) {
+          return
+        }
+        const pos = this.computePosition(state.y0, state.moveY)
+        if (pos < MIN_PULL_LENGTH) {
+          position.setValue(0)
+          return
+        }
+        position.setValue(pos)
+        this.showMatch(idx, position)
+      },
+    })
+  }
+
   getNewStates(count) {
-    return new Array(count).fill(false)
+    return new Array(count)
+      .fill(false)
+      .map((v, idx) => {
+        const pulled = false
+        const position = new Animated.Value(0)
+        const panResponder = this.makeMatchPanResponder(position, idx)
+        return { pulled, position, panResponder }
+      })
   }
 
   onRefresh() {
@@ -49,14 +90,42 @@ export class Matches extends Component {
     })
   }
 
-  showMatch(idx) {
-    this.setState({
-      states: this.state.states.map((s, i) => i === idx ? true : s),
+  showMatch(idx, position) {
+    Animated.timing(position, {
+      toValue: this.upperPosition,
+      duration: 200,
+    }).start(() => {
+      this.setState({
+        states: this.state.states.map((s, i) => i !== idx ? s : {
+          ...s, pulled: true,
+        }),
+      })
     })
   }
 
+  updateLayoutProperties() {
+    const {
+      contentHeight,
+      controlsHeight,
+      settingsHeight,
+    } = ResponsiveStyleSheet.getProperties()
+    const availableHeight = contentHeight - controlsHeight - settingsHeight
+    this.lowerPosition = 0
+    this.matchHeight = availableHeight * 0.83
+    this.upperPosition = availableHeight - this.matchHeight
+  }
+
+  componentWillMount() {
+    this.updateLayoutProperties()
+
+  }
+
+  componentWillUpdate() {
+    this.updateLayoutProperties()
+  }
+
   render() {
-    const s = makeStyles()
+    const s = makeStyles({ matchHeight: this.matchHeight })
     const { throwNumber, states, selected } = this.state
     return (
       <SectionTemplate
@@ -68,20 +137,19 @@ export class Matches extends Component {
         buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
-          {states.map((a, i) => (
-            <TouchableOpacity
+          {states.map((match, i) => (
+            <Animated.View
               key={`${throwNumber}-${i}`}
-              onPress={() => this.showMatch(i)}
+              {...match.panResponder.panHandlers}
+              style={[s.imageContainer, {
+                bottom: match.position,
+              }]}
             >
-              <View
-                style={s.imageContainer}
-              >
-                <Image
-                  style={[s.imageMatch, a ? s.showed : {}]}
-                  source={a && i === selected ? matchBurnedSource : matchSource}
-                />
-              </View>
-            </TouchableOpacity>
+              <Image
+                style={s.imageMatch}
+                source={match.pulled && i === selected ? matchBurnedSource : matchSource}
+              />
+            </Animated.View>
           ))}
         </View>
       </SectionTemplate>
@@ -90,16 +158,9 @@ export class Matches extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({
-  contentHeight,
-  contentWidth,
-  controlsHeight,
-  settingsHeight,
-}) => {
-  const availableHeight = contentHeight - controlsHeight - settingsHeight
-  const pullLength = availableHeight * 0.15
-  const matchPadding = contentWidth * 0.03
-  const matchHeight = availableHeight - pullLength
+const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, controlsHeight, matchHeight, contentPadding }) => {
+  const matchWidth = matchHeight / 10.14
+  const matchPadding = contentWidth * 0.02
   return ({
     container: {
       flex: 1,
@@ -107,6 +168,7 @@ const makeStyles = ResponsiveStyleSheet.create(({
       alignItems: 'flex-end',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      marginBottom: controlsHeight + contentPadding,
     },
     imageContainer: {
       paddingLeft: matchPadding,
@@ -117,11 +179,16 @@ const makeStyles = ResponsiveStyleSheet.create(({
       position: 'relative',
       resizeMode: 'stretch',
       height: matchHeight,
-      width: matchHeight / 10.1,
-      bottom: controlsHeight,
-    },
-    showed: {
-      bottom: pullLength + controlsHeight,
+      width: matchWidth,
     },
   })
+})
+
+const createPanResponder = ({ onStart, onMove, onEnd, onStartShouldSetPanResponder }) => PanResponder.create({
+  onStartShouldSetPanResponder: onStartShouldSetPanResponder,
+  onStartShouldSetPanResponderCapture: () => true,
+  onPanResponderTerminationRequest: () => true,
+  onPanResponderGrant: (evt, state) => onStart(state),
+  onPanResponderMove: (evt, state) => onMove(state),
+  onPanResponderRelease: (evt, state) => onEnd(state),
 })
