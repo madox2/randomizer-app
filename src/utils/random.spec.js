@@ -37,7 +37,12 @@ describe('randomNumber', () => {
   })
 
   it('should return correct nubers for reverse argument order', () => {
-    testRange(5, 9)
+    const min = 10
+    const max = 5
+    randomSpy.and.returnValue(0)
+    expect(randomNumber(min, max)).toBe(max)
+    randomSpy.and.returnValue(0.9999)
+    expect(randomNumber(min, max)).toBe(min)
   })
 
 })
