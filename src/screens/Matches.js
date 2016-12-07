@@ -9,7 +9,7 @@ const options = {
     type: 'number',
     label: 'Count',
     defaultValue: 3,
-    constraints: { min: 1, max: 10 },
+    constraints: { min: 1, max: 8 },
   },
 }
 
@@ -24,7 +24,7 @@ export class Matches extends Component {
     super(...args)
     this.state = {
       count: options.count.defaultValue,
-      states: this.getNewStates(options.count.defaultValue),
+      matches: this.getNewStates(options.count.defaultValue),
       selected: randomNumber(0, options.count.defaultValue - 1),
       throwNumber: 0,
     }
@@ -40,7 +40,7 @@ export class Matches extends Component {
   }
 
   makeMatchPanResponder(position, idx) {
-    const isPulled = () => this.state.states.find((a, i) => i === idx).pulled
+    const isPulled = () => this.state.matches.find((a, i) => i === idx).pulled
     return createPanResponder({
       onStart: () => true,
       onMove: state => {
@@ -78,14 +78,14 @@ export class Matches extends Component {
   onRefresh() {
     const { count } = this.state
     const selected = randomNumber(0, count - 1)
-    this.setState({ selected, states: this.getNewStates(count) })
+    this.setState({ selected, matches: this.getNewStates(count) })
   }
 
   onOptionsChange({ count }) {
     const selected = randomNumber(0, count.value - 1)
     this.setState({
       count: count.value,
-      states: this.getNewStates(count.value),
+      matches: this.getNewStates(count.value),
       selected,
     })
   }
@@ -96,7 +96,7 @@ export class Matches extends Component {
       duration: 200,
     }).start(() => {
       this.setState({
-        states: this.state.states.map((s, i) => i !== idx ? s : {
+        matches: this.state.matches.map((s, i) => i !== idx ? s : {
           ...s, pulled: true,
         }),
       })
@@ -125,8 +125,8 @@ export class Matches extends Component {
   }
 
   render() {
-    const s = makeStyles({ matchHeight: this.matchHeight })
-    const { throwNumber, states, selected } = this.state
+    const { throwNumber, matches, selected } = this.state
+    const s = makeStyles({ matchHeight: this.matchHeight, matchCount: matches.length })
     return (
       <SectionTemplate
         onRefresh={this.onRefresh}
@@ -137,7 +137,7 @@ export class Matches extends Component {
         buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
-          {states.map((match, i) => (
+          {matches.map((match, i) => (
             <Animated.View
               key={`${throwNumber}-${i}`}
               {...match.panResponder.panHandlers}
@@ -158,9 +158,18 @@ export class Matches extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, controlsHeight, matchHeight, contentPadding }) => {
+const makeStyles = ResponsiveStyleSheet.create(({
+  contentWidth,
+  controlsHeight,
+  matchHeight,
+  contentPadding,
+  matchCount,
+}) => {
   const matchWidth = matchHeight / 10.14
-  const matchPadding = contentWidth * 0.02
+  let matchPadding = contentWidth * 0.02
+  if (matchCount * (matchWidth + 2 * matchPadding) > contentWidth) {
+    matchPadding = (contentWidth - matchCount * matchWidth) / matchCount / 2
+  }
   return ({
     container: {
       flex: 1,
