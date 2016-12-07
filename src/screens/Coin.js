@@ -4,6 +4,9 @@ import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
+const coin0 = require('../resources/images/coin0.png')
+const coin1 = require('../resources/images/coin1.png')
+
 export class Coin extends Component {
 
   constructor(...args) {
@@ -101,7 +104,7 @@ export class Coin extends Component {
               {...this._panResponder.panHandlers}
             >
               <Animated.Image
-                source={{ uri: '../resources/images/coin0.svg' }}
+                source={coin0}
                 style={[s.image, {
                   transform: [
                     {rotateX: this.rotation.interpolate({
@@ -112,7 +115,7 @@ export class Coin extends Component {
                 }]}
               />
               <Animated.Image
-                source={{ uri: '../resources/images/coin1.svg' }}
+                source={coin1}
                 style={[s.image, {
                   transform: [
                     {rotateX: this.rotation.interpolate({

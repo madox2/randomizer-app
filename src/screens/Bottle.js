@@ -3,7 +3,7 @@ import { View, PanResponder, Animated, Easing } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
-const bottleSource = { uri: '../resources/images/bottle.svg' }
+const bottleSource = require('../resources/images/bottle.png')
 
 export class Bottle extends Component {
 
@@ -77,19 +77,18 @@ export class Bottle extends Component {
         buttonColor={this.props.buttonColor}
       >
         <View style={s.container} {...this._panResponder.panHandlers}>
-          <View onLayout={this.onBottleLayout}>
-            <Animated.Image
-              source={bottleSource}
-              style={[s.image, {
-                transform: [
-                  {rotate: this.rotation.interpolate({
-                    inputRange: [0, 360],
-                    outputRange: ['0deg', '360deg'],
-                  })},
-                ],
-              }]}
-            />
-          </View>
+          <Animated.Image
+            onLayout={this.onBottleLayout}
+            source={bottleSource}
+            style={[s.image, {
+              transform: [
+                {rotate: this.rotation.interpolate({
+                  inputRange: [0, 360],
+                  outputRange: ['0deg', '360deg'],
+                })},
+              ],
+            }]}
+          />
         </View>
       </SectionTemplate>
     )

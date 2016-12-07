@@ -13,8 +13,8 @@ const options = {
   },
 }
 
-const matchSource = { uri: '../resources/images/match.svg' }
-const matchBurnedSource = { uri: '../resources/images/match-burned.svg' }
+const matchSource = require('../resources/images/match.png')
+const matchBurnedSource = require('../resources/images/match-burned.png')
 
 const MIN_PULL_LENGTH = 10
 

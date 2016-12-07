@@ -75,16 +75,18 @@ export class Dices extends Component {
         buttonColor={this.props.buttonColor}
         options={options}
         onOptionsChange={this.onOptionsChange}
+        style={s.ounterContainer}
         title='Dices'
       >
         <TouchableOpacity
           onPress={this.throwDices}
           activeOpacity={0.6}
-          style={s.container}
         >
-          {results.map((r, i) => (
-            <DiceGraphic result={r} key={`${throwNumber}-${i}`} s={s} />
-          ))}
+          <View style={s.container}>
+            {results.map((r, i) => (
+              <DiceGraphic result={r} key={`${throwNumber}-${i}`} s={s} />
+            ))}
+          </View>
         </TouchableOpacity>
       </SectionTemplate>
     )
@@ -92,7 +94,14 @@ export class Dices extends Component {
 
 }
 
-const diceSource = num => ({ uri: `../resources/images/dice${num}.svg` })
+const sources = {
+  1: require('../resources/images/dice1.png'),
+  2: require('../resources/images/dice2.png'),
+  3: require('../resources/images/dice3.png'),
+  4: require('../resources/images/dice4.png'),
+  5: require('../resources/images/dice5.png'),
+  6: require('../resources/images/dice6.png'),
+}
 
 const DiceGraphic = ({ result, s }) => {
   if (result > 6 || result < 0) {
@@ -104,7 +113,7 @@ const DiceGraphic = ({ result, s }) => {
     )
   }
   return (
-    <Image style={s.diceImage} source={diceSource(result)} />
+    <Image style={s.diceImage} source={sources[result]} />
   )
 }
 
@@ -116,14 +125,19 @@ const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHe
   const size = diceArea * sizeRatio
   const margin = diceArea * (1 - sizeRatio) / 6
   return {
-    container: {
+    ounterContainer: {
       flex: 1,
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: settingsHeight + contentPadding,
+      marginBottom: controlsHeight,
+    },
+    container: {
+      flexWrap: 'wrap',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      flexWrap: 'wrap',
-      marginTop: settingsHeight + contentPadding,
-      marginBottom: controlsHeight,
     },
     diceImage: {
       margin: margin,

@@ -27,8 +27,8 @@ const answers = [
   { text: 'Very doubtful', type: 'negative' },
 ]
 
-const ballSource = { uri: '../resources/images/ball.svg' }
-const ballTriangleSource = { uri: '../resources/images/ball-triangle.svg' }
+const ballSource = require('../resources/images/ball.png')
+const ballTriangleSource = require('../resources/images/ball-triangle.png')
 
 export class MagicBall extends Component {
 
@@ -92,6 +92,8 @@ const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight })
   const r = 0.25 * size
   const d = r * 2
   const triangleA = r * Math.sqrt(3)
+  const triangleAHalf = triangleA / 2
+  const triangleHeight = Math.sqrt(triangleA * triangleA - triangleAHalf * triangleAHalf)
   const frameWidth = 2
   return {
     image: {
@@ -102,6 +104,7 @@ const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight })
       position: 'absolute',
       color: 'white',
       top: r / 2,
+      left: r / 2,
       paddingTop: size * 0.03,
       width: r,
       textAlign: 'center',
@@ -129,6 +132,7 @@ const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight })
       backgroundColor: 'white',
     },
     triangle: {
+      height: triangleHeight,
       width: triangleA,
       position: 'absolute',
       left: r - triangleA / 2,

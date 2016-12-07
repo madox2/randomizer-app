@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { View } from 'react-native'
 import { SectionButton } from '../components/SectionButton'
-import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from '.'
+import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from './index'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
 export const Welcome = (props, { navigate }) => {
