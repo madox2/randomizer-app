@@ -32,12 +32,12 @@ export class Numbers extends Component {
     this.toggleGenerating = this.toggleGenerating.bind(this)
     this.onOptionsChange = this.onOptionsChange.bind(this)
     this.generate = this.generate.bind(this)
+    this.stop = this.stop.bind(this)
   }
 
   toggleGenerating() {
     if (this.state.isGenerating) {
-      clearInterval(this.generation)
-      this.setState({ isGenerating: false })
+      this.stop()
       return
     }
     this.generation = setInterval(this.generate, 75)
@@ -58,6 +58,11 @@ export class Numbers extends Component {
     })
   }
 
+  stop() {
+    clearInterval(this.generation)
+    this.setState({ isGenerating: false })
+  }
+
   componentWillUnmount() {
     this.generation && clearInterval(this.generation)
   }
@@ -69,6 +74,7 @@ export class Numbers extends Component {
       <SectionTemplate
         options={options}
         onOptionsChange={this.onOptionsChange}
+        onSettings={this.stop}
         title='Numbers'
         style={s.container}
         color={this.props.color}

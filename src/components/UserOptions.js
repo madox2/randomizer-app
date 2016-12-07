@@ -4,8 +4,8 @@ import { InputNumber } from './InputNumber'
 import { mapProps, reduceProps, someProp } from '../utils/functional'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
-export const Button = ({ children, onPress }) => (
-  <TouchableHighlight onPress={onPress} style={staticStyles.button} underlayColor='#ddd'>
+export const Button = ({ children, onPress, style }) => (
+  <TouchableHighlight onPress={onPress} style={[staticStyles.button, style]} underlayColor='#ddd'>
     <Text>{children}</Text>
   </TouchableHighlight>
 )
@@ -36,7 +36,7 @@ export class UserOptions extends Component {
           {this.makeInputs()}
         </View>
         <View style={s.controls}>
-          <Button onPress={this.save}>Save</Button>
+          <Button onPress={this.save} style={s.buttonLeft}>Save</Button>
           <Button onPress={this.cancel}>Cancel</Button>
         </View>
       </View>
@@ -161,6 +161,9 @@ const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight, height, width 
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  buttonLeft: {
+    borderRightWidth: 0,
+  },
 }))
 
 const staticStyles = StyleSheet.create({
@@ -170,5 +173,7 @@ const staticStyles = StyleSheet.create({
     paddingLeft: 20,
     flex: 1,
     alignItems: 'center',
+    borderWidth: 1,
+    borderBottomColor: 'silver',
   },
 })

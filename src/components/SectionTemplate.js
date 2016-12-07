@@ -53,6 +53,7 @@ export class SectionTemplate extends Component {
 
   onSettings() {
     this.options.change()
+    this.props.onSettings && this.props.onSettings()
   }
 
   back() {
@@ -65,6 +66,7 @@ export class SectionTemplate extends Component {
 SectionTemplate.propTypes = {
   onBack: PropTypes.func,
   onRefresh: PropTypes.func,
+  onSettings: PropTypes.func,
   options: PropTypes.object,
   onOptionsChange: PropTypes.func,
   title: PropTypes.string,
