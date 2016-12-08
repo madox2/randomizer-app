@@ -55,8 +55,8 @@ export class Matches extends Component {
           return
         }
         const pos = this.computePosition(state.y0, state.moveY)
-        if (pos < MIN_PULL_LENGTH) {
-          position.setValue(0)
+        if (pos < this.lowerPosition + MIN_PULL_LENGTH) {
+          position.setValue(this.lowerPosition)
           return
         }
         position.setValue(pos)
@@ -70,7 +70,7 @@ export class Matches extends Component {
       .fill(false)
       .map((v, idx) => {
         const pulled = false
-        const position = new Animated.Value(0)
+        const position = new Animated.Value(this.lowerPosition)
         const panResponder = this.makeMatchPanResponder(position, idx)
         return { pulled, position, panResponder }
       })
@@ -104,25 +104,28 @@ export class Matches extends Component {
     })
   }
 
-  updateLayoutProperties() {
+  updateLayoutProperties(state) {
     const {
       contentHeight,
       controlsHeight,
       settingsHeight,
     } = ResponsiveStyleSheet.getProperties()
     const availableHeight = contentHeight - controlsHeight - settingsHeight
-    this.lowerPosition = 0
-    this.matchHeight = availableHeight * 0.83
-    this.upperPosition = availableHeight - this.matchHeight
+    this.matchHeight = Math.min(300, availableHeight * 0.83)
+    const pullHeight = Math.min(availableHeight - this.matchHeight, this.matchHeight / 4)
+    this.lowerPosition = Math.max((availableHeight - this.matchHeight - pullHeight) / 2)
+    this.upperPosition = pullHeight + this.lowerPosition
+    state.matches.forEach(m => {
+      m.position.setValue(m.pulled ? this.upperPosition : this.lowerPosition)
+    })
   }
 
   componentWillMount() {
-    this.updateLayoutProperties()
-
+    this.updateLayoutProperties(this.state)
   }
 
-  componentWillUpdate() {
-    this.updateLayoutProperties()
+  componentWillUpdate(nextProps, nextState) {
+    this.updateLayoutProperties(nextState)
   }
 
   render() {

@@ -37,10 +37,10 @@ export class Coin extends Component {
   }
 
   updateCoinProperties() {
-    const { contentPadding, contentHeight } = ResponsiveStyleSheet.getProperties()
-    this.imageSize = contentHeight * 0.5
-    this.upperPosition = -this.imageSize / 2 + contentPadding
-    this.lowerPosition = this.imageSize / 2 - contentPadding
+    const { contentHeight, controlsHeight } = ResponsiveStyleSheet.getProperties()
+    this.imageSize = Math.min(contentHeight * 0.5, 200)
+    this.upperPosition = -contentHeight / 2 + this.imageSize / 2
+    this.lowerPosition = contentHeight / 2 - this.imageSize / 2 - controlsHeight / 3
     this.initialPosition = this.lowerPosition * 0.3
     this.prevPosition = this.initialPosition
     this.position = new Animated.Value(this.prevPosition)
@@ -110,23 +110,21 @@ export class Coin extends Component {
         buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
-          <View style={s.imageContainer}>
-            <Animated.View
-              style={[s.positionContainer, {
-                transform: [
-                  {translateY: this.position},
-                  {[rotationTransformKey]: this.rotation.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['0deg', '180deg'],
-                  })},
-                ],
-              }]}
-              onLayout={this.onLayout}
-              {...this._panResponder.panHandlers}
-            >
-              <Image source={coin0} style={s.image} />
-            </Animated.View>
-          </View>
+          <Animated.View
+            style={[s.animationContainer, {
+              transform: [
+                {translateY: this.position},
+                {[rotationTransformKey]: this.rotation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['0deg', '180deg'],
+                })},
+              ],
+            }]}
+            onLayout={this.onLayout}
+            {...this._panResponder.panHandlers}
+          >
+            <Image source={coin0} style={s.image} />
+          </Animated.View>
         </View>
       </SectionTemplate>
     )
@@ -157,16 +155,12 @@ const makeStyles = ResponsiveStyleSheet.create(({ imageSize }) => {
       width: imageSize,
       height: imageSize,
     },
-    imageContainer: {
+    animationContainer: {
       height: imageSize,
       width: imageSize,
-    },
-    positionContainer: {
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',
-      width: imageSize,
-      height: imageSize,
       top: 0,
     },
   }

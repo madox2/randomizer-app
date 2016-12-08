@@ -35,22 +35,12 @@ export class Dices extends Component {
   }
 
   throwDices() {
-    this.duration = 1000
     if (this.interval) {
       return
     }
-    const step = 100
-    this.interval = setInterval(() => {
-      this.setState({
-        results: this.generate(this.state.count),
-        thrownNumber: this.state.throwNumber + 1,
-      })
-      this.duration -= step
-      if (this.duration < 0) {
-        clearInterval(this.interval)
-        this.interval = null
-      }
-    }, step)
+    this.setState({
+      results: this.generate(this.state.count),
+    })
   }
 
   onOptionsChange({ count }) {
@@ -60,15 +50,8 @@ export class Dices extends Component {
     })
   }
 
-  componentWillUnmount() {
-    if (this.interval) {
-      clearInterval(this.interval)
-      this.interval = null
-    }
-  }
-
   render() {
-    const { throwNumber, results, count } = this.state
+    const { results, count } = this.state
     const s = makeStyles({ count })
     return (
       <SectionTemplate
@@ -76,16 +59,16 @@ export class Dices extends Component {
         buttonColor={this.props.buttonColor}
         options={options}
         onOptionsChange={this.onOptionsChange}
-        style={s.ounterContainer}
         title='Dices'
       >
         <TouchableOpacity
           onPress={this.throwDices}
           activeOpacity={0.6}
+          style={s.ounterContainer}
         >
           <View style={s.container}>
             {results.map((r, i) => (
-              <DiceGraphic result={r} key={`${throwNumber}-${i}`} s={s} />
+              <DiceGraphic result={r} key={`${r}-${i}`} s={s} />
             ))}
           </View>
         </TouchableOpacity>
@@ -123,7 +106,7 @@ const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHe
   const evenCount = count + count % 2
   const diceArea = Math.sqrt(area / evenCount + 1)
   const sizeRatio = 0.7
-  const size = diceArea * sizeRatio
+  const size = Math.min(diceArea * sizeRatio, 120)
   const margin = diceArea * (1 - sizeRatio) / 6
   return {
     ounterContainer: {

@@ -64,7 +64,7 @@ export class MagicBall extends Component {
       >
         <TouchableOpacity
           onPress={this.ask}
-          activeOpacity={0.6}
+          activeOpacity={0.8}
           style={s.container}
         >
           <View>
@@ -87,7 +87,7 @@ export class MagicBall extends Component {
 }
 
 const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight }) => {
-  const size = Math.min(contentWidth, contentHeight)
+  const size = Math.min(contentWidth, contentHeight, 500)
   const y = 0.275 * size
   const x = 0.196 * size
   const r = 0.25 * size

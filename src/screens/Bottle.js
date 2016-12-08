@@ -97,17 +97,20 @@ export class Bottle extends Component {
 
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight }) => ({
-  image: {
-    height: Math.min(contentWidth, contentHeight),
-    width: Math.min(contentWidth, contentHeight) / 4,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-}))
+const makeStyles = ResponsiveStyleSheet.create(({ contentWidth, contentHeight }) => {
+  const height = Math.min(contentWidth, contentHeight, 500)
+  const width = height / 4
+  return {
+    image: {
+      width, height,
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  }
+})
 
 const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
   onStartShouldSetPanResponder: () => true,

@@ -139,7 +139,7 @@ const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight, height, width 
     padding: 5,
   },
   editContainer: {
-    paddingBottom: 10,
+    paddingBottom: 30,
     backgroundColor: 'white',
     height: height,
     width: width,
@@ -174,6 +174,6 @@ const staticStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     borderWidth: 1,
-    borderBottomColor: 'silver',
+    borderColor: 'silver',
   },
 })

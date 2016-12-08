@@ -40,7 +40,7 @@ export class Numbers extends Component {
       this.stop()
       return
     }
-    this.generation = setInterval(this.generate, 75)
+    this.generation = setInterval(this.generate, 100)
     this.setState({ isGenerating: true })
   }
 
@@ -98,7 +98,7 @@ const makeStyles = ResponsiveStyleSheet.create(({ contentHeight, contentWidth, f
   const availableHeight = contentHeight - settingsHeight - controlsHeight / 2
   const maxWidth = contentWidth * 2 * 0.8 / decimals
   const maxHeight = availableHeight * 0.6
-  const fontSize = Math.min(maxWidth, maxHeight)
+  const fontSize = Math.min(maxWidth, maxHeight, 350)
   return {
     container: {
       marginTop: settingsHeight,
