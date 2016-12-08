@@ -34,9 +34,9 @@ export class Matches extends Component {
   }
 
   computePosition(y0, y) {
-    let pos = y0 - y
-    pos > this.upperPosition && (pos = this.upperPosition)
-    pos < this.lowerPosition && (pos = this.lowerPosition)
+    let pos = y - y0 + this.lowerPosition
+    pos < this.upperPosition && (pos = this.upperPosition)
+    pos > this.lowerPosition && (pos = this.lowerPosition)
     return pos
   }
 
@@ -55,11 +55,10 @@ export class Matches extends Component {
           return
         }
         const pos = this.computePosition(state.y0, state.moveY)
-        if (pos < this.lowerPosition + MIN_PULL_LENGTH) {
+        if (pos > this.lowerPosition - MIN_PULL_LENGTH) {
           position.setValue(this.lowerPosition)
           return
         }
-        position.setValue(pos)
         this.showMatch(idx, position)
       },
     })
@@ -113,8 +112,8 @@ export class Matches extends Component {
     const availableHeight = contentHeight - controlsHeight - settingsHeight
     this.matchHeight = Math.min(300, availableHeight * 0.83)
     const pullHeight = Math.min(availableHeight - this.matchHeight, this.matchHeight / 4)
-    this.lowerPosition = Math.max((availableHeight - this.matchHeight - pullHeight) / 2)
-    this.upperPosition = pullHeight + this.lowerPosition
+    this.lowerPosition = -Math.max((availableHeight - this.matchHeight - pullHeight) / 2)
+    this.upperPosition = this.lowerPosition - pullHeight
     state.matches.forEach(m => {
       m.position.setValue(m.pulled ? this.upperPosition : this.lowerPosition)
     })
@@ -146,7 +145,7 @@ export class Matches extends Component {
               key={`${throwNumber}-${i}`}
               {...match.panResponder.panHandlers}
               style={[s.imageContainer, {
-                bottom: match.position,
+                transform: [{ translateY: match.position }],
               }]}
             >
               <Image
@@ -193,6 +192,7 @@ const makeStyles = ResponsiveStyleSheet.create(({
       resizeMode: 'stretch',
       height: matchHeight,
       width: matchWidth,
+      bottom: 0,
     },
   })
 })
