@@ -3,6 +3,7 @@ import { Image, View, Animated, PanResponder } from 'react-native'
 import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { resource } from '../utils/image'
 
 const options = {
   count: {
@@ -13,8 +14,8 @@ const options = {
   },
 }
 
-const matchSource = require('../resources/images/match.png')
-const matchBurnedSource = require('../resources/images/match-burned.png')
+const matchSource = resource('images/match.png')
+const matchBurnedSource = resource('images/match-burned.png')
 
 const MIN_PULL_LENGTH = 10
 

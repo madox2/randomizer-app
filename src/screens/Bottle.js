@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, PanResponder, Animated, Easing } from 'react-native'
+import { Image, View, PanResponder, Animated, Easing } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 
@@ -76,19 +76,20 @@ export class Bottle extends Component {
         color={this.props.color}
         buttonColor={this.props.buttonColor}
       >
-        <View style={s.container} {...this._panResponder.panHandlers}>
-          <Animated.Image
-            onLayout={this.onBottleLayout}
-            source={bottleSource}
-            style={[s.image, {
-              transform: [
-                {rotate: this.rotation.interpolate({
-                  inputRange: [0, 360],
-                  outputRange: ['0deg', '360deg'],
-                })},
-              ],
-            }]}
-          />
+        <View style={s.container} {...this._panResponder.panHandlers} collapsable={false}>
+          <Animated.View
+             onLayout={this.onBottleLayout}
+             style={[{
+               transform: [
+                 {rotate: this.rotation.interpolate({
+                   inputRange: [0, 360],
+                   outputRange: ['0deg', '360deg'],
+                 })},
+               ],
+             }]}
+            >
+            <Image source={bottleSource} style={s.image} />
+          </Animated.View>
         </View>
       </SectionTemplate>
     )

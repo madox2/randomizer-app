@@ -3,9 +3,10 @@ import { PanResponder, Animated, Easing, View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { resource } from '../utils/image'
 
-const coin0 = require('../resources/images/coin0.png')
-const coin1 = require('../resources/images/coin1.png')
+const coin0 = resource('images/coin0.png')
+const coin1 = resource('images/coin1.png')
 
 export class Coin extends Component {
 

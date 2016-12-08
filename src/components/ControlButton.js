@@ -1,12 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Image } from 'react-native'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-
-const sources = {
-  'back': require('../resources/icons/back.png'),
-  'refresh': require('../resources/icons/refresh.png'),
-  'settings': require('../resources/icons/settings.png'),
-}
+import { resource } from '../utils/image'
 
 export const ControlButton = ({ onPress, type, backgroundColor }) => {
   const s = makeStyles()
@@ -16,7 +11,7 @@ export const ControlButton = ({ onPress, type, backgroundColor }) => {
       style={[s.button, { backgroundColor }]}
       activeOpacity={0.5}
     >
-      <Image source={sources[type]} style={s.image} />
+      <Image source={resource(`icons/${type}.png`)} style={s.image} />
     </TouchableOpacity>
   )
 }

@@ -3,6 +3,7 @@ import { Image, View, TouchableOpacity, Animated, Easing } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { resource } from '../utils/image'
 
 const answers = [
   { text: 'It is certain', type: 'positive' },
@@ -27,8 +28,8 @@ const answers = [
   { text: 'Very doubtful', type: 'negative' },
 ]
 
-const ballSource = require('../resources/images/ball.png')
-const ballTriangleSource = require('../resources/images/ball-triangle.png')
+const ballSource = resource('images/ball.png')
+const ballTriangleSource = resource('images/ball-triangle.png')
 
 export class MagicBall extends Component {
 

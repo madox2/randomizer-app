@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image } from 'react-native'
 import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { resource } from '../utils/image'
 
 // TODO: implement multi sided dices
 const options = {
@@ -95,12 +96,12 @@ export class Dices extends Component {
 }
 
 const sources = {
-  1: require('../resources/images/dice1.png'),
-  2: require('../resources/images/dice2.png'),
-  3: require('../resources/images/dice3.png'),
-  4: require('../resources/images/dice4.png'),
-  5: require('../resources/images/dice5.png'),
-  6: require('../resources/images/dice6.png'),
+  1: resource('images/dice1.png'),
+  2: resource('images/dice2.png'),
+  3: resource('images/dice3.png'),
+  4: resource('images/dice4.png'),
+  5: resource('images/dice5.png'),
+  6: resource('images/dice6.png'),
 }
 
 const DiceGraphic = ({ result, s }) => {

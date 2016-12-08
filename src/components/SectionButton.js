@@ -1,15 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Text, Image, View } from 'react-native'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-
-const sources = {
-  'numbers': require('../resources/icons/numbers.png'),
-  'coin': require('../resources/icons/coin.png'),
-  'bottle': require('../resources/icons/bottle.png'),
-  'ball': require('../resources/icons/ball.png'),
-  'matches': require('../resources/icons/matches.png'),
-  'dice': require('../resources/icons/dice.png'),
-}
+import { resource } from '../utils/image'
 
 export const SectionButton = ({ title, onPress, color, type }) => {
   const s = makeStyles()
@@ -21,7 +13,7 @@ export const SectionButton = ({ title, onPress, color, type }) => {
     <TouchableOpacity style={container} onPress={onPress} activeOpacity={0.5}>
       <View style={s.imageWrapper}>
         <View>
-          <Image style={s.image} source={sources[type]} />
+          <Image style={s.image} source={resource(`icons/${type}.png`)} />
         </View>
       </View>
       <View style={s.textWrapper}>
