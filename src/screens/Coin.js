@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
-import { PanResponder, Animated, Easing, View } from 'react-native'
+import { Platform, Image, PanResponder, Animated, Easing, View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { randomNumber } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { resource } from '../utils/image'
 
 const coin0 = resource('images/coin0.png')
-const coin1 = resource('images/coin1.png')
+//const coin1 = resource('images/coin1.png')
+
+// FIXME:
+// rotation on android has large perspective which was not possible to adjust
+// skewX works the same way as rotateX on web, which is bug but sufficient for now:
+// https://productpains.com/post/react-native/transform-skewy-isnt-working-properly
+const rotationTransformKey = Platform.OS === 'web' ? 'rotateX' : 'skewX'
 
 export class Coin extends Component {
 
@@ -50,11 +56,16 @@ export class Coin extends Component {
       onStart: () => {
       },
       onMove: state => {
-        // TODO: how to grab coin during animation
+        if (this.animating) {
+          return
+        }
         const position = this.computePosition(state.y0, state.moveY)
         this.position.setValue(position)
       },
       onEnd: state => {
+        if (this.animating) {
+          return
+        }
         this.prevPosition = this.computePosition(state.y0, state.moveY)
         this.throwCoin()
       },
@@ -62,6 +73,7 @@ export class Coin extends Component {
   }
 
   throwCoin() {
+    this.animating = true
     this.time.setValue(0)
     this.prevPosition = this.initialPosition
     Animated.parallel([
@@ -84,7 +96,9 @@ export class Coin extends Component {
           easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
         }),
       ]),
-    ]).start()
+    ]).start(() => {
+      this.animating = false
+    })
   }
 
   render() {
@@ -99,33 +113,18 @@ export class Coin extends Component {
           <View style={s.imageContainer}>
             <Animated.View
               style={[s.positionContainer, {
-                top: this.position,
+                transform: [
+                  {translateY: this.position},
+                  {[rotationTransformKey]: this.rotation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0deg', '180deg'],
+                  })},
+                ],
               }]}
               onLayout={this.onLayout}
               {...this._panResponder.panHandlers}
             >
-              <Animated.Image
-                source={coin0}
-                style={[s.image, {
-                  transform: [
-                    {rotateX: this.rotation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ['0deg', '180deg'],
-                    })},
-                  ],
-                }]}
-              />
-              <Animated.Image
-                source={coin1}
-                style={[s.image, {
-                  transform: [
-                    {rotateX: this.rotation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: ['180deg', '0deg'],
-                    })},
-                  ],
-                }]}
-              />
+              <Image source={coin0} style={s.image} />
             </Animated.View>
           </View>
         </View>
@@ -144,6 +143,9 @@ const createPanResponder = ({ onStart, onMove, onEnd }) => PanResponder.create({
   onPanResponderRelease: (evt, state) => onEnd(state),
 })
 
+// TODO: backfaceVisibility is not supported by android now
+// implement coin animation using two images when it is supported
+// https://productpains.com/post/react-native/android-backfacevisibility-not-working
 const makeStyles = ResponsiveStyleSheet.create(({ imageSize }) => {
   return {
     container: {
@@ -154,17 +156,18 @@ const makeStyles = ResponsiveStyleSheet.create(({ imageSize }) => {
     image: {
       width: imageSize,
       height: imageSize,
-      backfaceVisibility: 'hidden',
-      position: 'absolute',
     },
     imageContainer: {
       height: imageSize,
       width: imageSize,
     },
     positionContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
       position: 'relative',
       width: imageSize,
       height: imageSize,
+      top: 0,
     },
   }
 })
