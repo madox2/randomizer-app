@@ -9,7 +9,7 @@ export const ControlButton = ({ onPress, type, backgroundColor }) => {
     <TouchableOpacity
       onPress={onPress}
       style={[s.button, { backgroundColor }]}
-      activeOpacity={0.5}
+      activeOpacity={0.8}
     >
       <Image source={resource(`icons/${type}.png`)} style={s.image} />
     </TouchableOpacity>

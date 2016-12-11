@@ -10,7 +10,7 @@ export const SectionButton = ({ title, onPress, color, type }) => {
     s.container,
   ]
   return (
-    <TouchableOpacity style={container} onPress={onPress} activeOpacity={0.5}>
+    <TouchableOpacity style={container} onPress={onPress} activeOpacity={0.8}>
       <View style={s.imageWrapper}>
         <View>
           <Image style={s.image} source={resource(`icons/${type}.png`)} />
