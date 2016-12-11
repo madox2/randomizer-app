@@ -1,15 +1,10 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
+import { View, Text } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { mapProps, reduceProps, someProp } from '../utils/functional'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { Modal } from '../components/Modal'
-
-export const Button = ({ children, onPress, style }) => (
-  <TouchableHighlight onPress={onPress} style={[staticStyles.button, style]} underlayColor='#ddd'>
-    <Text>{children}</Text>
-  </TouchableHighlight>
-)
+import { Button } from '../components/Button'
 
 const inputs = {
   number: InputNumber,
@@ -168,15 +163,3 @@ const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight, height, width 
     borderRightWidth: 0,
   },
 }))
-
-const staticStyles = StyleSheet.create({
-  button: {
-    padding: 14,
-    paddingRight: 20,
-    paddingLeft: 20,
-    flex: 1,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'silver',
-  },
-})
