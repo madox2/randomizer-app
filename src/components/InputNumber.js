@@ -26,7 +26,7 @@ export const InputNumber = ({ label, onChange, value, err, constraints }) => {
   return (
     <View style={s.container}>
       <Text style={s.label}>{`${label} `}</Text>
-      <TextInput onChangeText={onChangeText} value={`${value}`} style={s.input} />
+      <TextInput onChangeText={onChangeText} value={`${value}`} style={s.input} keyboardType='numeric' />
       {err && (
         <Error>{err}</Error>
       )}
