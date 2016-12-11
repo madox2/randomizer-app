@@ -3,6 +3,7 @@ import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { mapProps, reduceProps, someProp } from '../utils/functional'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { Modal } from '../components/Modal'
 
 export const Button = ({ children, onPress, style }) => (
   <TouchableHighlight onPress={onPress} style={[staticStyles.button, style]} underlayColor='#ddd'>
@@ -31,15 +32,17 @@ export class UserOptions extends Component {
     const { editMode } = this.state
     const s = makeStyles()
     return editMode ? (
-      <View style={[s.container, s.editContainer]}>
-        <View style={s.edit}>
-          {this.makeInputs()}
+      <Modal onRequestClose={this.cancel}>
+        <View style={[s.container, s.editContainer]}>
+          <View style={s.edit}>
+            {this.makeInputs()}
+          </View>
+          <View style={s.controls}>
+            <Button onPress={this.save} style={s.buttonLeft}>Save</Button>
+            <Button onPress={this.cancel}>Cancel</Button>
+          </View>
         </View>
-        <View style={s.controls}>
-          <Button onPress={this.save} style={s.buttonLeft}>Save</Button>
-          <Button onPress={this.cancel}>Cancel</Button>
-        </View>
-      </View>
+      </Modal>
     ) : (
       <View style={s.container}>
         <View style={s.summary}>
