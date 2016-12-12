@@ -14,8 +14,9 @@
   "dependencies": {
     "animated": "madox2/animated#unknown-method-invocation",
     "randomcolor": "^0.4.4",
-    "react": "^15.3.2",
-    "react-native": "^0.39.0",
+    "react": "15.3.2",
+    "react-dom": "15.3.2",
+    "react-native": "0.37.0",
     "react-native-responsive-stylesheet": "github:madox2/react-native-responsive-stylesheet",
     "react-native-web": "0.0.45"
   },
