@@ -4,15 +4,16 @@ import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { resource } from '../utils/image'
+import { storage } from '../services/storage'
 
-const options = {
+const makeOptions = count => ({
   count: {
     type: 'number',
     label: 'Count',
-    defaultValue: 3,
+    defaultValue: count || 3,
     constraints: { min: 1, max: 8 },
   },
-}
+})
 
 const matchSource = resource('images/match.png')
 const matchBurnedSource = resource('images/match-burned.png')
@@ -23,10 +24,12 @@ export class Matches extends Component {
 
   constructor(...args) {
     super(...args)
+    this.options = makeOptions(storage.get('Matches.count'))
+    const count = this.options.count.defaultValue
     this.state = {
-      count: options.count.defaultValue,
-      matches: this.getNewStates(options.count.defaultValue),
-      selected: randomNumber(0, options.count.defaultValue - 1),
+      count,
+      matches: this.getNewStates(count),
+      selected: randomNumber(0, count - 1),
       throwNumber: 0,
     }
     this.onRefresh = this.onRefresh.bind(this)
@@ -83,6 +86,7 @@ export class Matches extends Component {
 
   onOptionsChange({ count }) {
     const selected = randomNumber(0, count.value - 1)
+    storage.set('Matches.count', count.value)
     this.setState({
       count: count.value,
       matches: this.getNewStates(count.value),
@@ -133,7 +137,7 @@ export class Matches extends Component {
     return (
       <SectionTemplate
         onRefresh={this.onRefresh}
-        options={options}
+        options={this.options}
         onOptionsChange={this.onOptionsChange}
         title='Matches'
         color={this.props.color}

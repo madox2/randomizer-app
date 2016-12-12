@@ -4,25 +4,25 @@ import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { resource } from '../utils/image'
+import { storage } from '../services/storage'
 
 // TODO: implement multi sided dices
-const options = {
+const makeOptions = count => ({
   count: {
     type: 'number',
     label: 'Count',
-    defaultValue: 4,
+    defaultValue: count || 4,
     constraints: { min: 1, max: 12 },
   },
-}
+})
 
 export class Dices extends Component {
 
   constructor(...args) {
     super(...args)
-    this.state = {
-      count: options.count.defaultValue,
-      results: this.generate(options.count.defaultValue),
-    }
+    this.options = makeOptions(storage.get('Dices.count'))
+    const count = this.options.count.defaultValue
+    this.state = { count, results: this.generate(count) }
     this.onOptionsChange = this.onOptionsChange.bind(this)
     this.throwDices = this.throwDices.bind(this)
     this.thrownNumber = 0
@@ -44,6 +44,7 @@ export class Dices extends Component {
   }
 
   onOptionsChange({ count }) {
+    storage.set('Dices.count', count.value)
     this.setState({
       count: count.value,
       results: this.generate(count.value),
@@ -57,7 +58,7 @@ export class Dices extends Component {
       <SectionTemplate
         color={this.props.color}
         buttonColor={this.props.buttonColor}
-        options={options}
+        options={this.options}
         onOptionsChange={this.onOptionsChange}
         title='Dices'
       >

@@ -3,26 +3,31 @@ import { Text, TouchableOpacity } from 'react-native'
 import { randomNumber, randomColor } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { storage } from '../services/storage'
 
-const options = {
+const makeOptions = ({ from, to }) => ({
   from: {
     type: 'number',
     label: 'From',
-    defaultValue: 0,
+    defaultValue: from || 0,
   },
   to: {
     type: 'number',
     label: 'To',
-    defaultValue: 100,
+    defaultValue: to || 100,
   },
-}
+})
 
 export class Numbers extends Component {
 
   constructor(...args) {
     super(...args)
-    const from = options.from.defaultValue
-    const to = options.to.defaultValue
+    this.options = makeOptions({
+      from: storage.get('Numbers.from'),
+      to: storage.get('Numbers.to'),
+    })
+    const from = this.options.from.defaultValue
+    const to = this.options.to.defaultValue
     const number = randomNumber(from, to)
     const color = randomColor()
     this.state = {
@@ -52,6 +57,8 @@ export class Numbers extends Component {
   }
 
   onOptionsChange({ from, to }) {
+    storage.set('Numbers.from', from.value)
+    storage.set('Numbers.to', to.value)
     this.setState({
       from: from.value,
       to: to.value,
@@ -72,7 +79,7 @@ export class Numbers extends Component {
     const s = makeStyles({ from, to })
     return (
       <SectionTemplate
-        options={options}
+        options={this.options}
         onOptionsChange={this.onOptionsChange}
         onSettings={this.stop}
         title='Numbers'
