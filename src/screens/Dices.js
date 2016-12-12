@@ -32,7 +32,7 @@ export class Dices extends Component {
     this.thrownNumber = 0
     this.rotations = new Array(this.options.count.constraints.max)
       .fill(0)
-      .map(() => new Animated.Value())
+      .map(() => new Animated.Value(0))
     this.visibleFace = 0
   }
 
@@ -55,7 +55,7 @@ export class Dices extends Component {
           r.setValue(base)
           return Animated.timing(r, {
             toValue: base + 2,
-            duration: 200,
+            duration: 300,
             delay: randomNumber(0, 300),
           })
         })
@@ -76,6 +76,9 @@ export class Dices extends Component {
     // since backface visibility is not implemented on android I need to use scaling
     const { results0, results1, count } = this.state
     const s = makeStyles({ count })
+    // TODO: 0 as value for scale does not work properly:
+    // https://github.com/facebook/react-native/issues/10510
+    const min = 0.001
     return (
       <SectionTemplate
         color={this.props.color}
@@ -95,7 +98,7 @@ export class Dices extends Component {
                 transform: [{
                   scaleY: this.rotations[i].interpolate({
                     inputRange: [0, 1, 2, 3, 4],
-                    outputRange: [1, 0, 0, 0, 1],
+                    outputRange: [1, min, min, min, 1],
                   }),
                 }],
               }}>
@@ -108,7 +111,7 @@ export class Dices extends Component {
                   transform: [{
                     scaleY: this.rotations[i].interpolate({
                       inputRange: [0, 1, 2, 3, 4],
-                      outputRange: [0, 0, 1, 0, 0],
+                      outputRange: [min, min, 1, min, min],
                     }),
                   }],
                 }}>
@@ -174,6 +177,7 @@ const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHe
       position: 'absolute',
       top: 0,
       left: 0,
+      right: 0,
     },
     diceImage: {
       margin: margin,
