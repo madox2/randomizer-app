@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, Image } from 'react-native'
+import { Animated, Text, View, TouchableOpacity, Image } from 'react-native'
 import { randomNumber } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
@@ -22,10 +22,18 @@ export class Dices extends Component {
     super(...args)
     this.options = makeOptions(storage.get('Dices.count'))
     const count = this.options.count.defaultValue
-    this.state = { count, results: this.generate(count) }
+    this.state = {
+      count,
+      results0: this.generate(count),
+      results1: this.generate(count),
+    }
     this.onOptionsChange = this.onOptionsChange.bind(this)
     this.throwDices = this.throwDices.bind(this)
     this.thrownNumber = 0
+    this.rotations = new Array(this.options.count.constraints.max)
+      .fill(0)
+      .map(() => new Animated.Value())
+    this.visibleFace = 0
   }
 
   generate(count) {
@@ -35,11 +43,23 @@ export class Dices extends Component {
   }
 
   throwDices() {
-    if (this.interval) {
-      return
-    }
+    this.visibleFace = (this.visibleFace + 1) % 2
     this.setState({
-      results: this.generate(this.state.count),
+      [`results${this.visibleFace}`]: this.generate(this.state.count),
+    }, () => {
+      const base = this.visibleFace ? 0 : 2
+      this.rotations.forEach(r => r.setValue(base))
+      const animations = this.rotations
+        .filter((r, i) => i < this.state.count)
+        .map(r => {
+          r.setValue(base)
+          return Animated.timing(r, {
+            toValue: base + 2,
+            duration: 200,
+            delay: randomNumber(0, 300),
+          })
+        })
+      Animated.parallel(animations).start()
     })
   }
 
@@ -47,12 +67,14 @@ export class Dices extends Component {
     storage.set('Dices.count', count.value)
     this.setState({
       count: count.value,
-      results: this.generate(count.value),
+      results0: this.generate(count.value),
+      results1: this.generate(count.value),
     })
   }
 
   render() {
-    const { results, count } = this.state
+    // since backface visibility is not implemented on android I need to use scaling
+    const { results0, results1, count } = this.state
     const s = makeStyles({ count })
     return (
       <SectionTemplate
@@ -68,9 +90,32 @@ export class Dices extends Component {
           style={s.ounterContainer}
         >
           <View style={s.container}>
-            {results.map((r, i) => (
-              <DiceGraphic result={r} key={`${r}-${i}`} s={s} />
+            {results0.map((r, i) => (
+              <Animated.View key={`s${r}-${i}`} style={{
+                transform: [{
+                  scaleY: this.rotations[i].interpolate({
+                    inputRange: [0, 1, 2, 3, 4],
+                    outputRange: [1, 0, 0, 0, 1],
+                  }),
+                }],
+              }}>
+                <DiceGraphic result={r} s={s} />
+              </Animated.View>
             ))}
+            <View style={[s.container, s.hiddenContainer]}>
+              {results1.map((r, i) => (
+                <Animated.View key={`h${r}-${i}`} style={{
+                  transform: [{
+                    scaleY: this.rotations[i].interpolate({
+                      inputRange: [0, 1, 2, 3, 4],
+                      outputRange: [0, 0, 1, 0, 0],
+                    }),
+                  }],
+                }}>
+                  <DiceGraphic result={r} s={s} />
+                </Animated.View>
+              ))}
+            </View>
           </View>
         </TouchableOpacity>
       </SectionTemplate>
@@ -117,12 +162,18 @@ const makeStyles = ResponsiveStyleSheet.create(({ count, contentWidth, contentHe
       justifyContent: 'center',
       marginTop: settingsHeight + contentPadding,
       marginBottom: controlsHeight,
+      position: 'relative',
     },
     container: {
       flexWrap: 'wrap',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    hiddenContainer: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
     },
     diceImage: {
       margin: margin,
