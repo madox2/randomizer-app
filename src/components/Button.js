@@ -3,7 +3,7 @@ import { TouchableHighlight, Text, StyleSheet } from 'react-native'
 
 export const Button = ({ children, onPress, style }) => (
   <TouchableHighlight onPress={onPress} style={[styles.button, style]} underlayColor='#ddd'>
-    <Text>{children}</Text>
+    <Text style={styles.label}>{children}</Text>
   </TouchableHighlight>
 )
 
@@ -16,5 +16,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'silver',
+  },
+  label: {
+    fontSize: 18,
   },
 })

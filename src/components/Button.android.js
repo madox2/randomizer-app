@@ -7,7 +7,7 @@ export const Button = ({ children, onPress, style }) => (
     background={TouchableNativeFeedback.SelectableBackground()}
   >
     <View style={[styles.button, style]}>
-      <Text>{children}</Text>
+      <Text style={styles.label}>{children}</Text>
     </View>
   </TouchableNativeFeedback>
 )
@@ -21,5 +21,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'silver',
+  },
+  label: {
+    fontSize: 18,
   },
 })

@@ -25,7 +25,7 @@ export const InputNumber = ({ label, onChange, value, err, constraints }) => {
   const onChangeText = n => onChange(sanitize(n), validate(sanitize(n), constraints))
   return (
     <View style={s.container}>
-      <Text style={s.label}>{`${label} `}</Text>
+      <Text style={s.label}>{`${label}:`}</Text>
       <TextInput onChangeText={onChangeText} value={`${value}`} style={s.input} keyboardType='numeric' />
       {err && (
         <Error>{err}</Error>
@@ -39,21 +39,20 @@ const s = StyleSheet.create({
     flexDirection: 'column',
     padding: 10,
     margin: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: 'silver',
   },
   label: {
     width: 70,
-    padding: 5,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   input: {
     borderWidth: 0,
-    fontSize: 14,
     color: 'gray',
     padding: 5,
+    fontSize: 18,
   },
   error: {
-    fontSize: 14,
+    fontSize: 16,
     color: 'red',
     padding: 5,
   },

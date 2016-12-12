@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Navigator as NativeNavigator } from 'react-native'
 
-// TODO: NativeNavigator.SceneConfigs.PushFromRight looks better but it has bug when orientation changes:
+// TODO: NativeNavigator.SceneConfigs.PushFromRight has bug when orientation changes:
 // https://productpains.com/post/react-native/navigator-width-is-not-updated-when-orientation-is-changed-so-switch-animation-stops-halfway-and-component-vanishes
 
 export class Navigator extends Component {
@@ -38,7 +38,7 @@ export class Navigator extends Component {
         ref={this._onRef}
         initialRoute={{Scene: Initial}}
         renderScene={({ Scene }) => <Scene />}
-        configureScene={() => NativeNavigator.SceneConfigs.FadeAndroid}
+        configureScene={() => NativeNavigator.SceneConfigs.PushFromRight}
       />
     )
   }
