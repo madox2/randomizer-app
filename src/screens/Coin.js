@@ -1,18 +1,12 @@
 import React, { Component } from 'react'
-import { Platform, Image, PanResponder, Animated, Easing, View } from 'react-native'
+import { Image, PanResponder, Animated, Easing, View } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
-import { randomNumber } from '../utils/random'
+import { randomBoolean } from '../utils/random'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { resource } from '../utils/image'
 
-const coin0 = resource('images/coin0.png')
-//const coin1 = resource('images/coin1.png')
-
-// FIXME:
-// rotation on android has large perspective which was not possible to adjust
-// skewX works the same way as rotateX on web, which is bug but sufficient for now:
-// https://productpains.com/post/react-native/transform-skewy-isnt-working-properly
-const rotationTransformKey = Platform.OS === 'web' ? 'rotateX' : 'skewX'
+const coin0 = resource('images/coin-0.png')
+const coin1 = resource('images/coin-1.png')
 
 export class Coin extends Component {
 
@@ -20,7 +14,7 @@ export class Coin extends Component {
     super(...args)
     this.throwCoin = this.throwCoin.bind(this)
     this.time = new Animated.Value(0)
-    this.rotation = Animated.modulo(this.time, 2)
+    this.rotation = Animated.modulo(this.time, 4)
     this.position = new Animated.Value(this.prevPosition)
     this.onLayout = this.onLayout.bind(this)
   }
@@ -78,7 +72,7 @@ export class Coin extends Component {
     this.prevPosition = this.initialPosition
     Animated.parallel([
       Animated.timing(this.time, {
-        toValue: 15 + randomNumber(0, 1),
+        toValue: 30 + (randomBoolean() ? 0 : 2),
         duration: 800,
         easing: Easing.linear,
       }),
@@ -103,6 +97,8 @@ export class Coin extends Component {
 
   render() {
     const s = makeStyles({ imageSize: this.imageSize })
+    // TODO: see dices.js
+    const min = 0.0001
     return (
       <SectionTemplate
         title='Coin'
@@ -110,20 +106,47 @@ export class Coin extends Component {
         buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
-          <Animated.View
-            style={[s.animationContainer, {
-              transform: [
-                {translateY: this.position},
-                {[rotationTransformKey]: this.rotation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0deg', '180deg'],
-                })},
-              ],
-            }]}
-            onLayout={this.onLayout}
-            {...this._panResponder.panHandlers}
-          >
-            <Image source={coin0} style={s.image} />
+          <Animated.View style={[s.positionContainer, {
+            transform: [
+              {translateY: this.position},
+            ],
+          }]}>
+            <Animated.View
+              style={[s.rotationContainer, {
+                transform: [{
+                  scaleY: this.rotation.interpolate({
+                    inputRange: [0, 1, 2, 3, 4],
+                    outputRange: [1, min, min, min, 1],
+                  }),
+                }],
+                opacity: this.rotation.interpolate({
+                  inputRange: [0, 1, 2, 3, 4],
+                  outputRange: [1, 1, 0, 1, 1],
+                }),
+              }]}
+              onLayout={this.onLayout}
+              {...this._panResponder.panHandlers}
+            >
+              <Image source={coin0} style={s.image} />
+            </Animated.View>
+            <Animated.View
+              style={[s.rotationContainer, {
+                transform: [{
+                  scaleY: this.rotation.interpolate({
+                    inputRange: [0, 1, 2, 3, 4],
+                    outputRange: [min, min, 1, min, min],
+                  }),
+                }],
+                opacity: this.rotation.interpolate({
+                  inputRange: [0, 1, 2, 3, 4],
+                  outputRange: [0, 1, 1, 1, 0],
+                }),
+              }]}
+              onLayout={this.onLayout}
+              {...this._panResponder.panHandlers}
+            >
+              <Image source={coin1} style={s.image} />
+            </Animated.View>
           </Animated.View>
         </View>
       </SectionTemplate>
@@ -155,12 +178,17 @@ const makeStyles = ResponsiveStyleSheet.create(({ imageSize }) => {
       width: imageSize,
       height: imageSize,
     },
-    animationContainer: {
+    positionContainer: {
+      height: imageSize,
+      width: imageSize,
+      position: 'relative',
+    },
+    rotationContainer: {
       height: imageSize,
       width: imageSize,
       alignItems: 'center',
       justifyContent: 'center',
-      position: 'relative',
+      position: 'absolute',
       top: 0,
     },
   }

@@ -6,8 +6,8 @@ import { Platform } from 'react-native'
 
 const sourcesRequire = Platform.OS === 'web' ? {} : {
   'images/bottle.png': require('../resources/images/bottle.png'),
-  'images/coin0.png': require('../resources/images/coin0.png'),
-  'images/coin1.png': require('../resources/images/coin1.png'),
+  'images/coin-0.png': require('../resources/images/coin-0.png'),
+  'images/coin-1.png': require('../resources/images/coin-1.png'),
   'images/dice1.png': require('../resources/images/dice1.png'),
   'images/dice2.png': require('../resources/images/dice2.png'),
   'images/dice3.png': require('../resources/images/dice3.png'),

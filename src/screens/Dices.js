@@ -78,7 +78,7 @@ export class Dices extends Component {
     const s = makeStyles({ count })
     // TODO: 0 as value for scale does not work properly:
     // https://github.com/facebook/react-native/issues/10510
-    const min = 0.001
+    const min = 0.0001
     return (
       <SectionTemplate
         color={this.props.color}
@@ -101,6 +101,10 @@ export class Dices extends Component {
                     outputRange: [1, min, min, min, 1],
                   }),
                 }],
+                opacity: this.rotations[i].interpolate({
+                  inputRange: [0, 1, 2, 3, 4],
+                  outputRange: [1, 1, 0, 1, 1],
+                }),
               }}>
                 <DiceGraphic result={r} s={s} />
               </Animated.View>
@@ -114,6 +118,10 @@ export class Dices extends Component {
                       outputRange: [min, min, 1, min, min],
                     }),
                   }],
+                  opacity: this.rotations[i].interpolate({
+                    inputRange: [0, 1, 2, 3, 4],
+                    outputRange: [0, 1, 1, 1, 0],
+                  }),
                 }}>
                   <DiceGraphic result={r} s={s} />
                 </Animated.View>
