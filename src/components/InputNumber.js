@@ -21,12 +21,18 @@ const Error = ({ children }) => (
   <Text style={s.error}>{children}</Text>
 )
 
-export const InputNumber = ({ label, onChange, value, err, constraints }) => {
+export const InputNumber = ({ label, onChange, value, err, constraints, onSubmitEditing }) => {
   const onChangeText = n => onChange(sanitize(n), validate(sanitize(n), constraints))
   return (
     <View style={s.container}>
       <Text style={s.label}>{`${label}:`}</Text>
-      <TextInput onChangeText={onChangeText} value={`${value}`} style={s.input} keyboardType='numeric' />
+      <TextInput
+        onChangeText={onChangeText}
+        value={`${value}`}
+        style={s.input}
+        keyboardType='numeric'
+        onSubmitEditing={onSubmitEditing}
+      />
       {err && (
         <Error>{err}</Error>
       )}

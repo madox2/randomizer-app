@@ -104,6 +104,7 @@ export class UserOptions extends Component {
           constraints={obj.constraints}
           err={obj.err}
           onChange={onInputChange}
+          onSubmitEditing={this.save}
         />
       )
     })
