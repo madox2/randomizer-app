@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "start:web": "webpack-dashboard -- webpack-dev-server --port 3000 --host 0.0.0.0 --config webpack.config.dev.js --inline --hot --colors",
+    "build:web": "webpack --progress --profile --colors --config webpack.config.prod.js",
     "lint": "eslint .",
     "test": "jest"
   },
@@ -39,6 +40,7 @@
     "react-test-renderer": "^15.3.2",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
+    "webpack-bundle-analyzer": "^2.1.1",
     "webpack-dashboard": "^0.2.0",
     "webpack-dev-server": "^1.16.1"
   }

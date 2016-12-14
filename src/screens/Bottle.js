@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { Image, View, PanResponder, Animated, Easing } from 'react-native'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { resource } from '../utils/image'
 
-const bottleSource = require('../resources/images/bottle.png')
+const bottleSource = resource('images/bottle.png')
 
 export class Bottle extends Component {
 
