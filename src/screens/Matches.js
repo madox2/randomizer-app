@@ -10,7 +10,7 @@ const makeOptions = count => ({
   count: {
     type: 'number',
     label: 'Count',
-    defaultValue: count || 3,
+    defaultValue: count || 4,
     constraints: { min: 1, max: 8 },
   },
 })
