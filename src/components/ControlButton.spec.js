@@ -11,9 +11,6 @@ describe('<ControlButton />', () => {
     )
     const image = wrapper.find('Image')
     expect(image.length).toBe(1)
-    expect(image.prop('source')).toEqual({
-      uri: '../resources/icons/back.svg',
-    })
   })
 
   it('should trigger onPress event', () => {

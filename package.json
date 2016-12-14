@@ -35,7 +35,7 @@
     "jest": "^16.0.1",
     "jest-cli": "^16.0.1",
     "jest-react-native": "^16.0.0",
-    "react-addons-test-utils": "^15.3.2",
+    "react-addons-test-utils": "15.3.2",
     "react-test-renderer": "^15.3.2",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
