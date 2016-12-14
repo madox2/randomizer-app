@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { Navigator as NativeNavigator } from 'react-native'
+import { Navigator as NativeNavigator, BackAndroid } from 'react-native'
 
 // TODO: NativeNavigator.SceneConfigs.PushFromRight has bug when orientation changes:
 // https://productpains.com/post/react-native/navigator-width-is-not-updated-when-orientation-is-changed-so-switch-animation-stops-halfway-and-component-vanishes
@@ -10,6 +10,7 @@ export class Navigator extends Component {
     super(...args)
     this.state = { Initial: this.props.root }
     this._onRef = this._onRef.bind(this)
+    this._backPressListener = this._backPressListener.bind(this)
   }
 
   navigate(Scene) {
@@ -29,6 +30,22 @@ export class Navigator extends Component {
 
   _onRef(navigator) {
     this._navigator = navigator
+  }
+
+  _backPressListener() {
+    if (this._navigator && this._navigator.getCurrentRoutes().length > 1) {
+      this._navigator.pop()
+      return true
+    }
+    return false
+  }
+
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this._backPressListener)
+  }
+
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this._backPressListener)
   }
 
   render() {
