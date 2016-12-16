@@ -59,9 +59,11 @@ export class Numbers extends Component {
   onOptionsChange({ from, to }) {
     storage.set('Numbers.from', from.value)
     storage.set('Numbers.to', to.value)
+    const number = randomNumber(from.value, to.value)
     this.setState({
       from: from.value,
       to: to.value,
+      number,
     })
   }
 
