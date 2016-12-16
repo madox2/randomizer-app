@@ -1,10 +1,13 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Text } from 'react-native'
+import { Platform, KeyboardAvoidingView as KAW, View, Text } from 'react-native'
 import { InputNumber } from './InputNumber'
 import { mapProps, reduceProps, someProp } from '../utils/functional'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { Modal } from '../components/Modal'
 import { Button } from '../components/Button'
+
+// TODO: should be added to react-native-web
+const KeyboardAvoidingView = Platform.OS === 'web' ? View : KAW
 
 const inputs = {
   number: InputNumber,
@@ -33,7 +36,7 @@ export class UserOptions extends Component {
     const s = makeStyles()
     return editMode ? (
       <Modal onRequestClose={this.cancel}>
-        <View style={[s.container, s.editContainer]}>
+        <KeyboardAvoidingView style={[s.container, s.editContainer]}>
           <View style={s.edit}>
             {this.makeInputs()}
           </View>
@@ -41,7 +44,7 @@ export class UserOptions extends Component {
             <Button onPress={this.save} style={s.buttonLeft}>Save</Button>
             <Button onPress={this.cancel}>Cancel</Button>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     ) : (
       <View style={s.container}>
@@ -138,15 +141,13 @@ UserOptions.defaultProps = {
   showChangeButton: false,
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight, height, width }) => ({
+const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight }) => ({
   container: {
     padding: 5,
   },
   editContainer: {
-    paddingBottom: 30,
+    flex: 1,
     backgroundColor: 'white',
-    height: height,
-    width: width,
   },
   summary: {
     flexDirection: 'row',
