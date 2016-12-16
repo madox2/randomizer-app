@@ -10,6 +10,11 @@ const inputs = {
   number: InputNumber,
 }
 
+// FIXME:
+// https://github.com/facebook/react-native/issues/10795
+// https://github.com/facebook/react-native/issues/10845
+const timeout = (task, ms) => () => setTimeout(task, ms)
+
 export class UserOptions extends Component {
 
   constructor(...props) {
@@ -104,7 +109,7 @@ export class UserOptions extends Component {
           constraints={obj.constraints}
           err={obj.err}
           onChange={onInputChange}
-          onSubmitEditing={this.save}
+          onSubmitEditing={timeout(this.save, 300)}
         />
       )
     })
