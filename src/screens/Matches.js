@@ -136,12 +136,11 @@ export class Matches extends Component {
     const s = makeStyles({ matchHeight: this.matchHeight, matchCount: matches.length })
     return (
       <SectionTemplate
+        {...this.props}
         onRefresh={this.onRefresh}
         options={this.options}
         onOptionsChange={this.onOptionsChange}
         title='Matches'
-        color={this.props.color}
-        buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
           {matches.map((match, i) => (

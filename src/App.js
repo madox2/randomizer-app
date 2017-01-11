@@ -3,6 +3,7 @@ import { Navigator } from './components/Navigator'
 import { LayoutListener } from './components/LayoutListener'
 import { Welcome} from './screens'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { MenuContext } from 'react-native-popup-menu'
 
 ResponsiveStyleSheet.setExtension(({ width, height }) => {
   const dividerWidth = 4
@@ -32,9 +33,18 @@ export class App extends React.Component {
   render() {
     return (
       <LayoutListener onLayout={() => this.setState({})}>
-        <Navigator root={Welcome} />
+        <MenuContext customStyles={popupMenuStyles}>
+          <Navigator root={Welcome} />
+        </MenuContext>
       </LayoutListener>
     )
   }
 
+}
+
+const popupMenuStyles = {
+  backdrop: {
+    backgroundColor: 'black',
+    opacity: 0.5,
+  },
 }

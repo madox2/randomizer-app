@@ -73,9 +73,8 @@ export class Bottle extends Component {
     const s = makeStyles()
     return (
       <SectionTemplate
+        {...this.props}
         title='Bottle'
-        color={this.props.color}
-        buttonColor={this.props.buttonColor}
       >
         <View style={s.container} {...this._panResponder.panHandlers} collapsable={false}>
           <Animated.View

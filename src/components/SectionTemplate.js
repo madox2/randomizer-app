@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { UserOptions } from './UserOptions'
 import { ControlButton } from './ControlButton'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
+import { Info } from './Info'
 
 export class SectionTemplate extends Component {
 
@@ -21,6 +22,7 @@ export class SectionTemplate extends Component {
       style,
       color,
       buttonColor,
+      infoText,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     const s = makeStyles()
@@ -37,6 +39,9 @@ export class SectionTemplate extends Component {
         </View>
         <View style={s.controlButtonContainerRight}>
           {options && <ControlButton onPress={this.onSettings} type='settings' backgroundColor={buttonColor} />}
+        </View>
+        <View style={s.infoContainer}>
+          <Info text={infoText} buttonColor={buttonColor} />
         </View>
         {options &&
           <View style={s.options}>
@@ -71,6 +76,7 @@ SectionTemplate.propTypes = {
   onOptionsChange: PropTypes.func,
   title: PropTypes.string,
   color: PropTypes.string,
+  infoText: PropTypes.string,
 }
 
 SectionTemplate.contextTypes = {
@@ -106,6 +112,12 @@ const makeStyles = ResponsiveStyleSheet.create(({ width, contentPadding, control
       position: 'absolute',
       top: 0,
       left: 0,
+    },
+    infoContainer: {
+      position: 'absolute',
+      padding: contentPadding / 2,
+      top: 0,
+      right: 0,
     },
   })
 })

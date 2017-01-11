@@ -101,9 +101,8 @@ export class Coin extends Component {
     const min = 0.0001
     return (
       <SectionTemplate
+        {...this.props}
         title='Coin'
-        color={this.props.color}
-        buttonColor={this.props.buttonColor}
       >
         <View style={s.container}>
           <Animated.View style={[s.positionContainer, {

@@ -81,8 +81,7 @@ export class Dices extends Component {
     const min = 0.0001
     return (
       <SectionTemplate
-        color={this.props.color}
-        buttonColor={this.props.buttonColor}
+        {...this.props}
         options={this.options}
         onOptionsChange={this.onOptionsChange}
         title='Dices'

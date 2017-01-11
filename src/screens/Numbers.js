@@ -81,13 +81,12 @@ export class Numbers extends Component {
     const s = makeStyles({ from, to })
     return (
       <SectionTemplate
+        {...this.props}
         options={this.options}
         onOptionsChange={this.onOptionsChange}
         onSettings={this.stop}
         title='Numbers'
         style={s.container}
-        color={this.props.color}
-        buttonColor={this.props.buttonColor}
       >
         <TouchableOpacity
           style={s.touchable}
