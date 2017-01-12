@@ -7,21 +7,19 @@ import { resource } from '../utils/image'
 import { storage } from '../services/storage'
 
 // TODO: implement multi sided dices
-const makeOptions = count => ({
-  count: {
-    type: 'number',
-    label: 'Count',
-    defaultValue: count || 4,
-    constraints: { min: 1, max: 12 },
-  },
-})
-
 export class Dices extends Component {
 
   constructor(...args) {
     super(...args)
-    this.options = makeOptions(storage.get('Dices.count'))
-    const count = this.options.count.defaultValue
+    const count = storage.getNumber('Dices.count')
+    this.options = {
+      count: {
+        type: 'number',
+        label: 'Count',
+        defaultValue: count,
+        constraints: { min: 1, max: 12 },
+      },
+    }
     this.state = {
       count,
       results0: this.generate(count),

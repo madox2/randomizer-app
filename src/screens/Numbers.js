@@ -5,29 +5,24 @@ import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { storage } from '../services/storage'
 
-const makeOptions = ({ from, to }) => ({
-  from: {
-    type: 'number',
-    label: 'From',
-    defaultValue: from || 0,
-  },
-  to: {
-    type: 'number',
-    label: 'To',
-    defaultValue: to || 100,
-  },
-})
-
 export class Numbers extends Component {
 
   constructor(...args) {
     super(...args)
-    this.options = makeOptions({
-      from: storage.get('Numbers.from'),
-      to: storage.get('Numbers.to'),
-    })
-    const from = this.options.from.defaultValue
-    const to = this.options.to.defaultValue
+    const from = storage.getNumber('Numbers.from')
+    const to = storage.getNumber('Numbers.to')
+    this.options = {
+      from: {
+        type: 'number',
+        label: 'From',
+        defaultValue: from,
+      },
+      to: {
+        type: 'number',
+        label: 'To',
+        defaultValue: to,
+      },
+    }
     const number = randomNumber(from, to)
     const color = randomColor()
     this.state = {

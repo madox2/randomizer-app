@@ -6,15 +6,6 @@ import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { resource } from '../utils/image'
 import { storage } from '../services/storage'
 
-const makeOptions = count => ({
-  count: {
-    type: 'number',
-    label: 'Count',
-    defaultValue: count || 4,
-    constraints: { min: 2, max: 8 },
-  },
-})
-
 const matchSource = resource('images/match.png')
 const matchBurnedSource = resource('images/match-burned.png')
 
@@ -24,8 +15,15 @@ export class Matches extends Component {
 
   constructor(...args) {
     super(...args)
-    this.options = makeOptions(storage.get('Matches.count'))
-    const count = this.options.count.defaultValue
+    const count = storage.getNumber('Matches.count')
+    this.options = {
+      count: {
+        type: 'number',
+        label: 'Count',
+        defaultValue: count,
+        constraints: { min: 2, max: 8 },
+      },
+    }
     this.state = {
       count,
       matches: this.getNewStates(count),
