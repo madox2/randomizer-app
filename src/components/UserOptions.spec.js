@@ -111,6 +111,8 @@ describe('<UserOptions />', () => {
         label: 'Number',
         defaultValue: 1,
         value: 3,
+        err: undefined,
+        customErr: null,
       },
     })
   })

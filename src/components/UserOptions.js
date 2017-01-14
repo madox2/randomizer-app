@@ -76,21 +76,16 @@ export class UserOptions extends Component {
 
   save() {
     const { editOptions } = this.state
-    const hasErrors = someProp(editOptions, p => p.err)
-    if (hasErrors) {
-      this.setState({ editOptions })
-      return
-    }
-    const customValidatedOptions = reduceProps(editOptions, obj => {
-      let err = obj.validator ? obj.validator(editOptions) : null
-      return { ...obj, err }
+    const validatedEditOptions = reduceProps(editOptions, obj => {
+      let customErr = obj.validator ? obj.validator(editOptions) : null
+      let err = obj.customErr ? customErr : (obj.err || customErr)
+      return { ...obj, err, customErr }
     })
-    const hasCustomErrors = someProp(customValidatedOptions, p => p.err)
-    if (hasCustomErrors) {
-      this.setState({ editOptions: customValidatedOptions })
+    const hasErrors = someProp(validatedEditOptions, p => p.err)
+    if (hasErrors) {
+      this.setState({ editOptions: validatedEditOptions })
       return
     }
-
     this.props.onChange(editOptions)
     this.setState({
       editMode: false,
@@ -104,7 +99,7 @@ export class UserOptions extends Component {
     this.setState({
       editOptions: {
         ...editOptions,
-        [key]: { ...editOptions[key], value, err },
+        [key]: { ...editOptions[key], value, err, customErr: null },
       },
     })
   }
