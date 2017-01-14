@@ -1,6 +1,6 @@
 /*eslint-env jest, jasmine*/
 
-import { randomNumber, randomBoolean, randomColor } from './random'
+import { randomNumber, randomBoolean, randomColor, uniqueRandomNumbers } from './random'
 
 describe('randomNumber', () => {
 
@@ -77,4 +77,23 @@ describe('randomColor', () => {
     expect(randomColor().length).toBe(7)
     expect(randomColor()[0]).toBe('#')
   })
+})
+
+describe('uniqueRandomNumbers', () => {
+
+  it('should return two unique numbers', () => {
+    const numbers = uniqueRandomNumbers(0, 5, 2)
+    expect(numbers.length).toBe(2)
+    expect(numbers[0] >= 0 && numbers[0] <= 5).toBe(true)
+    expect(numbers[1] >= 0 && numbers[1] <= 5).toBe(true)
+  })
+
+  it('should return all unique numbers', () => {
+    const numbers = uniqueRandomNumbers(2, 7, 6)
+    expect(numbers.length).toBe(6)
+    for (let i = 2; i <= 7; i++) {
+      expect(!!~numbers.indexOf(i)).toBe(true)
+    }
+  })
+
 })

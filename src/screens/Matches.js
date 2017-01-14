@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Image, View, Animated, PanResponder } from 'react-native'
-import { randomNumber } from '../utils/random'
+import { uniqueRandomNumbers } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { resource } from '../utils/image'
@@ -16,6 +16,7 @@ export class Matches extends Component {
   constructor(...args) {
     super(...args)
     const count = storage.getNumber('Matches.count')
+    const burnedCount = storage.getNumber('Matches.burnedCount')
     this.options = {
       count: {
         type: 'number',
@@ -23,11 +24,18 @@ export class Matches extends Component {
         defaultValue: count,
         constraints: { min: 2, max: 8 },
       },
+      burnedCount: {
+        type: 'number',
+        label: 'Burned',
+        defaultValue: burnedCount,
+        constraints: { min: 1, max: 8 },
+      },
     }
     this.state = {
       count,
+      burnedCount,
       matches: this.getNewStates(count),
-      selected: randomNumber(0, count - 1),
+      burned: uniqueRandomNumbers(0, count - 1, burnedCount),
       throwNumber: 0,
     }
     this.onRefresh = this.onRefresh.bind(this)
@@ -77,18 +85,19 @@ export class Matches extends Component {
   }
 
   onRefresh() {
-    const { count } = this.state
-    const selected = randomNumber(0, count - 1)
-    this.setState({ selected, matches: this.getNewStates(count) })
+    const { count, burnedCount } = this.state
+    const burned = uniqueRandomNumbers(0, count - 1, burnedCount)
+    this.setState({ burned, matches: this.getNewStates(count) })
   }
 
-  onOptionsChange({ count }) {
-    const selected = randomNumber(0, count.value - 1)
+  onOptionsChange({ count, burnedCount }) {
+    const burned = uniqueRandomNumbers(0, count.value - 1, burnedCount.value)
     storage.set('Matches.count', count.value)
     this.setState({
       count: count.value,
+      burnedCount: burnedCount.value,
       matches: this.getNewStates(count.value),
-      selected,
+      burned,
     })
   }
 
@@ -130,7 +139,7 @@ export class Matches extends Component {
   }
 
   render() {
-    const { throwNumber, matches, selected } = this.state
+    const { throwNumber, matches, burned } = this.state
     const s = makeStyles({ matchHeight: this.matchHeight, matchCount: matches.length })
     return (
       <SectionTemplate
@@ -151,7 +160,7 @@ export class Matches extends Component {
             >
               <Image
                 style={s.imageMatch}
-                source={match.pulled && i === selected ? matchBurnedSource : matchSource}
+                source={match.pulled && ~burned.indexOf(i) ? matchBurnedSource : matchSource}
               />
             </Animated.View>
           ))}

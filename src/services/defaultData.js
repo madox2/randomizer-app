@@ -5,6 +5,7 @@ const data = [
   // game default data
   ['Dices.count', '4', '1'],
   ['Matches.count', '4', '1'],
+  ['Matches.burnedCount', '1', '1'],
   ['Numbers.from', '0', '1'],
   ['Numbers.to', '100', '1'],
   // info texts
