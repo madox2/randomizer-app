@@ -41,6 +41,7 @@ module.exports = {
   resolve: {
     alias: {
       'react-native': 'react-native-web',
+      'react-native-popup-menu': path.join(__dirname, './web/react-native-popup-menu'),
     },
   },
 }

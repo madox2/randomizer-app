@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Image, Animated, PanResponder } from 'react-native'
+import { Platform, ScrollView, Image, Animated, PanResponder } from 'react-native'
 import { uniqueRandomNumbers } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
@@ -101,7 +101,7 @@ export class Matches extends Component {
   onOptionsChange({ count, burnedCount }) {
     const burned = uniqueRandomNumbers(0, count.value - 1, burnedCount.value)
     storage.set('Matches.count', count.value)
-    storage.set('Matches.count', burnedCount.value)
+    storage.set('Matches.burnedCount', burnedCount.value)
     this.setState({
       count: count.value,
       burnedCount: burnedCount.value,
@@ -162,7 +162,6 @@ export class Matches extends Component {
         <ScrollView
           contentContainerStyle={s.scrollView}
           horizontal={true}
-          showsVerticalScrollIndicator={true}
         >
           {matches.map((match, i) => (
             <Animated.View
@@ -195,7 +194,7 @@ const makeStyles = ResponsiveStyleSheet.create(({
   const matchWidth = matchHeight / 10.14
   let matchPadding = contentWidth * 0.02
   if (matchCount * (matchWidth + 2 * matchPadding) > contentWidth) {
-    //matchPadding = (contentWidth - matchCount * matchWidth) / matchCount / 2
+    // TODO: display scroll info
   }
   return ({
     container: {
@@ -225,8 +224,8 @@ const makeStyles = ResponsiveStyleSheet.create(({
 
 const createPanResponder = ({ onStart, onMove, onEnd, onStartShouldSetPanResponder }) => PanResponder.create({
   onStartShouldSetPanResponder: onStartShouldSetPanResponder,
-  onStartShouldSetPanResponderCapture: () => false,
-  onMoveShouldSetPanResponderCapture: () => true,
+  onStartShouldSetPanResponderCapture: () => Platform.OS === 'web',
+  onMoveShouldSetPanResponderCapture: () => Platform.OS !== 'web',
   onPanResponderTerminationRequest: () => true,
   onPanResponderGrant: (evt, state) => onStart(state),
   onPanResponderMove: (evt, state) => onMove(state),

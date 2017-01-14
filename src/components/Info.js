@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, InteractionManager, TouchableOpacity } from 'react-native'
+import { Text, InteractionManager, TouchableOpacity, Platform } from 'react-native'
 import { Menu, MenuTrigger, MenuOption, MenuOptions } from 'react-native-popup-menu'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { InfoButton } from './InfoButton'
@@ -18,7 +18,7 @@ export class Info extends Component {
     const dismissedVersion = storage.getNumber(`Info.${type}.dismissedVersion`)
     const currentVersion = storage.getNumber(`Info.${type}@version`)
     // show popup only first time and in new version
-    if (dismissedVersion === currentVersion) {
+    if (dismissedVersion === currentVersion || Platform.OS === 'web') {
       return
     }
     InteractionManager.runAfterInteractions(() => {
