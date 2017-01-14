@@ -101,6 +101,7 @@ export class Matches extends Component {
   onOptionsChange({ count, burnedCount }) {
     const burned = uniqueRandomNumbers(0, count.value - 1, burnedCount.value)
     storage.set('Matches.count', count.value)
+    storage.set('Matches.count', burnedCount.value)
     this.setState({
       count: count.value,
       burnedCount: burnedCount.value,
