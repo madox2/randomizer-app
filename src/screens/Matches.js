@@ -9,6 +9,13 @@ import { storage } from '../services/storage'
 const matchSource = resource('images/match.png')
 const matchBurnedSource = resource('images/match-burned.png')
 
+const validator = options => {
+  if (options.burnedCount.value >= options.count.value) {
+    return 'Total count must be greater than count of burned matches'
+  }
+  return null
+}
+
 const MIN_PULL_LENGTH = 10
 
 export class Matches extends Component {
@@ -29,6 +36,7 @@ export class Matches extends Component {
         label: 'Burned',
         defaultValue: burnedCount,
         constraints: { min: 1, max: 8 },
+        validator,
       },
     }
     this.state = {

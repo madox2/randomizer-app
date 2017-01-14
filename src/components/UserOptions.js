@@ -81,6 +81,16 @@ export class UserOptions extends Component {
       this.setState({ editOptions })
       return
     }
+    const customValidatedOptions = reduceProps(editOptions, obj => {
+      let err = obj.validator ? obj.validator(editOptions) : null
+      return { ...obj, err }
+    })
+    const hasCustomErrors = someProp(customValidatedOptions, p => p.err)
+    if (hasCustomErrors) {
+      this.setState({ editOptions: customValidatedOptions })
+      return
+    }
+
     this.props.onChange(editOptions)
     this.setState({
       editMode: false,

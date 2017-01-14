@@ -5,6 +5,13 @@ import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { storage } from '../services/storage'
 
+const validator = options => {
+  if (options.from.value > options.to.value) {
+    return 'From have to be less than to'
+  }
+  return null
+}
+
 export class Numbers extends Component {
 
   constructor(...args) {
@@ -21,6 +28,7 @@ export class Numbers extends Component {
         type: 'number',
         label: 'To',
         defaultValue: to,
+        validator,
       },
     }
     const number = randomNumber(from, to)
