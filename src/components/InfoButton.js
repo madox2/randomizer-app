@@ -14,7 +14,7 @@ export const InfoButton = ({ onPress, type, backgroundColor }) => {
   )
 }
 
-const PADDING = 7
+const PADDING = 4
 const SIZE = 38
 const s = StyleSheet.create({
   button: {

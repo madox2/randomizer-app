@@ -41,7 +41,7 @@ export class Info extends Component {
     return(
       <Menu name='info'>
         <MenuTrigger>
-          <InfoButton onPress={this.openMenu} type='info' backgroundColor={buttonColor} />
+          <InfoButton onPress={this.openMenu} type='help' backgroundColor={buttonColor} />
         </MenuTrigger>
         <MenuOptions customStyles={{optionsContainer: s.options}}>
           <MenuOption style={s.option}>

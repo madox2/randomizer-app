@@ -22,7 +22,7 @@ const sourcesRequire = {
   'icons/back.png': require('../resources/icons/back-min.png'),
   'icons/refresh.png': require('../resources/icons/refresh-min.png'),
   'icons/settings.png': require('../resources/icons/settings-min.png'),
-  'icons/info.png': require('../resources/icons/info-min.png'),
+  'icons/help.png': require('../resources/icons/help-min.png'),
 }
 
 export function resource(uri) {
