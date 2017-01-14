@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, View, Animated, PanResponder } from 'react-native'
+import { ScrollView, Image, Animated, PanResponder } from 'react-native'
 import { uniqueRandomNumbers } from '../utils/random'
 import { SectionTemplate } from '../components/SectionTemplate'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
@@ -29,13 +29,13 @@ export class Matches extends Component {
         type: 'number',
         label: 'Count',
         defaultValue: count,
-        constraints: { min: 2, max: 8 },
+        constraints: { min: 2, max: 50 },
       },
       burnedCount: {
         type: 'number',
         label: 'Burned',
         defaultValue: burnedCount,
-        constraints: { min: 1, max: 8 },
+        constraints: { min: 1, max: 50 },
         validator,
       },
     }
@@ -156,8 +156,13 @@ export class Matches extends Component {
         options={this.options}
         onOptionsChange={this.onOptionsChange}
         title='Matches'
+        style={s.container}
       >
-        <View style={s.container}>
+        <ScrollView
+          contentContainerStyle={s.scrollView}
+          horizontal={true}
+          showsVerticalScrollIndicator={true}
+        >
           {matches.map((match, i) => (
             <Animated.View
               key={`${throwNumber}-${i}`}
@@ -172,7 +177,7 @@ export class Matches extends Component {
               />
             </Animated.View>
           ))}
-        </View>
+        </ScrollView>
       </SectionTemplate>
     )
   }
@@ -189,16 +194,18 @@ const makeStyles = ResponsiveStyleSheet.create(({
   const matchWidth = matchHeight / 10.14
   let matchPadding = contentWidth * 0.02
   if (matchCount * (matchWidth + 2 * matchPadding) > contentWidth) {
-    matchPadding = (contentWidth - matchCount * matchWidth) / matchCount / 2
+    //matchPadding = (contentWidth - matchCount * matchWidth) / matchCount / 2
   }
   return ({
     container: {
-      flex: 1,
+      alignItems: 'center',
+    },
+    scrollView: {
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'center',
       flexWrap: 'wrap',
-      marginBottom: controlsHeight + contentPadding,
+      marginBottom: controlsHeight - contentPadding,
     },
     imageContainer: {
       paddingLeft: matchPadding,
@@ -217,7 +224,8 @@ const makeStyles = ResponsiveStyleSheet.create(({
 
 const createPanResponder = ({ onStart, onMove, onEnd, onStartShouldSetPanResponder }) => PanResponder.create({
   onStartShouldSetPanResponder: onStartShouldSetPanResponder,
-  onStartShouldSetPanResponderCapture: () => true,
+  onStartShouldSetPanResponderCapture: () => false,
+  onMoveShouldSetPanResponderCapture: () => true,
   onPanResponderTerminationRequest: () => true,
   onPanResponderGrant: (evt, state) => onStart(state),
   onPanResponderMove: (evt, state) => onMove(state),
