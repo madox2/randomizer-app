@@ -3,6 +3,7 @@ import { Text, InteractionManager, TouchableOpacity } from 'react-native'
 import { Menu, MenuTrigger, MenuOption, MenuOptions } from 'react-native-popup-menu'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
 import { InfoButton } from './InfoButton'
+import { storage } from '../services/storage'
 
 export class Info extends Component {
 
@@ -13,11 +14,17 @@ export class Info extends Component {
   }
 
   componentDidMount() {
-    /*
+    const { type } = this.props
+    const dismissedVersion = storage.getNumber(`Info.${type}.dismissedVersion`)
+    const currentVersion = storage.getNumber(`Info.${type}@version`)
+    // show popup only first time and in new version
+    if (dismissedVersion === currentVersion) {
+      return
+    }
     InteractionManager.runAfterInteractions(() => {
       this.context.menuActions.openMenu('info')
+      storage.set(`Info.${type}.dismissedVersion`, currentVersion)
     })
-    */
   }
 
   openMenu() {
@@ -29,7 +36,7 @@ export class Info extends Component {
   }
 
   render() {
-    const { text, buttonColor } = this.props
+    const { type, buttonColor } = this.props
     const s = makeStyles()
     return(
       <Menu name='info'>
@@ -38,7 +45,7 @@ export class Info extends Component {
         </MenuTrigger>
         <MenuOptions customStyles={{optionsContainer: s.options}}>
           <MenuOption style={s.option}>
-            <Text style={s.text}>{text}</Text>
+            <Text style={s.text}>{storage.get(`Info.${type}`)}</Text>
             <TouchableOpacity onPress={this.dismiss}>
               <Text style={s.dismiss}>dismiss...</Text>
             </TouchableOpacity>

@@ -1,19 +1,33 @@
 import { AsyncStorage } from 'react-native'
+import { defaultData } from './defaultData'
 
-// [[key, value, version], ...]
-const defaultData = [
-  ['Dices.count', '4', '1'],
-  ['Matches.count', '4', '1'],
-  ['Numbers.from', '0', '1'],
-  ['Numbers.to', '100', '1'],
-]
-const reduceVersions = data => data.reduce((r, [key, value, version]) => {
-  return r.concat([[key, value], [`${key}@version`, version]])
-}, [])
-const appStore = new Map(reduceVersions(defaultData))
+let appStore // cached store data structure
+
+initialize(defaultData)
+
+const get = key => appStore.get(key)
+const set = (key, value) => {
+  const strVal = JSON.stringify(value)
+  appStore.set(key, strVal)
+  AsyncStorage.setItem(key, strVal)
+}
+const getNumber = key => Number(get(key))
+const getBoolean = key => !!get(key)
+
+/**
+ * App storage.
+ */
+export const storage = { get, set, getNumber, getBoolean }
+
+function initialize() {
+  appStore = new Map(defaultData)
+  AsyncStorage
+    .multiGet([...appStore.keys()])
+    .then(mergeWithVersions)
+}
 
 // merge default data and phone storage with respect to versions
-const initialize = data => {
+function mergeWithVersions(data) {
   const deviceStore = new Map(data)
   data.forEach(([key, value]) => {
     const appVersion = appStore.get(`${key}@version`)
@@ -25,19 +39,3 @@ const initialize = data => {
     }
   })
 }
-
-AsyncStorage.multiGet([...appStore.keys()]).then(initialize)
-
-const get = key => appStore.get(key)
-const set = (key, value) => {
-  appStore.set(key, value)
-  AsyncStorage.setItem(key, JSON.stringify(value))
-}
-const getNumber = key => Number(get(key))
-const getBoolean = key => !!get(key)
-
-/**
- * App storage.
- */
-export const storage = { get, set, getNumber, getBoolean }
-

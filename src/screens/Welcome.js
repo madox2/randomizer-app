@@ -3,7 +3,6 @@ import { View } from 'react-native'
 import { SectionButton } from '../components/SectionButton'
 import { Coin, Matches, Bottle, Numbers, Dices, MagicBall } from './index'
 import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-import { infoText } from '../infoText'
 
 export const Welcome = (props, { navigate }) => {
 
@@ -17,7 +16,9 @@ export const Welcome = (props, { navigate }) => {
   ]
 
   const sections = data.map(({ title, color, bColor, Component, type }) => ({
-    onPress: () => navigate(() => <Component color={color} infoText={infoText[type]} buttonColor={bColor} />),
+    onPress: () => navigate(() => (
+      <Component color={color} type={type} buttonColor={bColor} />
+    )),
     title, color, type,
   }))
 

@@ -22,7 +22,7 @@ export class SectionTemplate extends Component {
       style,
       color,
       buttonColor,
-      infoText,
+      type,
     } = this.props
     const displayBack = this.props.onBack || this.context.back
     const s = makeStyles()
@@ -41,7 +41,7 @@ export class SectionTemplate extends Component {
           {options && <ControlButton onPress={this.onSettings} type='settings' backgroundColor={buttonColor} />}
         </View>
         <View style={s.infoContainer}>
-          <Info text={infoText} buttonColor={buttonColor} />
+          <Info type={type} buttonColor={buttonColor} />
         </View>
         {options &&
           <View style={s.options}>
