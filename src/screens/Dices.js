@@ -179,7 +179,7 @@ const makeStyles = ResponsiveStyleSheet.create(({
   const sizeRatio = 0.7
   const size = Math.min(diceArea * sizeRatio, 120)
   const margin = diceArea * (1 - sizeRatio) / 6
-  const textFontSize = sides < 100 ? 60 : 40
+  const textFontSize = sides < 100 ? size / 2 : size / 3
   return {
     ounterContainer: {
       flex: 1,
