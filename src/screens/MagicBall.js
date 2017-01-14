@@ -48,7 +48,7 @@ export class MagicBall extends Component {
     this.fade.setValue(0)
     Animated.timing( this.fade, {
       toValue: 1,
-      duration: 2500,
+      duration: 2000,
       easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
     }).start()
   }
