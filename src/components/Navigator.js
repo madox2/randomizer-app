@@ -1,21 +1,21 @@
-import React, { Component, PropTypes } from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 
 export class Navigator extends Component {
-
   constructor(...args) {
     super(...args)
-    this.history = [ this.props.root ]
-    this.state = { Screen: this.props.root }
+    this.history = [this.props.root]
+    this.state = {Screen: this.props.root}
   }
 
   navigate(Screen) {
     this.history.push(Screen)
-    this.setState({ Screen })
+    this.setState({Screen})
   }
 
   back() {
     this.history.length > 1 && this.history.pop()
-    this.setState({ Screen: this.history[this.history.length - 1] })
+    this.setState({Screen: this.history[this.history.length - 1]})
   }
 
   getChildContext() {
@@ -26,12 +26,9 @@ export class Navigator extends Component {
   }
 
   render() {
-    const { Screen } = this.state
-    return (
-      <Screen />
-    )
+    const {Screen} = this.state
+    return <Screen />
   }
-
 }
 
 Navigator.propTypes = {

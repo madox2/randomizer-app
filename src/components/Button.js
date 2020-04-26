@@ -1,8 +1,11 @@
 import React from 'react'
-import { TouchableHighlight, Text, StyleSheet } from 'react-native'
+import {TouchableHighlight, Text, StyleSheet} from 'react-native'
 
-export const Button = ({ children, onPress, style }) => (
-  <TouchableHighlight onPress={onPress} style={[styles.button, style]} underlayColor='#ddd'>
+export const Button = ({children, onPress, style}) => (
+  <TouchableHighlight
+    onPress={onPress}
+    style={[styles.button, style]}
+    underlayColor="#ddd">
     <Text style={styles.label}>{children}</Text>
   </TouchableHighlight>
 )

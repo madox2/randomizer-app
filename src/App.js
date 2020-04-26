@@ -1,11 +1,11 @@
 import React from 'react'
-import { Navigator } from './components/Navigator'
-import { LayoutListener } from './components/LayoutListener'
-import { Welcome} from './screens'
-import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-import { MenuContext } from 'react-native-popup-menu'
+import {Navigator} from './components/Navigator'
+import {LayoutListener} from './components/LayoutListener'
+import {Welcome} from './screens'
+import {ResponsiveStyleSheet} from 'react-native-responsive-stylesheet'
+import {MenuProvider} from 'react-native-popup-menu'
 
-ResponsiveStyleSheet.setExtension(({ width, height }) => {
+ResponsiveStyleSheet.setExtension(({width, height}) => {
   const dividerWidth = 4
   const size = Math.max(width, height)
   const minSize = Math.min(width, height)
@@ -29,17 +29,15 @@ ResponsiveStyleSheet.setExtension(({ width, height }) => {
 })
 
 export class App extends React.Component {
-
   render() {
     return (
       <LayoutListener onLayout={() => this.setState({})}>
-        <MenuContext customStyles={popupMenuStyles}>
+        <MenuProvider customStyles={popupMenuStyles}>
           <Navigator root={Welcome} />
-        </MenuContext>
+        </MenuProvider>
       </LayoutListener>
     )
   }
-
 }
 
 const popupMenuStyles = {

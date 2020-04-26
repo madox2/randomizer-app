@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TextInput, StyleSheet } from 'react-native'
+import {Text, View, TextInput, StyleSheet} from 'react-native'
 
 export const validate = (value, constraints = {}) => {
   const {
@@ -13,16 +13,23 @@ export const validate = (value, constraints = {}) => {
   return null
 }
 
-const length = x => `${x}`.length
+const length = (x) => `${x}`.length
 
-const sanitize = n => /^\-?\d+$/.test(n) && length(n) === length(+n) ? +n : n
+const sanitize = (n) =>
+  /^\-?\d+$/.test(n) && length(n) === length(+n) ? +n : n
 
-const Error = ({ children }) => (
-  <Text style={s.error}>{children}</Text>
-)
+const Error = ({children}) => <Text style={s.error}>{children}</Text>
 
-export const InputNumber = ({ label, onChange, value, err, constraints, onSubmitEditing }) => {
-  const onChangeText = n => onChange(sanitize(n), validate(sanitize(n), constraints))
+export const InputNumber = ({
+  label,
+  onChange,
+  value,
+  err,
+  constraints,
+  onSubmitEditing,
+}) => {
+  const onChangeText = (n) =>
+    onChange(sanitize(n), validate(sanitize(n), constraints))
   return (
     <View style={s.container}>
       <Text style={s.label}>{`${label}:`}</Text>
@@ -30,12 +37,10 @@ export const InputNumber = ({ label, onChange, value, err, constraints, onSubmit
         onChangeText={onChangeText}
         value={`${value}`}
         style={s.input}
-        keyboardType='numeric'
+        keyboardType="numeric"
         onSubmitEditing={onSubmitEditing}
       />
-      {err && (
-        <Error>{err}</Error>
-      )}
+      {err && <Error>{err}</Error>}
     </View>
   )
 }

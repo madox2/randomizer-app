@@ -1,9 +1,13 @@
 /*eslint-env jest, jasmine*/
 
-import { randomNumber, randomBoolean, randomColor, uniqueRandomNumbers } from './random'
+import {
+  randomNumber,
+  randomBoolean,
+  randomColor,
+  uniqueRandomNumbers,
+} from './random'
 
 describe('randomNumber', () => {
-
   let randomSpy
 
   const testRange = (min, max) => {
@@ -44,11 +48,9 @@ describe('randomNumber', () => {
     randomSpy.and.returnValue(0.9999)
     expect(randomNumber(min, max)).toBe(min)
   })
-
 })
 
 describe('randomBoolean', () => {
-
   let randomSpy
 
   beforeEach(() => {
@@ -68,7 +70,6 @@ describe('randomBoolean', () => {
     randomSpy.and.returnValue(0.5)
     expect(randomBoolean()).toBe(true)
   })
-
 })
 
 describe('randomColor', () => {
@@ -80,7 +81,6 @@ describe('randomColor', () => {
 })
 
 describe('uniqueRandomNumbers', () => {
-
   it('should return two unique numbers', () => {
     const numbers = uniqueRandomNumbers(0, 5, 2)
     expect(numbers.length).toBe(2)
@@ -95,5 +95,4 @@ describe('uniqueRandomNumbers', () => {
       expect(!!~numbers.indexOf(i)).toBe(true)
     }
   })
-
 })

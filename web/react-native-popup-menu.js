@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react'
-import { View } from 'react-native'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {View} from 'react-native'
 
 /**
  * Simple replacement for react-native-popup-menu in web.
@@ -9,11 +10,9 @@ import { View } from 'react-native'
 let lastMenuOptions = <div></div>
 
 export const Menu = View
-export const MenuOptions = props => {
+export const MenuOptions = (props) => {
   lastMenuOptions = props.children
-  return (
-    <View></View>
-  )
+  return <View></View>
 }
 export const MenuOption = View
 export const MenuTrigger = View
@@ -32,9 +31,7 @@ export class MenuContext extends Component {
     }
   }
   render() {
-    return (
-      <View style={{flex: 1}}>{this.props.children}</View>
-    )
+    return <View style={{flex: 1}}>{this.props.children}</View>
   }
 }
 

@@ -1,15 +1,18 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, Image } from 'react-native'
-import { resource } from '../utils/image'
+import {StyleSheet, TouchableOpacity, Image} from 'react-native'
+import {resource} from '../utils/image'
 
-export const InfoButton = ({ onPress, type, backgroundColor }) => {
+export const InfoButton = ({onPress, type, backgroundColor}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[s.button, { backgroundColor }]}
-      activeOpacity={0.8}
-    >
-      <Image source={resource(`icons/${type}.png`)} style={s.image} resizeMode='contain' />
+      style={[s.button, {backgroundColor}]}
+      activeOpacity={0.8}>
+      <Image
+        source={resource(`icons/${type}.png`)}
+        style={s.image}
+        resizeMode="contain"
+      />
     </TouchableOpacity>
   )
 }

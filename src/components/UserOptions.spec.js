@@ -1,11 +1,10 @@
 /*eslint-env jest, jasmine*/
 import React from 'react'
-import { shallow } from 'enzyme'
-import { UserOptions } from './UserOptions'
-import { View } from 'react-native'
+import {shallow} from 'enzyme'
+import {UserOptions} from './UserOptions'
+import {View} from 'react-native'
 
 describe('<UserOptions />', () => {
-
   it('should render view', () => {
     const wrapper = shallow(<UserOptions />)
     expect(wrapper.type()).toBe(View)
@@ -25,8 +24,8 @@ describe('<UserOptions />', () => {
       },
     }
     const wrapper = shallow(<UserOptions options={options} />)
-    expect(wrapper.find({ children: 'Number: 1' }).length).toBe(1)
-    expect(wrapper.find({ children: 'My text: Hello world' }).length).toBe(1)
+    expect(wrapper.find({children: 'Number: 1'}).length).toBe(1)
+    expect(wrapper.find({children: 'My text: Hello world'}).length).toBe(1)
   })
 
   it('should render change button', () => {
@@ -47,7 +46,9 @@ describe('<UserOptions />', () => {
         defaultValue: 1,
       },
     }
-    const wrapper = shallow(<UserOptions options={options} showChangeButton={true} />)
+    const wrapper = shallow(
+      <UserOptions options={options} showChangeButton={true} />,
+    )
     const change = wrapper.find('Button[children="Change"]')
     expect(wrapper.find('Button[children="Cancel"]').length).toBe(0)
     expect(wrapper.find('Button[children="Save"]').length).toBe(0)
@@ -67,7 +68,9 @@ describe('<UserOptions />', () => {
         defaultValue: 1,
       },
     }
-    const wrapper = shallow(<UserOptions options={options} showChangeButton={true} />)
+    const wrapper = shallow(
+      <UserOptions options={options} showChangeButton={true} />,
+    )
     const change = wrapper.find('Button[children="Change"]')
     change.simulate('press')
     wrapper.update()
@@ -80,7 +83,7 @@ describe('<UserOptions />', () => {
     expect(wrapper.find('Button[children="Save"]').length).toBe(0)
     expect(wrapper.find('InputNumber[key="Number"]').length).toBe(0)
     expect(wrapper.find('Button[children="Change"]').length).toBe(1)
-    expect(wrapper.find({ children: 'Number: 1' }).length).toBe(1)
+    expect(wrapper.find({children: 'Number: 1'}).length).toBe(1)
   })
 
   it('should edit and trigger onChange event', () => {
@@ -92,7 +95,13 @@ describe('<UserOptions />', () => {
       },
     }
     const onChange = jest.fn()
-    const wrapper = shallow(<UserOptions options={options} onChange={onChange} showChangeButton={true} />)
+    const wrapper = shallow(
+      <UserOptions
+        options={options}
+        onChange={onChange}
+        showChangeButton={true}
+      />,
+    )
     const change = wrapper.find('Button[children="Change"]')
     change.simulate('press')
     wrapper.update()
@@ -102,8 +111,8 @@ describe('<UserOptions />', () => {
     const save = wrapper.find('Button[children="Save"]')
     save.simulate('press')
     wrapper.update()
-    expect(wrapper.find({ children: 'Number: 1' }).length).toBe(0)
-    expect(wrapper.find({ children: 'Number: 3' }).length).toBe(1)
+    expect(wrapper.find({children: 'Number: 1'}).length).toBe(0)
+    expect(wrapper.find({children: 'Number: 3'}).length).toBe(1)
     expect(onChange.mock.calls.length).toBe(1)
     expect(onChange.mock.calls[0][0]).toEqual({
       number: {
@@ -122,12 +131,18 @@ describe('<UserOptions />', () => {
       number: {
         type: 'number',
         label: 'Number',
-        constraints: { min: 0 },
+        constraints: {min: 0},
         defaultValue: 1,
       },
     }
     const onChange = jest.fn()
-    const wrapper = shallow(<UserOptions options={options} onChange={onChange} showChangeButton={true} />)
+    const wrapper = shallow(
+      <UserOptions
+        options={options}
+        onChange={onChange}
+        showChangeButton={true}
+      />,
+    )
     const change = wrapper.find('Button[children="Change"]')
     change.simulate('press')
     wrapper.update()
@@ -141,5 +156,4 @@ describe('<UserOptions />', () => {
     expect(inputWithError.length).toBe(1)
     expect(!!inputWithError.prop('err')).toBe(true)
   })
-
 })

@@ -1,12 +1,11 @@
 /*eslint-env jest, jasmine*/
 import React from 'react'
-import { View } from 'react-native'
-import { shallow } from 'enzyme'
-import { Navigator } from './Navigator'
+import {View} from 'react-native'
+import {shallow} from 'enzyme'
+import {Navigator} from './Navigator'
 
 describe('<Navigator />', () => {
-
-  const { any } = jasmine
+  const {any} = jasmine
   const Root = () => <View />
   const Next = () => <View />
 
@@ -45,5 +44,4 @@ describe('<Navigator />', () => {
     wrapper.update()
     expect(wrapper.get(0)).toEqual(<Root />)
   })
-
 })

@@ -23,9 +23,9 @@ export const uniqueRandomNumbers = (_min, _max, count) => {
 
 export const randomBoolean = () => Math.random() >= 0.5
 
-export const randomColor = options => rndColor({
-  luminosity: 'dark',
-  hue: 'blue',
-  ...options,
-})
-
+export const randomColor = (options) =>
+  rndColor({
+    luminosity: 'dark',
+    hue: 'blue',
+    ...options,
+  })

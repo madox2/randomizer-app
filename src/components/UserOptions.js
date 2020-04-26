@@ -1,10 +1,11 @@
-import React, { PropTypes, Component } from 'react'
-import { Platform, KeyboardAvoidingView as KAW, View, Text } from 'react-native'
-import { InputNumber } from './InputNumber'
-import { mapProps, reduceProps, someProp } from '../utils/functional'
-import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-import { Modal } from '../components/Modal'
-import { Button } from '../components/Button'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {Platform, KeyboardAvoidingView as KAW, View, Text} from 'react-native'
+import {InputNumber} from './InputNumber'
+import {mapProps, reduceProps, someProp} from '../utils/functional'
+import {ResponsiveStyleSheet} from 'react-native-responsive-stylesheet'
+import {Modal} from '../components/Modal'
+import {Button} from '../components/Button'
 
 // TODO: should be added to react-native-web
 const KeyboardAvoidingView = Platform.OS === 'web' ? View : KAW
@@ -19,43 +20,41 @@ const inputs = {
 const timeout = (task, ms) => () => setTimeout(task, ms)
 
 export class UserOptions extends Component {
-
   constructor(...props) {
     super(...props)
     this.change = this.change.bind(this)
     this.cancel = this.cancel.bind(this)
     this.save = this.save.bind(this)
-    const options = reduceProps(this.props.options, obj => ({
-      ...obj, value: obj.defaultValue,
+    const options = reduceProps(this.props.options, (obj) => ({
+      ...obj,
+      value: obj.defaultValue,
     }))
-    this.state = { editMode: false, options }
+    this.state = {editMode: false, options}
   }
 
   render() {
-    const { editMode } = this.state
+    const {editMode} = this.state
     const s = makeStyles()
     return editMode ? (
       <Modal onRequestClose={this.cancel}>
         <KeyboardAvoidingView style={[s.container, s.editContainer]}>
-          <View style={s.edit}>
-            {this.makeInputs()}
-          </View>
+          <View style={s.edit}>{this.makeInputs()}</View>
           <View style={s.controls}>
-            <Button onPress={this.save} style={s.buttonLeft}>Save</Button>
+            <Button onPress={this.save} style={s.buttonLeft}>
+              Save
+            </Button>
             <Button onPress={this.cancel}>Cancel</Button>
           </View>
         </KeyboardAvoidingView>
       </Modal>
     ) : (
       <View style={s.container}>
-        <View style={s.summary}>
-          {this.makeSummary(s)}
-        </View>
-        {this.props.showChangeButton &&
+        <View style={s.summary}>{this.makeSummary(s)}</View>
+        {this.props.showChangeButton && (
           <View style={s.controls}>
             <Button onPress={this.change}>Change</Button>
           </View>
-        }
+        )}
       </View>
     )
   }
@@ -75,15 +74,15 @@ export class UserOptions extends Component {
   }
 
   save() {
-    const { editOptions } = this.state
-    const validatedEditOptions = reduceProps(editOptions, obj => {
+    const {editOptions} = this.state
+    const validatedEditOptions = reduceProps(editOptions, (obj) => {
       let customErr = obj.validator ? obj.validator(editOptions) : null
-      let err = obj.customErr ? customErr : (obj.err || customErr)
-      return { ...obj, err, customErr }
+      let err = obj.customErr ? customErr : obj.err || customErr
+      return {...obj, err, customErr}
     })
-    const hasErrors = someProp(validatedEditOptions, p => p.err)
+    const hasErrors = someProp(validatedEditOptions, (p) => p.err)
     if (hasErrors) {
-      this.setState({ editOptions: validatedEditOptions })
+      this.setState({editOptions: validatedEditOptions})
       return
     }
     this.props.onChange(editOptions)
@@ -95,18 +94,18 @@ export class UserOptions extends Component {
   }
 
   onInputChange(key, value, err) {
-    const { editOptions } = this.state
+    const {editOptions} = this.state
     this.setState({
       editOptions: {
         ...editOptions,
-        [key]: { ...editOptions[key], value, err, customErr: null },
+        [key]: {...editOptions[key], value, err, customErr: null},
       },
     })
   }
 
   makeInputs() {
-    const { editOptions } = this.state
-    return mapProps(editOptions, ([ key, obj ]) => {
+    const {editOptions} = this.state
+    return mapProps(editOptions, ([key, obj]) => {
       const Input = inputs[obj.type]
       const onInputChange = this.onInputChange.bind(this, key)
       return (
@@ -124,14 +123,15 @@ export class UserOptions extends Component {
   }
 
   makeSummary(s) {
-    return mapProps(this.state.options, ([ key, obj ]) => {
+    return mapProps(this.state.options, ([key, obj]) => {
       const text = `${obj.label}: ${obj.value}`
       return (
-        <Text style={s.summaryItem} key={key}>{text}</Text>
+        <Text style={s.summaryItem} key={key}>
+          {text}
+        </Text>
       )
     })
   }
-
 }
 
 UserOptions.propTypes = {
@@ -146,7 +146,7 @@ UserOptions.defaultProps = {
   showChangeButton: false,
 }
 
-const makeStyles = ResponsiveStyleSheet.create(({ settingsHeight }) => ({
+const makeStyles = ResponsiveStyleSheet.create(({settingsHeight}) => ({
   container: {
     padding: 5,
   },

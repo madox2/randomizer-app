@@ -1,12 +1,18 @@
-import React, { Component } from 'react'
-import { Text, InteractionManager, TouchableOpacity, Platform } from 'react-native'
-import { Menu, MenuTrigger, MenuOption, MenuOptions } from 'react-native-popup-menu'
-import { ResponsiveStyleSheet } from 'react-native-responsive-stylesheet'
-import { InfoButton } from './InfoButton'
-import { storage } from '../services/storage'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {Text, TouchableOpacity, Platform} from 'react-native'
+import {
+  Menu,
+  MenuTrigger,
+  MenuOption,
+  MenuOptions,
+  withMenuContext,
+} from 'react-native-popup-menu'
+import {ResponsiveStyleSheet} from 'react-native-responsive-stylesheet'
+import {InfoButton} from './InfoButton'
+import {storage} from '../services/storage'
 
-export class Info extends Component {
-
+class InfoComponent extends Component {
   constructor(...args) {
     super(...args)
     this.dismiss = this.dismiss.bind(this)
@@ -14,34 +20,38 @@ export class Info extends Component {
   }
 
   componentDidMount() {
-    const { type } = this.props
+    const {type} = this.props
     const dismissedVersion = storage.getNumber(`Info.${type}.dismissedVersion`)
     const currentVersion = storage.getNumber(`Info.${type}@version`)
     // show popup only first time and in new version
     if (dismissedVersion === currentVersion || Platform.OS === 'web') {
       return
     }
-    InteractionManager.runAfterInteractions(() => {
-      this.context.menuActions.openMenu('info')
+    requestAnimationFrame(() => {
+      this.props.ctx.menuActions.openMenu('info')
       storage.set(`Info.${type}.dismissedVersion`, currentVersion)
     })
   }
 
   openMenu() {
-    this.context.menuActions.openMenu('info')
+    this.props.ctx.menuActions.openMenu('info')
   }
 
   dismiss() {
-    this.context.menuActions.closeMenu()
+    this.props.ctx.menuActions.closeMenu()
   }
 
   render() {
-    const { type, buttonColor } = this.props
+    const {type, buttonColor} = this.props
     const s = makeStyles()
-    return(
-      <Menu name='info'>
+    return (
+      <Menu name="info">
         <MenuTrigger>
-          <InfoButton onPress={this.openMenu} type='help' backgroundColor={buttonColor} />
+          <InfoButton
+            onPress={this.openMenu}
+            type="help"
+            backgroundColor={buttonColor}
+          />
         </MenuTrigger>
         <MenuOptions customStyles={{optionsContainer: s.options}}>
           <MenuOption style={s.option}>
@@ -54,11 +64,10 @@ export class Info extends Component {
       </Menu>
     )
   }
-
 }
 
-Info.contextTypes = {
-  menuActions: React.PropTypes.object,
+InfoComponent.propTypes = {
+  ctx: PropTypes.object,
 }
 
 const makeStyles = ResponsiveStyleSheet.create(() => ({
@@ -83,3 +92,5 @@ const makeStyles = ResponsiveStyleSheet.create(() => ({
     color: '#6495ed',
   },
 }))
+
+export const Info = withMenuContext(InfoComponent)

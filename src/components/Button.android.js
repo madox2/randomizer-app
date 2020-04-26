@@ -1,11 +1,10 @@
 import React from 'react'
-import { View, TouchableNativeFeedback, Text, StyleSheet } from 'react-native'
+import {View, TouchableNativeFeedback, Text, StyleSheet} from 'react-native'
 
-export const Button = ({ children, onPress, style }) => (
+export const Button = ({children, onPress, style}) => (
   <TouchableNativeFeedback
     onPress={onPress}
-    background={TouchableNativeFeedback.SelectableBackground()}
-  >
+    background={TouchableNativeFeedback.SelectableBackground()}>
     <View style={[styles.button, style]}>
       <Text style={styles.label}>{children}</Text>
     </View>
