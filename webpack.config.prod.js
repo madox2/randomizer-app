@@ -1,11 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 
 module.exports = {
-  entry: [
-    path.join(__dirname, './index.web.js'),
-  ],
+  entry: [path.join(__dirname, './index.web.js')],
   output: {
     filename: 'app.js',
     path: __dirname + '/dist',
@@ -16,24 +15,24 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-        query: { cacheDirectory: true },
+        query: {cacheDirectory: true},
       },
       {
         test: /\.(gif|jpe?g|png|svg)$/,
         loader: 'url-loader',
-        query: { name: '[name].[hash:16].[ext]' },
+        query: {name: '[name].[hash:16].[ext]'},
       },
     ],
   },
   plugins: [
     new BundleAnalyzerPlugin(),
     new webpack.DefinePlugin({
-      'process.env':{
-        'NODE_ENV': JSON.stringify('production'),
+      'process.env': {
+        NODE_ENV: JSON.stringify('production'),
       },
     }),
     new webpack.optimize.UglifyJsPlugin({
-      compress:{
+      compress: {
         warnings: false,
       },
     }),
@@ -42,7 +41,10 @@ module.exports = {
   resolve: {
     alias: {
       'react-native': 'react-native-web',
-      'react-native-popup-menu': path.join(__dirname, './web/react-native-popup-menu'),
+      'react-native-popup-menu': path.join(
+        __dirname,
+        './web/react-native-popup-menu',
+      ),
     },
   },
 }

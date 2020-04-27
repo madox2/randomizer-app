@@ -7,12 +7,12 @@ import {View} from 'react-native'
  * It is not reusable since it works only with Info.js component.
  */
 
-let lastMenuOptions = <div></div>
+let lastMenuOptions = <div />
 
 export const Menu = View
 export const MenuOptions = (props) => {
   lastMenuOptions = props.children
-  return <View></View>
+  return <View />
 }
 export const MenuOption = View
 export const MenuTrigger = View
@@ -24,6 +24,7 @@ export class MenuContext extends Component {
         openMenu: () => {
           // text from menu options in Info component
           const infoText = lastMenuOptions.props.children[0].props.children
+          // eslint-disable-next-line
           alert(infoText)
         },
         closeMenu: () => 0,
@@ -31,6 +32,7 @@ export class MenuContext extends Component {
     }
   }
   render() {
+    // eslint-disable-next-line
     return <View style={{flex: 1}}>{this.props.children}</View>
   }
 }
