@@ -17,18 +17,24 @@ export const MenuOptions = (props) => {
 export const MenuOption = View
 export const MenuTrigger = View
 
-export class MenuContext extends Component {
+const menuActions = {
+  openMenu: () => {
+    // text from menu options in Info component
+    const infoText = lastMenuOptions.props.children[0].props.children
+    // eslint-disable-next-line
+    alert(infoText)
+  },
+  closeMenu: () => undefined,
+}
+
+export const withMenuContext = (Comp) => (props) => (
+  <Comp {...props} ctx={{menuActions}} />
+)
+
+export class MenuProvider extends Component {
   getChildContext() {
     return {
-      menuActions: {
-        openMenu: () => {
-          // text from menu options in Info component
-          const infoText = lastMenuOptions.props.children[0].props.children
-          // eslint-disable-next-line
-          alert(infoText)
-        },
-        closeMenu: () => 0,
-      },
+      menuActions,
     }
   }
   render() {
@@ -37,6 +43,6 @@ export class MenuContext extends Component {
   }
 }
 
-MenuContext.childContextTypes = {
+MenuProvider.childContextTypes = {
   menuActions: PropTypes.object,
 }

@@ -1,7 +1,11 @@
-import {AppRegistry} from 'react-native'
+import './src/styles.css'
 import {App} from './src/App'
+import {AppRegistry} from 'react-native'
 
-AppRegistry.registerComponent('randomizerapp', () => App)
-AppRegistry.runApplication('randomizerapp', {
+// register the app
+AppRegistry.registerComponent('App', () => App)
+
+AppRegistry.runApplication('App', {
+  initialProps: {},
   rootTag: document.getElementById('react-root'),
 })

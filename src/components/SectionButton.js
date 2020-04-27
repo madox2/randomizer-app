@@ -31,7 +31,7 @@ const makeStyles = ResponsiveStyleSheet.create(
         width: buttonWidth,
       },
       imageWrapper: {
-        flex: landscape ? 0 : 1,
+        flex: landscape ? undefined : 4,
         width: landscape ? buttonWidth / 2 : undefined,
         alignItems: 'center',
         justifyContent: 'center',
@@ -41,7 +41,7 @@ const makeStyles = ResponsiveStyleSheet.create(
         width: imageHeight,
       },
       textWrapper: {
-        flex: 0,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
       },

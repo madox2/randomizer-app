@@ -1,0 +1,6 @@
+html,
+body,
+#react-root,
+#react-root > div {
+  height: 100%;
+}

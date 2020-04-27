@@ -1,4 +1,3 @@
-// TODO: production build with minification and without devtool
 const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 
