@@ -1,4 +1,4 @@
-import {AsyncStorage} from 'react-native'
+import {AsyncStorage} from './AsyncStorage'
 import {defaultData} from './defaultData'
 
 let appStore // cached store data structure

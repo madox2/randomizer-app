@@ -12,6 +12,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.9.0",
     "animated": "^0.2.2",
     "css-loader": "^3.5.3",
     "prop-types": "^15.7.2",
