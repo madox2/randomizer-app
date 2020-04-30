@@ -10,8 +10,8 @@ export class Bottle extends Component {
   constructor(...args) {
     super(...args)
     this.anim = new Animated.Value(0)
-    ;(this.rotation = Animated.modulo(this.anim, 360)),
-      (this.onBottleLayout = this.onBottleLayout.bind(this))
+    this.rotation = Animated.modulo(this.anim, 360)
+    this.onBottleLayout = this.onBottleLayout.bind(this)
   }
 
   computeAngle(x, y) {

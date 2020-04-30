@@ -17,12 +17,13 @@ export const MenuOptions = (props) => {
 export const MenuOption = View
 export const MenuTrigger = View
 
+const popupStyles = {flex: 1}
+
 const menuActions = {
   openMenu: () => {
     // text from menu options in Info component
     const infoText = lastMenuOptions.props.children[0].props.children
-    // eslint-disable-next-line
-    alert(infoText)
+    global.alert(infoText)
   },
   closeMenu: () => undefined,
 }
@@ -38,8 +39,7 @@ export class MenuProvider extends Component {
     }
   }
   render() {
-    // eslint-disable-next-line
-    return <View style={{flex: 1}}>{this.props.children}</View>
+    return <View style={popupStyles}>{this.props.children}</View>
   }
 }
 

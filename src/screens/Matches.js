@@ -183,7 +183,7 @@ export class Matches extends Component {
               <Image
                 style={s.imageMatch}
                 source={
-                  match.pulled && ~burned.indexOf(i)
+                  match.pulled && burned.indexOf(i) > 1
                     ? matchBurnedSource
                     : matchSource
                 }

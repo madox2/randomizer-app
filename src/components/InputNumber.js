@@ -6,17 +6,25 @@ export const validate = (value, constraints = {}) => {
     min = Number.MIN_SAFE_INTEGER,
     max = Number.MAX_SAFE_INTEGER,
   } = constraints
-  if (value === '') return `Cannot be empty`
-  if (!Number.isSafeInteger(value)) return `Invalid number format`
-  if (value < min) return `Minimum value is ${min}`
-  if (value > max) return `Maximum value is ${max}`
+  if (value === '') {
+    return 'Cannot be empty'
+  }
+  if (!Number.isSafeInteger(value)) {
+    return 'Invalid number format'
+  }
+  if (value < min) {
+    return `Minimum value is ${min}`
+  }
+  if (value > max) {
+    return `Maximum value is ${max}`
+  }
   return null
 }
 
 const length = (x) => `${x}`.length
 
 const sanitize = (n) =>
-  /^\-?\d+$/.test(n) && length(n) === length(+n) ? +n : n
+  /^\-?\d+$/.test(n) && length(n) === length(+n) ? +n : n // eslint-disable-line no-useless-escape
 
 const Error = ({children}) => <Text style={s.error}>{children}</Text>
 

@@ -92,7 +92,7 @@ describe('uniqueRandomNumbers', () => {
     const numbers = uniqueRandomNumbers(2, 7, 6)
     expect(numbers.length).toBe(6)
     for (let i = 2; i <= 7; i++) {
-      expect(!!~numbers.indexOf(i)).toBe(true)
+      expect(numbers.indexOf(i) > -1).toBe(true)
     }
   })
 })

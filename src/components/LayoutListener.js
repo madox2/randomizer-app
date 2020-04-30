@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View} from 'react-native'
+import {View, StyleSheet} from 'react-native'
 
 export class LayoutListener extends Component {
   constructor(...args) {
@@ -19,9 +19,15 @@ export class LayoutListener extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}} onLayout={this.props.onLayout}>
+      <View style={styles.container} onLayout={this.props.onLayout}>
         {this.props.children}
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+})
