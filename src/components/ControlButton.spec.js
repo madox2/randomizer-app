@@ -2,6 +2,7 @@
 import React from 'react'
 import {shallow} from 'enzyme'
 import {ControlButton} from './ControlButton'
+import {TouchableOpacity} from 'react-native'
 
 describe('<ControlButton />', () => {
   it('should render image', () => {
@@ -13,7 +14,7 @@ describe('<ControlButton />', () => {
   it('should trigger onPress event', () => {
     const onPress = jest.fn()
     const wrapper = shallow(<ControlButton type="back" onPress={onPress} />)
-    wrapper.find('TouchableOpacity').simulate('press')
+    wrapper.find(TouchableOpacity).simulate('press')
     expect(onPress).toBeCalled()
   })
 })

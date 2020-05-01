@@ -26,5 +26,5 @@ const sourcesRequire = {
 }
 
 export function resource(uri) {
-  return sourcesRequire[uri].default
+  return sourcesRequire[uri] && sourcesRequire[uri].default
 }

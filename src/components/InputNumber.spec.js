@@ -2,11 +2,16 @@
 import React from 'react'
 import {shallow} from 'enzyme'
 import {InputNumber} from './InputNumber'
+import {TextInput} from 'react-native'
+
+function findByValue(wrapper, value) {
+  return wrapper.find(TextInput).find(`[value="${value}"]`)
+}
 
 describe('<InputNumber />', () => {
   it('should render text input', () => {
     const wrapper = shallow(<InputNumber label="Number" value={13} />)
-    expect(wrapper.find('TextInput[value="13"]').length).toBe(1)
+    expect(findByValue(wrapper, 13).length).toBe(1)
   })
 
   it('should trigger onChange event', () => {
@@ -14,7 +19,7 @@ describe('<InputNumber />', () => {
     const wrapper = shallow(
       <InputNumber label="Number" value={13} onChange={onChange} />,
     )
-    const textinput = wrapper.find('TextInput[value="13"]')
+    const textinput = findByValue(wrapper, 13)
     textinput.simulate('changeText', '18')
     expect(onChange.mock.calls.length).toBe(1)
     expect(typeof onChange.mock.calls[0][0]).toBe('number')
@@ -44,7 +49,7 @@ describe('InputNumber validation', () => {
     const wrapper = shallow(
       <InputNumber constraints={constraints} onChange={onChange} />,
     )
-    wrapper.find('TextInput').simulate('changeText', value)
+    wrapper.find(TextInput).simulate('changeText', value)
     return onChange.mock.calls[0][1]
   }
 
