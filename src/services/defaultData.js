@@ -10,12 +10,12 @@ const data = [
   ['Numbers.from', '0', '1'],
   ['Numbers.to', '100', '1'],
   // info texts
-  ['Info.numbers', 'Press to start and press again to stop', 1],
+  ['Info.numbers', 'Touch to start and touch again to stop', 1],
   ['Info.coin', 'Grab the coin with finger and throw it', 1],
   ['Info.bottle', 'Spin the bottle with finger', 1],
   ['Info.ball', 'Touch the screen and wait for the answer', 1],
-  ['Info.matches', 'Pull up the match to find a burned one', 1],
-  ['Info.dice', 'Press to throw all dices', 1],
+  ['Info.matches', 'Pull the match up to find a burned one', 1],
+  ['Info.dice', 'Touch to throw all dices', 1],
   // last dismissed versions of device
   ['Info.numbers.dismissedVersion', '0'],
   ['Info.coin.dismissedVersion', '0'],
