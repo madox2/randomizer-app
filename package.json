@@ -8,6 +8,7 @@
     "start": "react-native start",
     "build:web": "webpack --mode production",
     "start:web": "webpack-dev-server --open --mode development",
+    "deploy": "git subtree push --prefix dist origin gh-pages",
     "test": "jest",
     "lint": "eslint ."
   },
