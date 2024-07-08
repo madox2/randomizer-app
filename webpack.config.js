@@ -43,6 +43,16 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
     }),
+    new HtmlWebPackPlugin({
+      template: './src/privacy.html',
+      filename: './privacy.html',
+      inject: false,
+    }),
+    new HtmlWebPackPlugin({
+      template: './src/terms.html',
+      filename: './terms.html',
+      inject: false,
+    }),
   ],
   resolve: {
     alias: {
