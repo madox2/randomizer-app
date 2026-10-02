@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Randomizer",
+    "slug": "randomizer-app",
+    "version": "3.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "backgroundColor": "#ffffff",
+    "platforms": ["android", "web"],
+    "android": {
+      "package": "com.randomizerapp",
+      "versionCode": 6,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#337d84"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "name": "Randomizer App - Random Generator",
+      "shortName": "Randomizer",
+      "description": "Ultimate randomizer: random numbers, coin, bottle, magic 8-ball, matches and dices"
+    }
+  }
+}

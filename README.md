@@ -1,12 +1,17 @@
 # Randomizer App
 
-Ultimate randomizer mobile/web application created in [react-native](https://facebook.github.io/react-native/) and [react-native-web](https://github.com/necolas/react-native-web).
+Ultimate randomizer mobile/web application created with [Expo](https://expo.dev), [react-native](https://reactnative.dev/) and [react-native-web](https://github.com/necolas/react-native-web).
 
-![preview](doc/preview.png)
+![preview](app-old/doc/preview.png)
 
-[![web](doc/available_web.png)](https://madox2.github.io/randomizer-app/)
+[![web](app-old/doc/available_web.png)](https://madox2.github.io/randomizer-app/)
 
-[![android store](doc/available_android.png)](https://play.google.com/store/apps/details?id=com.randomizerapp)
+[![android store](app-old/doc/available_android.png)](https://play.google.com/store/apps/details?id=com.randomizerapp)
+
+## Repository structure
+
+* [`app`](app) - the current application (Expo, TypeScript), see [app/README.md](app/README.md) for how to run and build it in Expo Cloud (EAS) or locally with prebuild
+* [`app-old`](app-old) - the previous version of the application (react-native 0.62, webpack) kept for reference
 
 ## Features
 
