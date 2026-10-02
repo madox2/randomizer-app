@@ -1,0 +1,106 @@
+import React, {useCallback, useRef} from 'react'
+import {Animated, Easing, Image, StyleSheet, View} from 'react-native'
+import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
+import {images} from '../resources/images'
+import {Metrics, useMetrics} from '../theme/metrics'
+import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+
+// difference of two angles normalized to the range (-180, 180]
+const angleDiff = (a: number, b: number) => ((((a - b) % 360) + 540) % 360) - 180
+
+const velocityOf = (vx: number, vy: number) => Math.sqrt(vx * vx + vy * vy)
+
+export const Bottle = (props: SectionProps) => {
+  const s = makeStyles(useMetrics())
+  const angle = useRef(new Animated.Value(0)).current
+  const rotation = useRef(Animated.modulo(angle, 360)).current
+  const bottle = useRef<View>(null)
+  // center of the bottle in the window coordinates
+  const center = useRef({x: 0, y: 0})
+
+  const measure = useCallback(() => {
+    bottle.current?.measureInWindow((x, y, width, height) => {
+      center.current = {x: x + width / 2, y: y + height / 2}
+    })
+  }, [])
+
+  const computeAngle = (x: number, y: number) => {
+    const dx = x - center.current.x
+    const dy = -(y - center.current.y)
+    return (Math.atan2(dx, dy) * 180) / Math.PI
+  }
+
+  const startRotation = (velocity: number, direction: number) => {
+    if (velocity < 0.1) {
+      return
+    }
+    const duration = Math.sqrt(velocity) * 2500
+    const spin = velocity * 5
+    Animated.timing(angle, {
+      toValue: Math.floor(direction * 360 * spin),
+      duration,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: USE_NATIVE_DRIVER,
+    }).start()
+  }
+
+  const panResponder = usePanResponder(
+    {
+      onStart: ({x0, y0}: Gesture) => {
+        measure()
+        angle.setValue(computeAngle(x0, y0))
+      },
+      onMove: ({moveX, moveY}: Gesture) => {
+        angle.setValue(computeAngle(moveX, moveY))
+      },
+      onEnd: ({moveX, moveY, vx, vy}: Gesture) => {
+        const direction = Math.sign(
+          angleDiff(computeAngle(moveX, moveY), computeAngle(moveX - vx, moveY - vy)),
+        )
+        startRotation(velocityOf(vx, vy), direction)
+      },
+    },
+    {captureStart: true},
+  )
+
+  return (
+    <SectionTemplate {...props}>
+      <View
+        style={s.container}
+        onLayout={measure}
+        {...panResponder.panHandlers}
+        collapsable={false}>
+        <Animated.View
+          ref={bottle}
+          onLayout={measure}
+          style={{
+            transform: [
+              {
+                rotate: rotation.interpolate({
+                  inputRange: [0, 360],
+                  outputRange: ['0deg', '360deg'],
+                }),
+              },
+            ],
+          }}>
+          <Image source={images.bottle} style={s.image} />
+        </Animated.View>
+      </View>
+    </SectionTemplate>
+  )
+}
+
+const makeStyles = ({contentWidth, contentHeight}: Metrics) => {
+  const height = Math.min(contentWidth, contentHeight, 500)
+  return StyleSheet.create({
+    image: {
+      width: height / 4,
+      height,
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  })
+}
