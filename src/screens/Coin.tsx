@@ -12,12 +12,10 @@ const MIN_SCALE = 0.0001
 
 export const Coin = (props: SectionProps) => {
   const m = useMetrics()
-  // the coin moves within the whole screen, the same as before the redesign
-  const contentHeight = m.height - 2 * m.contentPadding
-  const controlsHeight = 100
-  const imageSize = Math.min(contentHeight * 0.5, 200)
-  const upperPosition = -contentHeight / 2 + imageSize / 2
-  const lowerPosition = contentHeight / 2 - imageSize / 2 - controlsHeight / 3
+  const {contentHeight} = m
+  const imageSize = Math.min(contentHeight * 0.45, 200)
+  const upperPosition = -contentHeight / 2 + imageSize / 2 + 8
+  const lowerPosition = contentHeight / 2 - imageSize / 2 - 24
   const initialPosition = lowerPosition * 0.3
   const s = makeStyles(imageSize)
 
@@ -97,28 +95,46 @@ export const Coin = (props: SectionProps) => {
     }),
   })
 
+  // the shadow on the ground shrinks and fades while the coin is in the air
+  const shadowScale = position.interpolate({
+    inputRange: [upperPosition, initialPosition],
+    outputRange: [0.4, 1],
+    extrapolate: 'clamp',
+  })
+
   return (
     <SectionTemplate {...props}>
       <View style={s.container}>
-        <Animated.View
-          style={[s.positionContainer, {transform: [{translateY: position}]}]}>
+        <View style={s.stage}>
           <Animated.View
             style={[
-              s.rotationContainer,
-              face([1, MIN_SCALE, MIN_SCALE, MIN_SCALE, 1], [1, 1, 0, 1, 1]),
+              s.shadow,
+              {
+                opacity: shadowScale,
+                transform: [{translateY: initialPosition}, {scaleX: shadowScale}],
+              },
             ]}
-            {...panResponder.panHandlers}>
-            <CoinFace size={imageSize} side="crown" />
-          </Animated.View>
+          />
           <Animated.View
-            style={[
-              s.rotationContainer,
-              face([MIN_SCALE, MIN_SCALE, 1, MIN_SCALE, MIN_SCALE], [0, 1, 1, 1, 0]),
-            ]}
-            {...panResponder.panHandlers}>
-            <CoinFace size={imageSize} side="eagle" />
+            style={[s.positionContainer, {transform: [{translateY: position}]}]}>
+            <Animated.View
+              style={[
+                s.rotationContainer,
+                face([1, MIN_SCALE, MIN_SCALE, MIN_SCALE, 1], [1, 1, 0, 1, 1]),
+              ]}
+              {...panResponder.panHandlers}>
+              <CoinFace size={imageSize} side="eagle" />
+            </Animated.View>
+            <Animated.View
+              style={[
+                s.rotationContainer,
+                face([MIN_SCALE, MIN_SCALE, 1, MIN_SCALE, MIN_SCALE], [0, 1, 1, 1, 0]),
+              ]}
+              {...panResponder.panHandlers}>
+              <CoinFace size={imageSize} side="crown" />
+            </Animated.View>
           </Animated.View>
-        </Animated.View>
+        </View>
       </View>
     </SectionTemplate>
   )
@@ -132,6 +148,19 @@ const makeStyles = (imageSize: number) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    stage: {
+      width: imageSize,
+      height: imageSize,
+    },
+    shadow: {
+      position: 'absolute',
+      top: imageSize + 12,
+      alignSelf: 'center',
+      width: imageSize * 0.8,
+      height: imageSize * 0.1,
+      borderRadius: imageSize,
+      backgroundColor: 'rgba(0, 0, 0, 0.14)',
     },
     positionContainer: {
       height: imageSize,
