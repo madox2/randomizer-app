@@ -1,41 +1,37 @@
 import React from 'react'
-import Svg, {Circle, Ellipse, Path, Rect, Text as SvgText} from 'react-native-svg'
+import {Image} from 'react-native'
+import Svg, {Circle, Ellipse, Path, Rect} from 'react-native-svg'
+import {coins} from '../../resources/coins'
 
 /** Flat illustrations of the game objects. */
 
-const COIN = '#ffd04a'
-const COIN_EDGE = '#e8a91c'
-const COIN_MARK = '#b9780a'
-
-export const CoinFace = ({size, side}: {size: number; side: 'heads' | 'tails'}) => (
-  <Svg width={size} height={size} viewBox="0 0 100 100">
-    <Circle cx="50" cy="50" r="48" fill={COIN_EDGE} />
-    <Circle cx="50" cy="50" r="42" fill={COIN} />
-    <Circle cx="50" cy="50" r="33" fill="none" stroke={COIN_EDGE} strokeWidth={3} />
-    {side === 'heads' ? (
-      <Path
-        d="M50 27l6.8 14.2 15.5 2-11.4 10.8 2.9 15.4L50 61.8 36.2 69.4l2.9-15.4L27.7 43.2l15.5-2z"
-        fill={COIN_MARK}
-      />
-    ) : (
-      <SvgText x="50" y="65" fontSize="46" fontWeight="bold" fill={COIN_MARK} textAnchor="middle">
-        1
-      </SvgText>
-    )}
-  </Svg>
+export const CoinFace = ({size, side}: {size: number; side: 'crown' | 'eagle'}) => (
+  <Image
+    source={coins[side]}
+    style={{width: size, height: size}}
+    accessibilityIgnoresInvertColors
+  />
 )
 
 /** Bottle lying along its vertical axis, the neck points up. */
 export const BottleArt = ({width, height}: {width: number; height: number}) => (
-  <Svg width={width} height={height} viewBox="0 0 40 160">
-    <Rect x="14" y="2" width="12" height="12" rx="3" fill="#f4f1ea" />
+  <Svg width={width} height={height} viewBox="0 0 100 400">
+    {/* glass */}
     <Path
-      d="M15 14h10v38c0 8 11 12 11 26v68a8 8 0 0 1-8 8H12a8 8 0 0 1-8-8V78c0-14 11-18 11-26z"
-      fill="#16634a"
+      d="M38 6h24v10h-2v70c0 22 6 34 16 52 14 24 24 42 24 76v152c0 18-12 28-30 28H30C12 394 0 384 0 366V214c0-34 10-52 24-76 10-18 16-30 16-52V16h-2z"
+      fill="#1f6b3b"
     />
-    <Rect x="4" y="86" width="32" height="40" fill="#f4f1ea" />
-    <Rect x="10" y="98" width="20" height="4" rx="2" fill="#16634a" />
-    <Rect x="10" y="108" width="14" height="4" rx="2" fill="#16634a" />
+    {/* shaded side */}
+    <Path
+      d="M62 16v70c0 22 6 34 16 52 14 24 22 42 22 76v152c0 18-10 28-28 28h-8c18 0 22-10 22-28V214c0-34-8-52-22-76-10-18-14-30-14-52V16z"
+      fill="#17552f"
+    />
+    {/* neck lip */}
+    <Rect x="36" y="2" width="28" height="12" rx="4" fill="#2a8449" />
+    {/* highlights */}
+    <Rect x="14" y="236" width="6" height="146" rx="3" fill="#fff" opacity={0.9} />
+    <Rect x="25" y="236" width="6" height="146" rx="3" fill="#fff" opacity={0.9} />
+    <Rect x="44" y="30" width="5" height="40" rx="2.5" fill="#fff" opacity={0.9} />
   </Svg>
 )
 

@@ -3,7 +3,6 @@ import {Animated, Pressable, StyleSheet, Text, View} from 'react-native'
 import {DieFace} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
 import {Options} from '../components/OptionsSheet'
-import {Stepper} from '../components/Stepper'
 import {storage} from '../services/storage'
 import {fonts} from '../theme/colors'
 import {Metrics, useMetrics} from '../theme/metrics'
@@ -113,11 +112,6 @@ export const Dices = (props: SectionProps) => {
   const onOptionsChange = (values: Record<string, number>) =>
     applySettings({count: values.count, sides: values.sides})
 
-  const onCountChange = (next: number) => {
-    haptics.select()
-    applySettings({count: next, sides})
-  }
-
   const textMode = sides > 6
   // faces are flipped by scaling since backface visibility is not
   // supported on android
@@ -142,10 +136,7 @@ export const Dices = (props: SectionProps) => {
     <SectionTemplate
       {...props}
       options={options}
-      onOptionsChange={onOptionsChange}
-      footer={
-        <Stepper label="dice" value={count} min={1} max={MAX_COUNT} onChange={onCountChange} />
-      }>
+      onOptionsChange={onOptionsChange}>
       <Pressable
         onPress={throwDices}
         style={s.counterContainer}

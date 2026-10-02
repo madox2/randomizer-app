@@ -1,7 +1,7 @@
 import React from 'react'
 import Svg, {Circle, Path, Rect, Text as SvgText} from 'react-native-svg'
 
-export type UiIconName = 'back' | 'refresh' | 'settings' | 'help' | 'plus' | 'minus'
+export type UiIconName = 'back' | 'refresh' | 'settings' | 'help'
 
 type Props = {name: UiIconName; size?: number; color?: string}
 
@@ -16,8 +16,6 @@ const stroke = {
 export const UiIcon = ({name, size = 24, color = '#fff'}: Props) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" stroke={color} {...stroke}>
     {name === 'back' && <Path d="M15 5l-7 7 7 7" />}
-    {name === 'plus' && <Path d="M12 5v14M5 12h14" />}
-    {name === 'minus' && <Path d="M5 12h14" />}
     {name === 'refresh' && (
       <>
         <Path d="M20 11a8 8 0 1 0-2.3 5.7" />

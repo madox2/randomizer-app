@@ -123,7 +123,7 @@ export const Coin = (props: SectionProps) => {
                 face([1, MIN_SCALE, MIN_SCALE, MIN_SCALE, 1], [1, 1, 0, 1, 1]),
               ]}
               {...panResponder.panHandlers}>
-              <CoinFace size={imageSize} side="heads" />
+              <CoinFace size={imageSize} side="eagle" />
             </Animated.View>
             <Animated.View
               style={[
@@ -131,7 +131,7 @@ export const Coin = (props: SectionProps) => {
                 face([MIN_SCALE, MIN_SCALE, 1, MIN_SCALE, MIN_SCALE], [0, 1, 1, 1, 0]),
               ]}
               {...panResponder.panHandlers}>
-              <CoinFace size={imageSize} side="tails" />
+              <CoinFace size={imageSize} side="crown" />
             </Animated.View>
           </Animated.View>
         </View>

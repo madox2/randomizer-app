@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {Ref, useState} from 'react'
 import {Platform, StyleSheet, Text, TextInput, View} from 'react-native'
 import {fonts, useTheme} from '../theme/colors'
 import {NumberConstraints, sanitize, validate} from '../utils/validate'
@@ -9,7 +9,7 @@ type Props = {
   err?: string | null
   constraints?: NumberConstraints
   accent: string
-  autoFocus?: boolean
+  ref?: Ref<TextInput>
   onChange: (value: number | string, err: string | null) => void
   onSubmitEditing?: () => void
 }
@@ -21,7 +21,7 @@ export const InputNumber = ({
   err,
   constraints,
   accent,
-  autoFocus,
+  ref,
   onSubmitEditing,
 }: Props) => {
   const theme = useTheme()
@@ -34,6 +34,7 @@ export const InputNumber = ({
     <View style={s.container}>
       <Text style={[s.label, {color: theme.textMuted}]}>{label}</Text>
       <TextInput
+        ref={ref}
         onChangeText={onChangeText}
         value={`${value}`}
         accessibilityLabel={label}
@@ -48,7 +49,6 @@ export const InputNumber = ({
         keyboardType="numeric"
         selectionColor={accent}
         selectTextOnFocus
-        autoFocus={autoFocus}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
         onSubmitEditing={onSubmitEditing}

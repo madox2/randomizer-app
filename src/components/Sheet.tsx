@@ -16,6 +16,8 @@ import {useReduceMotion} from '../utils/motion'
 type Props = {
   visible: boolean
   onClose: () => void
+  /** called when the sheet finished sliding in, e.g. to focus an input */
+  onOpened?: () => void
   children: ReactNode
 }
 
@@ -25,12 +27,14 @@ const USE_NATIVE_DRIVER = Platform.OS !== 'web'
  * Bottom sheet over a dimmed screen. Slides in and out, closes with the
  * backdrop and the hardware back button.
  */
-export const Sheet = ({visible, onClose, children}: Props) => {
+export const Sheet = ({visible, onClose, onOpened, children}: Props) => {
   const theme = useTheme()
   const {height, insets} = useMetrics()
   const reduceMotion = useReduceMotion()
   const progress = useRef(new Animated.Value(0)).current
   const [mounted, setMounted] = useState(visible)
+  const onOpenedRef = useRef(onOpened)
+  onOpenedRef.current = onOpened
 
   useEffect(() => {
     if (visible) {
@@ -43,7 +47,12 @@ export const Sheet = ({visible, onClose, children}: Props) => {
       useNativeDriver: USE_NATIVE_DRIVER,
     })
     animation.start(({finished}) => {
-      if (finished && !visible) {
+      if (!finished) {
+        return
+      }
+      if (visible) {
+        onOpenedRef.current?.()
+      } else {
         setMounted(false)
       }
     })

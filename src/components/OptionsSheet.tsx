@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import React, {useEffect, useRef, useState} from 'react'
+import {StyleSheet, Text, TextInput, View} from 'react-native'
 import {fonts, useTheme} from '../theme/colors'
 import {NumberConstraints} from '../utils/validate'
 import {Button} from './Button'
@@ -58,6 +58,7 @@ export const OptionsSheet = ({
 }: Props) => {
   const theme = useTheme()
   const [fields, setFields] = useState(() => initialFields(options))
+  const firstInput = useRef<TextInput>(null)
 
   // start from the current values every time the form is opened
   useEffect(() => {
@@ -91,7 +92,11 @@ export const OptionsSheet = ({
   }
 
   return (
-    <Sheet visible={visible} onClose={onClose}>
+    // focusing while the sheet is still off screen would scroll the page
+    <Sheet
+      visible={visible}
+      onClose={onClose}
+      onOpened={() => firstInput.current?.focus()}>
       <Text style={[s.title, {color: theme.text}]}>{title}</Text>
       {Object.entries(options).map(([key, option], i) => (
         <InputNumber
@@ -101,7 +106,7 @@ export const OptionsSheet = ({
           err={fields[key]?.err}
           constraints={option.constraints}
           accent={accent}
-          autoFocus={i === 0}
+          ref={i === 0 ? firstInput : undefined}
           onChange={(value, err) => onInputChange(key, value, err)}
           onSubmitEditing={save}
         />
