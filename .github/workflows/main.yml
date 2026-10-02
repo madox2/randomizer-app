@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: app
+        working-directory: .
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js
@@ -13,7 +13,7 @@ jobs:
       with:
         node-version: 22.x
         cache: npm
-        cache-dependency-path: app/package-lock.json
+        cache-dependency-path: ./package-lock.json
     - run: npm ci
     - run: npm run typecheck
     - run: npm test
