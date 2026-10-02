@@ -1,6 +1,7 @@
 import {ComponentType} from 'react'
-import {IconName} from '../resources/images'
+import {GlyphName} from '../components/art/icons'
 import {SectionProps} from '../components/SectionTemplate'
+import {sectionColors} from '../theme/colors'
 import {Bottle} from './Bottle'
 import {Coin} from './Coin'
 import {Dices} from './Dices'
@@ -14,9 +15,9 @@ export type Section = {
   id: SectionId
   title: string
   color: string
-  /** color of the buttons displayed over the section background */
-  buttonColor: string
-  type: IconName
+  /** short instruction displayed at the bottom of the screen */
+  hint: string
+  type: GlyphName
   Component: ComponentType<SectionProps>
 }
 
@@ -24,48 +25,48 @@ export const sections: Section[] = [
   {
     id: 'numbers',
     title: 'Numbers',
-    color: '#f9be3e',
-    buttonColor: '#d89c19',
+    color: sectionColors.numbers,
+    hint: 'Tap to roll',
     type: 'numbers',
     Component: Numbers,
   },
   {
     id: 'coin',
     title: 'Coin',
-    color: '#067b82',
-    buttonColor: '#07565a',
+    color: sectionColors.coin,
+    hint: 'Drag the coin up and let go to flip it',
     type: 'coin',
     Component: Coin,
   },
   {
     id: 'bottle',
     title: 'Bottle',
-    color: '#f06060',
-    buttonColor: '#c33939',
+    color: sectionColors.bottle,
+    hint: 'Swipe around the bottle to spin it',
     type: 'bottle',
     Component: Bottle,
   },
   {
     id: 'ball',
     title: 'Magic 8-Ball',
-    color: '#86a73f',
-    buttonColor: '#5d7d17',
+    color: sectionColors.ball,
+    hint: 'Think of a question, then tap the ball',
     type: 'ball',
     Component: MagicBall,
   },
   {
     id: 'matches',
     title: 'Matches',
-    color: '#92c2b8',
-    buttonColor: '#63a094',
+    color: sectionColors.matches,
+    hint: 'Pull a match up. Someone gets the burned one',
     type: 'matches',
     Component: Matches,
   },
   {
     id: 'dice',
     title: 'Dices',
-    color: '#e5a959',
-    buttonColor: '#c78123',
+    color: sectionColors.dice,
+    hint: 'Tap to throw',
     type: 'dice',
     Component: Dices,
   },

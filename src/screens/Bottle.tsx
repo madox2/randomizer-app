@@ -1,9 +1,10 @@
 import React, {useCallback, useRef} from 'react'
-import {Animated, Easing, Image, StyleSheet, View} from 'react-native'
+import {Animated, Easing, StyleSheet, View} from 'react-native'
+import {BottleArt} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
-import {images} from '../resources/images'
 import {Metrics, useMetrics} from '../theme/metrics'
 import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+import {haptics} from '../utils/haptics'
 
 // difference of two angles normalized to the range (-180, 180]
 const angleDiff = (a: number, b: number) => ((((a - b) % 360) + 540) % 360) - 180
@@ -41,7 +42,7 @@ export const Bottle = (props: SectionProps) => {
       duration,
       easing: Easing.out(Easing.cubic),
       useNativeDriver: USE_NATIVE_DRIVER,
-    }).start()
+    }).start(({finished}) => finished && haptics.tap())
   }
 
   const panResponder = usePanResponder(
@@ -83,7 +84,7 @@ export const Bottle = (props: SectionProps) => {
               },
             ],
           }}>
-          <Image source={images.bottle} style={s.image} />
+          <BottleArt width={s.image.width} height={s.image.height} />
         </Animated.View>
       </View>
     </SectionTemplate>
@@ -91,7 +92,7 @@ export const Bottle = (props: SectionProps) => {
 }
 
 const makeStyles = ({contentWidth, contentHeight}: Metrics) => {
-  const height = Math.min(contentWidth, contentHeight, 500)
+  const height = Math.min(contentWidth, contentHeight, 440)
   return StyleSheet.create({
     image: {
       width: height / 4,

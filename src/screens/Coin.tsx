@@ -1,9 +1,10 @@
 import React, {useEffect, useRef} from 'react'
-import {Animated, Easing, Image, StyleSheet, View} from 'react-native'
+import {Animated, Easing, StyleSheet, View} from 'react-native'
+import {CoinFace} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
-import {images} from '../resources/images'
 import {Metrics, useMetrics} from '../theme/metrics'
 import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+import {haptics} from '../utils/haptics'
 import {randomBoolean} from '../utils/random'
 
 // scale of the flipped coin (0 does not work properly on android)
@@ -11,10 +12,10 @@ const MIN_SCALE = 0.0001
 
 export const Coin = (props: SectionProps) => {
   const m = useMetrics()
-  const {contentHeight, controlsHeight} = m
-  const imageSize = Math.min(contentHeight * 0.5, 200)
-  const upperPosition = -contentHeight / 2 + imageSize / 2
-  const lowerPosition = contentHeight / 2 - imageSize / 2 - controlsHeight / 3
+  const {contentHeight} = m
+  const imageSize = Math.min(contentHeight * 0.45, 200)
+  const upperPosition = -contentHeight / 2 + imageSize / 2 + 8
+  const lowerPosition = contentHeight / 2 - imageSize / 2 - 24
   const initialPosition = lowerPosition * 0.3
   const s = makeStyles(imageSize)
 
@@ -34,6 +35,7 @@ export const Coin = (props: SectionProps) => {
 
   const throwCoin = () => {
     animating.current = true
+    haptics.tap()
     time.setValue(0)
     Animated.parallel([
       Animated.timing(time, {
@@ -58,6 +60,7 @@ export const Coin = (props: SectionProps) => {
       ]),
     ]).start(() => {
       animating.current = false
+      haptics.thud()
     })
   }
 
@@ -92,28 +95,46 @@ export const Coin = (props: SectionProps) => {
     }),
   })
 
+  // the shadow on the ground shrinks and fades while the coin is in the air
+  const shadowScale = position.interpolate({
+    inputRange: [upperPosition, initialPosition],
+    outputRange: [0.4, 1],
+    extrapolate: 'clamp',
+  })
+
   return (
     <SectionTemplate {...props}>
       <View style={s.container}>
-        <Animated.View
-          style={[s.positionContainer, {transform: [{translateY: position}]}]}>
+        <View style={s.stage}>
           <Animated.View
             style={[
-              s.rotationContainer,
-              face([1, MIN_SCALE, MIN_SCALE, MIN_SCALE, 1], [1, 1, 0, 1, 1]),
+              s.shadow,
+              {
+                opacity: shadowScale,
+                transform: [{translateY: initialPosition}, {scaleX: shadowScale}],
+              },
             ]}
-            {...panResponder.panHandlers}>
-            <Image source={images.coin0} style={s.image} />
-          </Animated.View>
+          />
           <Animated.View
-            style={[
-              s.rotationContainer,
-              face([MIN_SCALE, MIN_SCALE, 1, MIN_SCALE, MIN_SCALE], [0, 1, 1, 1, 0]),
-            ]}
-            {...panResponder.panHandlers}>
-            <Image source={images.coin1} style={s.image} />
+            style={[s.positionContainer, {transform: [{translateY: position}]}]}>
+            <Animated.View
+              style={[
+                s.rotationContainer,
+                face([1, MIN_SCALE, MIN_SCALE, MIN_SCALE, 1], [1, 1, 0, 1, 1]),
+              ]}
+              {...panResponder.panHandlers}>
+              <CoinFace size={imageSize} side="heads" />
+            </Animated.View>
+            <Animated.View
+              style={[
+                s.rotationContainer,
+                face([MIN_SCALE, MIN_SCALE, 1, MIN_SCALE, MIN_SCALE], [0, 1, 1, 1, 0]),
+              ]}
+              {...panResponder.panHandlers}>
+              <CoinFace size={imageSize} side="tails" />
+            </Animated.View>
           </Animated.View>
-        </Animated.View>
+        </View>
       </View>
     </SectionTemplate>
   )
@@ -128,9 +149,18 @@ const makeStyles = (imageSize: number) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
-    image: {
+    stage: {
       width: imageSize,
       height: imageSize,
+    },
+    shadow: {
+      position: 'absolute',
+      top: imageSize + 12,
+      alignSelf: 'center',
+      width: imageSize * 0.8,
+      height: imageSize * 0.1,
+      borderRadius: imageSize,
+      backgroundColor: 'rgba(0, 0, 0, 0.14)',
     },
     positionContainer: {
       height: imageSize,

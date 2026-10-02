@@ -1,11 +1,14 @@
 import React, {useLayoutEffect, useRef, useState} from 'react'
-import {Animated, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {Animated, Pressable, StyleSheet, Text, View} from 'react-native'
+import {DieFace} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
-import {Options} from '../components/UserOptions'
-import {images} from '../resources/images'
+import {Options} from '../components/OptionsSheet'
+import {Stepper} from '../components/Stepper'
 import {storage} from '../services/storage'
+import {fonts} from '../theme/colors'
 import {Metrics, useMetrics} from '../theme/metrics'
 import {USE_NATIVE_DRIVER} from '../utils/gesture'
+import {haptics} from '../utils/haptics'
 import {randomNumber} from '../utils/random'
 
 const MAX_COUNT = 12
@@ -16,26 +19,31 @@ const MIN_SCALE = 0.0001
 const generate = (count: number, sides: number) =>
   Array.from({length: count}, () => randomNumber(1, sides))
 
-const faces: Record<number, number> = {
-  1: images.dice1,
-  2: images.dice2,
-  3: images.dice3,
-  4: images.dice4,
-  5: images.dice5,
-  6: images.dice6,
-}
-
 type Styles = ReturnType<typeof makeStyles>
 
-const DiceGraphic = ({result, s, textMode}: {result: number; s: Styles; textMode: boolean}) => {
+const DiceGraphic = ({
+  result,
+  s,
+  textMode,
+  color,
+}: {
+  result: number
+  s: Styles
+  textMode: boolean
+  color: string
+}) => {
   if (textMode || result > 6) {
     return (
       <View style={[s.diceImage, s.diceTextContainer]}>
-        <Text style={s.diceText}>{result}</Text>
+        <Text style={[s.diceText, {color}]}>{result}</Text>
       </View>
     )
   }
-  return <Image style={s.diceImage} source={faces[result]} />
+  return (
+    <View style={s.diceImage}>
+      <DieFace size={s.diceImage.width} value={result} pip={color} />
+    </View>
+  )
 }
 
 export const Dices = (props: SectionProps) => {
@@ -57,20 +65,10 @@ export const Dices = (props: SectionProps) => {
   ).current
   const s = makeStyles(useMetrics(), count, sides)
 
-  const [options] = useState<Options>(() => ({
-    count: {
-      type: 'number',
-      label: 'Count',
-      defaultValue: count,
-      constraints: {min: 1, max: MAX_COUNT},
-    },
-    sides: {
-      type: 'number',
-      label: 'Sides',
-      defaultValue: sides,
-      constraints: {min: 2, max: 9999},
-    },
-  }))
+  const options: Options = {
+    count: {label: 'Count', value: count, constraints: {min: 1, max: MAX_COUNT}},
+    sides: {label: 'Sides', value: sides, constraints: {min: 2, max: 9999}},
+  }
 
   useLayoutEffect(() => {
     if (throwNumber === 0) {
@@ -88,7 +86,7 @@ export const Dices = (props: SectionProps) => {
     })
     rotations.slice(count).forEach((rotation) => rotation.setValue(base))
     const animation = Animated.parallel(animations)
-    animation.start()
+    animation.start(({finished}) => finished && haptics.tap())
     return () => animation.stop()
   }, [throwNumber, rotations, count])
 
@@ -102,8 +100,7 @@ export const Dices = (props: SectionProps) => {
     setThrowNumber((n) => n + 1)
   }
 
-  const onOptionsChange = ({count: c, sides: sd}: Options) => {
-    const next = {count: Number(c.value), sides: Number(sd.value)}
+  const applySettings = (next: {count: number; sides: number}) => {
     storage.set('Dices.count', next.count)
     storage.set('Dices.sides', next.sides)
     setSettings(next)
@@ -111,6 +108,14 @@ export const Dices = (props: SectionProps) => {
       generate(next.count, next.sides),
       generate(next.count, next.sides),
     ])
+  }
+
+  const onOptionsChange = (values: Record<string, number>) =>
+    applySettings({count: values.count, sides: values.sides})
+
+  const onCountChange = (next: number) => {
+    haptics.select()
+    applySettings({count: next, sides})
   }
 
   const textMode = sides > 6
@@ -137,42 +142,41 @@ export const Dices = (props: SectionProps) => {
     <SectionTemplate
       {...props}
       options={options}
-      onOptionsChange={onOptionsChange}>
-      <TouchableOpacity
+      onOptionsChange={onOptionsChange}
+      footer={
+        <Stepper label="dice" value={count} min={1} max={MAX_COUNT} onChange={onCountChange} />
+      }>
+      <Pressable
         onPress={throwDices}
-        activeOpacity={0.6}
-        style={s.counterContainer}>
+        style={s.counterContainer}
+        accessibilityRole="button"
+        accessibilityLabel={`Dice: ${results[visibleFace.current].join(', ')}`}
+        accessibilityHint="Throws all dice">
         <View style={s.container}>
           {results[0].map((r, i) => (
             <Animated.View key={`s${r}-${i}`} style={face(i, true)}>
-              <DiceGraphic result={r} s={s} textMode={textMode} />
+              <DiceGraphic result={r} s={s} textMode={textMode} color={props.color ?? '#000'} />
             </Animated.View>
           ))}
           <View style={[s.container, s.hiddenContainer]}>
             {results[1].map((r, i) => (
               <Animated.View key={`h${r}-${i}`} style={face(i, false)}>
-                <DiceGraphic result={r} s={s} textMode={textMode} />
+                <DiceGraphic result={r} s={s} textMode={textMode} color={props.color ?? '#000'} />
               </Animated.View>
             ))}
           </View>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     </SectionTemplate>
   )
 }
 
 const makeStyles = (
-  {
-    contentWidth,
-    contentHeight,
-    settingsHeight,
-    controlsHeight,
-    contentPadding,
-  }: Metrics,
+  {contentWidth, contentHeight}: Metrics,
   count: number,
   sides: number,
 ) => {
-  const area = contentWidth * (contentHeight - settingsHeight - controlsHeight)
+  const area = contentWidth * contentHeight
   const evenCount = count + (count % 2)
   const diceArea = Math.sqrt(area / evenCount + 1)
   const sizeRatio = 0.7
@@ -185,8 +189,6 @@ const makeStyles = (
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: settingsHeight,
-      marginBottom: controlsHeight - contentPadding,
       position: 'relative',
     },
     container: {
@@ -211,11 +213,11 @@ const makeStyles = (
       backgroundColor: 'white',
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: size / 10,
+      borderRadius: size * 0.22,
     },
     diceText: {
       fontSize: textFontSize,
-      color: 'black',
+      fontWeight: fonts.bold,
     },
   })
 }

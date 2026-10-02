@@ -4,6 +4,7 @@
     "slug": "randomizer-app",
     "version": "3.0.0",
     "orientation": "default",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "backgroundColor": "#ffffff",
     "platforms": ["android", "web"],

@@ -2,7 +2,7 @@
 
 Ultimate randomizer mobile/web application created with [Expo](https://expo.dev), [react-native](https://reactnative.dev/) and [react-native-web](https://github.com/necolas/react-native-web).
 
-![preview](doc/preview.png)
+<img src="doc/preview.png" alt="preview" width="320">
 
 [![web](doc/available_web.png)](https://madox2.github.io/randomizer-app/)
 
@@ -11,7 +11,7 @@ Ultimate randomizer mobile/web application created with [Expo](https://expo.dev)
 ## Features
 
 * Get a random number
-* Flip the coing
+* Flip the coin
 * Spin the bottle
 * Ask yes/no question
 * Pull a burned match

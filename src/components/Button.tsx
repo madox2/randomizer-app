@@ -1,39 +1,47 @@
 import React, {ReactNode} from 'react'
-import {Platform, Pressable, StyleProp, StyleSheet, Text, ViewStyle} from 'react-native'
+import {StyleProp, StyleSheet, Text, ViewStyle} from 'react-native'
+import {fonts, ON_COLOR, useTheme} from '../theme/colors'
+import {Touchable} from './Touchable'
 
 type Props = {
   children: ReactNode
-  onPress?: () => void
+  onPress: () => void
+  /** `primary` is filled with the accent color, `text` has no background */
+  variant?: 'primary' | 'text'
+  color?: string
   style?: StyleProp<ViewStyle>
 }
 
-export const Button = ({children, onPress, style}: Props) => (
-  <Pressable
-    onPress={onPress}
-    android_ripple={{color: '#ddd'}}
-    style={({pressed}) => [
-      styles.button,
-      style,
-      pressed && Platform.OS !== 'android' && styles.pressed,
-    ]}>
-    <Text style={styles.label}>{children}</Text>
-  </Pressable>
-)
+export const Button = ({
+  children,
+  onPress,
+  variant = 'primary',
+  color,
+  style,
+}: Props) => {
+  const theme = useTheme()
+  const primary = variant === 'primary'
+  return (
+    <Touchable
+      onPress={onPress}
+      style={[s.button, primary && {backgroundColor: color}, style]}>
+      <Text style={[s.label, {color: primary ? ON_COLOR : theme.textMuted}]}>
+        {children}
+      </Text>
+    </Touchable>
+  )
+}
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
   button: {
-    padding: 14,
-    paddingRight: 20,
-    paddingLeft: 20,
-    flex: 1,
+    minHeight: 52,
+    paddingHorizontal: 24,
+    borderRadius: 16,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'silver',
-  },
-  pressed: {
-    backgroundColor: '#ddd',
+    justifyContent: 'center',
   },
   label: {
     fontSize: 18,
+    fontWeight: fonts.bold,
   },
 })
