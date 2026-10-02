@@ -1,16 +1,28 @@
 import React from 'react'
-import {Image} from 'react-native'
-import Svg, {Circle, Ellipse, Path, Rect} from 'react-native-svg'
-import {coins} from '../../resources/coins'
+import Svg, {Circle, Ellipse, Path, Rect, Text as SvgText} from 'react-native-svg'
 
 /** Flat illustrations of the game objects. */
 
-export const CoinFace = ({size, side}: {size: number; side: 'crown' | 'eagle'}) => (
-  <Image
-    source={coins[side]}
-    style={{width: size, height: size}}
-    accessibilityIgnoresInvertColors
-  />
+const COIN = '#ffd04a'
+const COIN_EDGE = '#e8a91c'
+const COIN_MARK = '#b9780a'
+
+export const CoinFace = ({size, side}: {size: number; side: 'heads' | 'tails'}) => (
+  <Svg width={size} height={size} viewBox="0 0 100 100">
+    <Circle cx="50" cy="50" r="48" fill={COIN_EDGE} />
+    <Circle cx="50" cy="50" r="42" fill={COIN} />
+    <Circle cx="50" cy="50" r="33" fill="none" stroke={COIN_EDGE} strokeWidth={3} />
+    {side === 'heads' ? (
+      <Path
+        d="M50 27l6.8 14.2 15.5 2-11.4 10.8 2.9 15.4L50 61.8 36.2 69.4l2.9-15.4L27.7 43.2l15.5-2z"
+        fill={COIN_MARK}
+      />
+    ) : (
+      <SvgText x="50" y="65" fontSize="46" fontWeight="bold" fill={COIN_MARK} textAnchor="middle">
+        1
+      </SvgText>
+    )}
+  </Svg>
 )
 
 /** Bottle lying along its vertical axis, the neck points up. */
