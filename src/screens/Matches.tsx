@@ -5,7 +5,12 @@ import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
 import {Options} from '../components/OptionsSheet'
 import {storage} from '../services/storage'
 import {Metrics, useMetrics} from '../theme/metrics'
-import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+import {
+  DRAG_AREA_STYLE,
+  Gesture,
+  USE_NATIVE_DRIVER,
+  usePanResponder,
+} from '../utils/gesture'
 import {haptics} from '../utils/haptics'
 import {uniqueRandomNumbers} from '../utils/random'
 
@@ -32,21 +37,23 @@ const Match = ({burned, lowerPosition, upperPosition, style}: MatchProps) => {
     position.setValue(pulled ? upperPosition : lowerPosition)
   }, [position, pulled, upperPosition, lowerPosition])
 
-  const computePosition = (y0: number, y: number) =>
-    Math.min(lowerPosition, Math.max(upperPosition, y - y0 + lowerPosition))
+  // by the movement of the finger (dy), the absolute position of a move is not
+  // always valid
+  const computePosition = (dy: number) =>
+    Math.min(lowerPosition, Math.max(upperPosition, dy + lowerPosition))
 
   const panResponder = usePanResponder(
     {
-      onMove: ({y0, moveY}: Gesture) => {
+      onMove: ({dy}: Gesture) => {
         if (!pulled) {
-          position.setValue(computePosition(y0, moveY))
+          position.setValue(computePosition(dy))
         }
       },
-      onEnd: ({y0, moveY}: Gesture) => {
+      onEnd: ({dy}: Gesture) => {
         if (pulled) {
           return
         }
-        if (computePosition(y0, moveY) > lowerPosition - MIN_PULL_LENGTH) {
+        if (computePosition(dy) > lowerPosition - MIN_PULL_LENGTH) {
           position.setValue(lowerPosition)
           return
         }
@@ -70,7 +77,11 @@ const Match = ({burned, lowerPosition, upperPosition, style}: MatchProps) => {
   return (
     <Animated.View
       {...panResponder.panHandlers}
-      style={[style.imageContainer, {transform: [{translateY: position}]}]}>
+      style={[
+        style.imageContainer,
+        DRAG_AREA_STYLE,
+        {transform: [{translateY: position}]},
+      ]}>
       <MatchArt
         width={style.imageMatch.width}
         height={style.imageMatch.height}

@@ -3,7 +3,12 @@ import {Animated, Easing, StyleSheet, View} from 'react-native'
 import {CoinFace} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
 import {Metrics, useMetrics} from '../theme/metrics'
-import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+import {
+  DRAG_AREA_STYLE,
+  Gesture,
+  USE_NATIVE_DRIVER,
+  usePanResponder,
+} from '../utils/gesture'
 import {haptics} from '../utils/haptics'
 import {randomBoolean} from '../utils/random'
 
@@ -40,6 +45,8 @@ const SECOND_FACE = {
 }
 // 3 full turns in a flight are slow enough to follow, faster turns blur into
 // a flicker
+// movement of a finger (px) which is a drag, not a tap
+const DRAG_SLOP = 6
 const FLIGHT_TURNS = 12
 const FLIGHT_DURATION = 1000
 
@@ -65,8 +72,10 @@ export const Coin = (props: SectionProps) => {
     }
   }, [position, initialPosition])
 
-  const computePosition = (y0: number, y: number) =>
-    Math.min(lowerPosition, Math.max(upperPosition, y - y0 + initialPosition))
+  // Follows the finger by its movement (dy). The absolute position of a move
+  // (moveY) is not always valid and would send the coin to the top.
+  const computePosition = (dy: number) =>
+    Math.min(lowerPosition, Math.max(upperPosition, initialPosition + dy))
 
   const throwCoin = () => {
     animating.current = true
@@ -108,9 +117,10 @@ export const Coin = (props: SectionProps) => {
 
   const panResponder = usePanResponder(
     {
-      onMove: ({y0, moveY}: Gesture) => {
-        if (!animating.current) {
-          position.setValue(computePosition(y0, moveY))
+      onMove: ({dy}: Gesture) => {
+        // a tap wobbles a little, the coin moves only when it is dragged
+        if (!animating.current && Math.abs(dy) > DRAG_SLOP) {
+          position.setValue(computePosition(dy))
         }
       },
       onEnd: () => {
@@ -118,8 +128,13 @@ export const Coin = (props: SectionProps) => {
           throwCoin()
         }
       },
+      onTerminate: () => {
+        if (!animating.current) {
+          position.setValue(initialPosition)
+        }
+      },
     },
-    {captureStart: true},
+    {captureStart: true, allowTermination: false},
   )
 
   const face = (shape: typeof FIRST_FACE) => ({
@@ -160,18 +175,12 @@ export const Coin = (props: SectionProps) => {
           <Animated.View
             style={[s.positionContainer, {transform: [{translateY: position}]}]}>
             <Animated.View
-              style={[
-                s.rotationContainer,
-                face(FIRST_FACE),
-              ]}
+              style={[s.rotationContainer, DRAG_AREA_STYLE, face(FIRST_FACE)]}
               {...panResponder.panHandlers}>
               <CoinFace size={imageSize} side="heads" />
             </Animated.View>
             <Animated.View
-              style={[
-                s.rotationContainer,
-                face(SECOND_FACE),
-              ]}
+              style={[s.rotationContainer, DRAG_AREA_STYLE, face(SECOND_FACE)]}
               {...panResponder.panHandlers}>
               <CoinFace size={imageSize} side="tails" />
             </Animated.View>

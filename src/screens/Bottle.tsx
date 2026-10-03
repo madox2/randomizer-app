@@ -3,7 +3,12 @@ import {Animated, Easing, StyleSheet, View} from 'react-native'
 import {BottleArt} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
 import {Metrics, useMetrics} from '../theme/metrics'
-import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+import {
+  DRAG_AREA_STYLE,
+  Gesture,
+  USE_NATIVE_DRIVER,
+  usePanResponder,
+} from '../utils/gesture'
 import {haptics} from '../utils/haptics'
 
 // difference of two angles normalized to the range (-180, 180]
@@ -65,23 +70,27 @@ export const Bottle = (props: SectionProps) => {
         angle.stopAnimation()
         grabOffset.current = currentAngle.current - computeAngle(x0, y0)
       },
-      onMove: ({moveX, moveY}: Gesture) => {
-        angle.setValue(computeAngle(moveX, moveY) + grabOffset.current)
+      // The position of the finger is taken from its movement (dx, dy), the
+      // absolute position of a move (moveX, moveY) is not always valid.
+      onMove: ({x0, y0, dx, dy}: Gesture) => {
+        angle.setValue(computeAngle(x0 + dx, y0 + dy) + grabOffset.current)
       },
-      onEnd: ({moveX, moveY, vx, vy}: Gesture) => {
+      onEnd: ({x0, y0, dx, dy, vx, vy}: Gesture) => {
+        const x = x0 + dx
+        const y = y0 + dy
         const direction = Math.sign(
-          angleDiff(computeAngle(moveX, moveY), computeAngle(moveX - vx, moveY - vy)),
+          angleDiff(computeAngle(x, y), computeAngle(x - vx, y - vy)),
         )
         startRotation(velocityOf(vx, vy), direction, currentAngle.current)
       },
     },
-    {captureStart: true},
+    {captureStart: true, allowTermination: false},
   )
 
   return (
     <SectionTemplate {...props}>
       <View
-        style={s.container}
+        style={[s.container, DRAG_AREA_STYLE]}
         onLayout={measure}
         {...panResponder.panHandlers}
         collapsable={false}>
