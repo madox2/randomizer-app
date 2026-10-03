@@ -78,3 +78,10 @@ EXPO_BASE_URL=/randomizer-app npx expo export --platform web
 ```
 
 `public/privacy.html` and `public/terms.html` are copied to the root of the export.
+
+### GitHub Pages deployment
+
+[`.github/workflows/deploy-web.yml`](.github/workflows/deploy-web.yml) builds the web app with the
+base URL above and publishes it to GitHub Pages on every push to `master` (it can also be started
+manually from the Actions tab). Typecheck and tests must pass first. One-time setup: in the
+repository go to Settings > Pages > Build and deployment and set the source to **GitHub Actions**.
