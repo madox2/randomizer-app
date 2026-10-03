@@ -27,6 +27,11 @@ type Props = Partial<SectionProps> & {
   refreshLabel?: string
   onSettings?: () => void
   options?: Options
+  /**
+   * Text of the settings button for sections which provide their own
+   * settings (`onSettings`) instead of numeric `options`.
+   */
+  summary?: string
   onOptionsChange?: (values: Record<string, number>) => void
 }
 
@@ -48,6 +53,7 @@ export const SectionTemplate = ({
   refreshLabel = 'New game',
   onSettings,
   options,
+  summary,
   onOptionsChange,
 }: Props) => {
   const m = useMetrics()
@@ -64,9 +70,13 @@ export const SectionTemplate = ({
     }).start()
   }, [appear, reduceMotion])
 
+  const settingsSummary = summary ?? (options ? optionsSummary(options) : null)
+
   const openSettings = () => {
     onSettings?.()
-    setEditing(true)
+    if (options) {
+      setEditing(true)
+    }
   }
 
   return (
@@ -79,13 +89,13 @@ export const SectionTemplate = ({
             <View />
           )}
           <View style={s.summaryContainer}>
-            {options && (
+            {settingsSummary !== null && (
               <Touchable
                 onPress={openSettings}
-                accessibilityLabel={`Settings: ${optionsSummary(options)}`}
+                accessibilityLabel={`Settings: ${settingsSummary}`}
                 style={s.summary}>
                 <Text style={s.summaryText} numberOfLines={1}>
-                  {optionsSummary(options)}
+                  {settingsSummary}
                 </Text>
                 <UiIcon name="settings" size={18} />
               </Touchable>

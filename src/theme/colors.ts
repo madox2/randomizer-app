@@ -67,6 +67,17 @@ export const sectionColors = {
   teams: '#4f6081',
 } as const
 
+/** Colors of the teams, neighbors differ clearly. */
+export const teamColors = [
+  sectionColors.dice,
+  sectionColors.numbers,
+  sectionColors.matches,
+  sectionColors.cards,
+  sectionColors.coin,
+  sectionColors.ball,
+  sectionColors.bottle,
+] as const
+
 export const fonts = {
   /** font sizes */
   size: {caption: 13, body: 16, title: 20, heading: 28},

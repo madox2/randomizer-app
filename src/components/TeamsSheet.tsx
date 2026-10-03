@@ -1,45 +1,76 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Platform, StyleSheet, Text, TextInput, View} from 'react-native'
 import {fonts, useTheme} from '../theme/colors'
 import {formatPlayers, parsePlayers} from '../utils/teams'
+import {NumberConstraints, validate} from '../utils/validate'
 import {Button} from './Button'
+import {InputNumber} from './InputNumber'
 import {Sheet} from './Sheet'
+
+export const TEAM_CONSTRAINTS: NumberConstraints = {min: 2, max: 20}
 
 type Props = {
   visible: boolean
+  teams: number
   players: string[]
   accent: string
-  onSave: (players: string[]) => void
+  onSave: (settings: {teams: number; players: string[]}) => void
   onClose: () => void
 }
 
-/** Form to edit the list of players, one name per line. */
-export const PlayersSheet = ({visible, players, accent, onSave, onClose}: Props) => {
+/** Form to change the number of teams and the list of players (one name per line). */
+export const TeamsSheet = ({visible, teams, players, accent, onSave, onClose}: Props) => {
   const theme = useTheme()
+  const [teamsValue, setTeamsValue] = useState<number | string>(teams)
+  const [teamsErr, setTeamsErr] = useState<string | null>(null)
   const [text, setText] = useState(() => formatPlayers(players))
   const [focused, setFocused] = useState(false)
+  const firstInput = useRef<TextInput>(null)
 
-  // start from the current players every time the form is opened
+  // start from the current settings every time the form is opened
   useEffect(() => {
     if (visible) {
+      setTeamsValue(teams)
+      setTeamsErr(null)
       setText(formatPlayers(players))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible])
 
-  const count = parsePlayers(text).length
+  const names = parsePlayers(text)
+
+  const save = () => {
+    const err = validate(teamsValue, TEAM_CONSTRAINTS)
+    if (err) {
+      setTeamsErr(err)
+      return
+    }
+    onSave({teams: Number(teamsValue), players: names})
+  }
 
   return (
-    <Sheet visible={visible} onClose={onClose}>
-      <Text style={[s.title, {color: theme.text}]}>Players</Text>
+    // focusing while the sheet is still off screen would scroll the page
+    <Sheet visible={visible} onClose={onClose} onOpened={() => firstInput.current?.focus()}>
+      <Text style={[s.title, {color: theme.text}]}>Teams</Text>
+      <InputNumber
+        ref={firstInput}
+        label="Teams"
+        value={teamsValue}
+        err={teamsErr}
+        constraints={TEAM_CONSTRAINTS}
+        accent={accent}
+        onChange={(value, err) => {
+          setTeamsValue(value)
+          setTeamsErr(err)
+        }}
+      />
       <Text style={[s.label, {color: theme.textMuted}]}>
-        One name per line  ·  {count} {count === 1 ? 'player' : 'players'}
+        Players  ·  one name per line  ·  {names.length}
       </Text>
       <TextInput
         value={text}
         onChangeText={setText}
         multiline
-        autoFocus={false}
         accessibilityLabel="Players"
         placeholder={'Anna\nBen\nCleo\nDan'}
         placeholderTextColor={theme.textMuted}
@@ -59,7 +90,7 @@ export const PlayersSheet = ({visible, players, accent, onSave, onClose}: Props)
         <Button variant="text" onPress={onClose}>
           Cancel
         </Button>
-        <Button color={accent} onPress={() => onSave(parsePlayers(text))} style={s.save}>
+        <Button color={accent} onPress={save} style={s.save}>
           Save
         </Button>
       </View>
@@ -71,7 +102,7 @@ const s = StyleSheet.create({
   title: {
     fontSize: fonts.size.title,
     fontWeight: fonts.bold,
-    marginBottom: 12,
+    marginBottom: 20,
   },
   label: {
     fontSize: fonts.size.caption,
@@ -81,7 +112,7 @@ const s = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    height: 180,
+    height: 140,
     marginBottom: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,

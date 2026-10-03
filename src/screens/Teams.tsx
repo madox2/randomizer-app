@@ -1,12 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {Animated, ScrollView, StyleSheet, Text, View} from 'react-native'
-import {UiIcon} from '../components/art/icons'
-import {Options} from '../components/OptionsSheet'
-import {PlayersSheet} from '../components/PlayersSheet'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
+import {TeamsSheet} from '../components/TeamsSheet'
 import {Touchable} from '../components/Touchable'
 import {storage} from '../services/storage'
-import {CONTROL_FILL, fonts, ON_COLOR} from '../theme/colors'
+import {CONTROL_FILL, fonts, ON_COLOR, teamColors} from '../theme/colors'
 import {Metrics, useMetrics} from '../theme/metrics'
 import {USE_NATIVE_DRIVER} from '../utils/gesture'
 import {haptics} from '../utils/haptics'
@@ -59,6 +57,7 @@ const TeamCard = ({number, members, delay, color, style}: TeamCardProps) => {
       style={[
         style.team,
         {
+          backgroundColor: color,
           opacity: appear,
           transform: [
             {translateY: appear.interpolate({inputRange: [0, 1], outputRange: [16, 0]})},
@@ -95,21 +94,13 @@ export const Teams = (props: SectionProps) => {
     setRound((r) => r + 1)
   }
 
-  const options: Options = {
-    teams: {label: 'Teams', value: teamCount, constraints: {min: 2, max: 20}},
-  }
-
-  const onOptionsChange = (values: Record<string, number>) => {
-    storage.set('Teams.count', values.teams)
-    setTeamCount(values.teams)
-    split(players, values.teams)
-  }
-
-  const onPlayersSave = (next: string[]) => {
-    storage.set('Teams.players', next)
-    setPlayers(next)
+  const onSave = (next: {teams: number; players: string[]}) => {
+    storage.set('Teams.count', next.teams)
+    storage.set('Teams.players', next.players)
+    setTeamCount(next.teams)
+    setPlayers(next.players)
     setEditing(false)
-    split(next, teamCount)
+    split(next.players, next.teams)
     haptics.tap()
   }
 
@@ -127,37 +118,31 @@ export const Teams = (props: SectionProps) => {
       hint={hint}
       refreshLabel="Shuffle"
       onRefresh={empty ? undefined : onRefresh}
-      options={options}
-      onOptionsChange={onOptionsChange}
+      summary={`Teams ${teamCount}  ·  Players ${players.length}`}
+      onSettings={() => setEditing(true)}
       overlay={
-        <PlayersSheet
+        <TeamsSheet
           visible={editing}
+          teams={teamCount}
           players={players}
           accent={props.color ?? '#444'}
-          onSave={onPlayersSave}
+          onSave={onSave}
           onClose={() => setEditing(false)}
         />
       }
       style={s.container}>
-      <View style={s.header}>
-        <Touchable
-          onPress={() => setEditing(true)}
-          accessibilityLabel={`Edit players, ${players.length} so far`}
-          style={s.edit}>
-          <UiIcon name="edit" size={18} />
-          <Text style={s.editText}>
-            {players.length === 0
-              ? 'Add players'
-              : `${players.length} ${players.length === 1 ? 'player' : 'players'}`}
-          </Text>
-        </Touchable>
-      </View>
       {empty ? (
         <View style={s.empty}>
           <Text style={s.emptyTitle}>Who is playing?</Text>
           <Text style={s.emptyText}>
             Add the names of the players and shuffle them into random teams.
           </Text>
+          <Touchable
+            onPress={() => setEditing(true)}
+            accessibilityLabel="Add players"
+            style={s.add}>
+            <Text style={s.addText}>Add players</Text>
+          </Touchable>
         </View>
       ) : (
         <ScrollView contentContainerStyle={s.teams}>
@@ -167,7 +152,7 @@ export const Teams = (props: SectionProps) => {
               number={i + 1}
               members={members}
               delay={i * 70}
-              color={props.color ?? '#444'}
+              color={teamColors[i % teamColors.length]}
               style={s}
             />
           ))}
@@ -185,24 +170,6 @@ const makeStyles = ({contentPadding, contentWidth}: Metrics) => {
     container: {
       paddingHorizontal: contentPadding,
     },
-    header: {
-      alignItems: 'center',
-      paddingBottom: 12,
-    },
-    edit: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      height: 40,
-      paddingHorizontal: 16,
-      borderRadius: 20,
-      backgroundColor: CONTROL_FILL,
-    },
-    editText: {
-      marginLeft: 8,
-      color: ON_COLOR,
-      fontSize: fonts.size.body,
-      fontWeight: fonts.bold,
-    },
     teams: {
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -213,7 +180,6 @@ const makeStyles = ({contentPadding, contentWidth}: Metrics) => {
       width: teamWidth,
       padding: 16,
       borderRadius: 20,
-      backgroundColor: CONTROL_FILL,
     },
     teamHeader: {
       flexDirection: 'row',
@@ -249,6 +215,19 @@ const makeStyles = ({contentPadding, contentWidth}: Metrics) => {
       justifyContent: 'center',
       paddingHorizontal: 24,
       paddingBottom: 48,
+    },
+    add: {
+      height: 48,
+      marginTop: 24,
+      paddingHorizontal: 24,
+      borderRadius: 24,
+      justifyContent: 'center',
+      backgroundColor: CONTROL_FILL,
+    },
+    addText: {
+      color: ON_COLOR,
+      fontSize: fonts.size.body,
+      fontWeight: fonts.bold,
     },
     emptyTitle: {
       color: ON_COLOR,
