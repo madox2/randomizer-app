@@ -32,7 +32,7 @@ export const UiIcon = ({name, size = 24, color = '#fff'}: Props) => (
   </Svg>
 )
 
-export type GlyphName = 'numbers' | 'coin' | 'bottle' | 'ball' | 'matches' | 'dice'
+export type GlyphName = 'numbers' | 'coin' | 'bottle' | 'ball' | 'matches' | 'dice' | 'cards' | 'teams'
 
 type GlyphProps = {name: GlyphName; size: number; color?: string; cutout: string}
 
@@ -91,6 +91,21 @@ export const Glyph = ({name, size, color = '#fff', cutout}: GlyphProps) => (
         <Circle cx="22" cy="22" r="4.5" fill={cutout} />
         <Circle cx="32" cy="32" r="4.5" fill={cutout} />
         <Circle cx="42" cy="42" r="4.5" fill={cutout} />
+      </>
+    )}
+    {name === 'cards' && (
+      <>
+        <Rect x="8" y="10" width="30" height="42" rx="6" fill={color} opacity={0.55} transform="rotate(-14 23 31)" />
+        <Rect x="24" y="8" width="30" height="42" rx="6" fill={color} transform="rotate(10 39 29)" />
+        <Path d="M39 36c-5-4-6-6.5-6-8.500a3.2 3.2 0 0 1 6-1.500a3.2 3.2 0 0 1 6 1.500c0 2-1 4.5-6 8.500z" fill={cutout} transform="rotate(10 39 29)" />
+      </>
+    )}
+    {name === 'teams' && (
+      <>
+        <Circle cx="21" cy="22" r="8" fill={color} />
+        <Path d="M6 50c0-9 6-15 15-15s15 6 15 15z" fill={color} />
+        <Circle cx="44" cy="25" r="8" fill={color} opacity={0.6} />
+        <Path d="M32 50c0-8 5-13 12-13s14 5 14 13z" fill={color} opacity={0.6} />
       </>
     )}
   </Svg>

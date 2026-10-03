@@ -12,6 +12,8 @@ const data: DefaultEntry[] = [
   ['Matches.burnedCount', '1', 1],
   ['Numbers.from', '0', 1],
   ['Numbers.to', '100', 1],
+  ['Teams.count', '2', 1],
+  ['Teams.players', '[]', 1],
   // info texts
   ['Info.numbers', 'Touch to start and touch again to stop', 1],
   ['Info.coin', 'Grab the coin with finger and throw it', 1],

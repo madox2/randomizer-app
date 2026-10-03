@@ -1,5 +1,5 @@
 import React from 'react'
-import Svg, {Circle, Ellipse, Path, Rect, Text as SvgText} from 'react-native-svg'
+import Svg, {Circle, ClipPath, Defs, Ellipse, G, Path, Rect, Text as SvgText} from 'react-native-svg'
 
 /** Flat illustrations of the game objects. */
 
@@ -152,3 +152,73 @@ export const BallTriangle = ({
     <Path d="M50 0L100 87H0z" fill={color} />
   </Svg>
 )
+
+const CARD_RED = '#d1352b'
+const CARD_BLACK = '#1b1c1f'
+const CARD_BACK = '#a82f68'
+
+/** A suit symbol drawn in a 24x24 box. */
+const Suit = ({suit, x, y, size, fill}: {suit: string; x: number; y: number; size: number; fill: string}) => (
+  <G transform={`translate(${x} ${y}) scale(${size / 24})`}>
+    {suit === 'hearts' && (
+      <Path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1.5A5 5 0 0 1 22 8c0 3.5-3 7-10 13z" fill={fill} />
+    )}
+    {suit === 'diamonds' && <Path d="M12 2l8 10-8 10-8-10z" fill={fill} />}
+    {suit === 'spades' && (
+      <Path
+        d="M12 2C7 8 3 11 3 15a4.5 4.5 0 0 0 8 2.8c-.2 2-1 3.3-2.5 4.2h7c-1.5-.9-2.3-2.2-2.5-4.2A4.5 4.5 0 0 0 21 15c0-4-4-7-9-13z"
+        fill={fill}
+      />
+    )}
+    {suit === 'clubs' && (
+      <>
+        <Circle cx="12" cy="7.5" r="4.5" fill={fill} />
+        <Circle cx="6.5" cy="14.5" r="4.5" fill={fill} />
+        <Circle cx="17.5" cy="14.5" r="4.5" fill={fill} />
+        <Path d="M12 13c.2 3-.5 6-2.5 9h5c-2-3-2.7-6-2.5-9z" fill={fill} />
+      </>
+    )}
+  </G>
+)
+
+/** A playing card (5:7), the back is shown without a card. */
+export const PlayingCard = ({
+  width,
+  card,
+}: {
+  width: number
+  card: {rank: string; suit: string} | null
+}) => {
+  const ink = card && (card.suit === 'hearts' || card.suit === 'diamonds') ? CARD_RED : CARD_BLACK
+  return (
+    <Svg width={width} height={width * 1.4} viewBox="0 0 100 140">
+      <Rect x="1" y="1" width="98" height="138" rx="9" fill="#fff" stroke="#d7d9de" strokeWidth={1} />
+      {card ? (
+        [0, 1].map((half) => (
+          // the second corner is the first one turned around
+          <G key={half} transform={half ? 'rotate(180 50 70)' : undefined}>
+            <SvgText x="15" y="27" fontSize="22" fontWeight="bold" fill={ink} textAnchor="middle">
+              {card.rank}
+            </SvgText>
+            <Suit suit={card.suit} x={6} y={32} size={18} fill={ink} />
+            {half === 0 && <Suit suit={card.suit} x={25} y={43} size={50} fill={ink} />}
+          </G>
+        ))
+      ) : (
+        <>
+          <Rect x="8" y="8" width="84" height="124" rx="5" fill={CARD_BACK} />
+          <Defs>
+            <ClipPath id="cardBack">
+              <Rect x="8" y="8" width="84" height="124" rx="5" />
+            </ClipPath>
+          </Defs>
+          <G clipPath="url(#cardBack)" stroke="#fff" strokeOpacity={0.28} strokeWidth={2}>
+            <Path d="M0 28L28 0M0 56L56 0M0 84L84 0M0 112L112 0M0 140L140 0M28 140L140 28M56 140L140 56M84 140L140 84" />
+            <Path d="M0 112L28 140M0 84L56 140M0 56L84 140M0 28L112 140M0 0L140 140M28 0L140 112M56 0L140 84M84 0L140 56" />
+          </G>
+          <Rect x="8" y="8" width="84" height="124" rx="5" fill="none" stroke="#fff" strokeOpacity={0.5} strokeWidth={1.5} />
+        </>
+      )}
+    </Svg>
+  )
+}
