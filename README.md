@@ -16,6 +16,8 @@ Ultimate randomizer mobile/web application created with [Expo](https://expo.dev)
 * Ask yes/no question
 * Pull a burned match
 * Throw dices
+* Pick a card from a shuffled deck
+* Split players into random teams
 
 ## License
 

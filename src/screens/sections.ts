@@ -3,13 +3,15 @@ import {GlyphName} from '../components/art/icons'
 import {SectionProps} from '../components/SectionTemplate'
 import {sectionColors} from '../theme/colors'
 import {Bottle} from './Bottle'
+import {Cards} from './Cards'
 import {Coin} from './Coin'
 import {Dices} from './Dices'
 import {MagicBall} from './MagicBall'
 import {Matches} from './Matches'
 import {Numbers} from './Numbers'
+import {Teams} from './Teams'
 
-export type SectionId = 'numbers' | 'coin' | 'bottle' | 'ball' | 'matches' | 'dice'
+export type SectionId = 'numbers' | 'coin' | 'bottle' | 'ball' | 'matches' | 'dice' | 'cards' | 'teams'
 
 export type Section = {
   id: SectionId
@@ -69,5 +71,21 @@ export const sections: Section[] = [
     hint: 'Tap to throw',
     type: 'dice',
     Component: Dices,
+  },
+  {
+    id: 'cards',
+    title: 'Cards',
+    color: sectionColors.cards,
+    hint: 'Tap to draw',
+    type: 'cards',
+    Component: Cards,
+  },
+  {
+    id: 'teams',
+    title: 'Teams',
+    color: sectionColors.teams,
+    hint: 'Add players and shuffle them into teams',
+    type: 'teams',
+    Component: Teams,
   },
 ]

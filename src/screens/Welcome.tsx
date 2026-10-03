@@ -17,7 +17,9 @@ export const Welcome = ({onSelect}: Props) => {
   const theme = useTheme()
   const s = makeStyles(m)
   // sections are displayed in two columns
-  const rows = [sections.slice(0, 2), sections.slice(2, 4), sections.slice(4, 6)]
+  const rows = Array.from({length: Math.ceil(sections.length / 2)}, (_, i) =>
+    sections.slice(i * 2, i * 2 + 2),
+  )
   return (
     <View style={[s.container, {backgroundColor: theme.bg}]}>
       <View style={s.safeArea}>

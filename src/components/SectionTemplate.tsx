@@ -20,7 +20,11 @@ type Props = Partial<SectionProps> & {
   style?: StyleProp<ViewStyle>
   /** a control displayed above the hint, e.g. a stepper */
   footer?: ReactNode
+  /** displayed over the whole section, e.g. a sheet */
+  overlay?: ReactNode
   onRefresh?: () => void
+  /** label of the refresh button, "New game" by default */
+  refreshLabel?: string
   onSettings?: () => void
   options?: Options
   onOptionsChange?: (values: Record<string, number>) => void
@@ -35,11 +39,13 @@ export const SectionTemplate = ({
   children,
   style,
   footer,
+  overlay,
   title = '',
   color = '#444',
   hint,
   onBack,
   onRefresh,
+  refreshLabel = 'New game',
   onSettings,
   options,
   onOptionsChange,
@@ -91,15 +97,16 @@ export const SectionTemplate = ({
         <View style={[s.content, style]}>{children}</View>
         <View style={s.bottomBar}>
           {onRefresh && (
-            <Touchable onPress={onRefresh} accessibilityLabel="New game" style={s.refresh}>
+            <Touchable onPress={onRefresh} accessibilityLabel={refreshLabel} style={s.refresh}>
               <UiIcon name="refresh" size={20} />
-              <Text style={s.refreshText}>New game</Text>
+              <Text style={s.refreshText}>{refreshLabel}</Text>
             </Touchable>
           )}
           {footer}
           {!!hint && <Text style={s.hint}>{hint}</Text>}
         </View>
       </Animated.View>
+      {overlay}
       {options && (
         <OptionsSheet
           visible={editing}

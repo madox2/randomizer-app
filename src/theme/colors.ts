@@ -63,6 +63,8 @@ export const sectionColors = {
   ball: '#6f4bd0',
   matches: '#3f8f3a',
   dice: '#2f66d0',
+  cards: '#c23a7a',
+  teams: '#4f6081',
 } as const
 
 export const fonts = {

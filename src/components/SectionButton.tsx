@@ -2,6 +2,7 @@ import React from 'react'
 import {StyleSheet, Text, View} from 'react-native'
 import {fonts, ON_COLOR} from '../theme/colors'
 import {Metrics, useMetrics} from '../theme/metrics'
+import {sections} from '../screens/sections'
 import {Glyph, GlyphName} from './art/icons'
 import {Touchable} from './Touchable'
 
@@ -12,12 +13,15 @@ type Props = {
   type: GlyphName
 }
 
+// number of rows of the tiles on the home screen
+const ROWS = Math.ceil(sections.length / 2)
+
 /** Tile of a section on the home screen. */
 export const SectionButton = ({title, onPress, color, type}: Props) => {
   const m = useMetrics()
   const s = makeStyles(m)
   const ref = React.useRef<View>(null)
-  const glyphSize = Math.min(96, Math.max(48, (m.height / 3 - 2 * m.gap) * 0.45))
+  const glyphSize = Math.min(96, Math.max(48, (m.height / ROWS - 2 * m.gap) * 0.45))
   return (
     <Touchable
       viewRef={ref}

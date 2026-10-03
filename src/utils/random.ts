@@ -71,3 +71,13 @@ export const randomColor = (): string => {
   const brightness = randomWithin(bMin, bMin + 20)
   return hsvToHex(hue, saturation / 100, brightness / 100)
 }
+
+/** Returns a shuffled copy of the list (Fisher-Yates). */
+export const shuffle = <T>(items: readonly T[]): T[] => {
+  const result = [...items]
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = randomNumber(0, i)
+    ;[result[i], result[j]] = [result[j], result[i]]
+  }
+  return result
+}
