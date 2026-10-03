@@ -64,12 +64,7 @@ const TeamCard = ({number, members, delay, color, style}: TeamCardProps) => {
           ],
         },
       ]}>
-      <View style={style.teamHeader}>
-        <View style={style.badge}>
-          <Text style={[style.badgeText, {color}]}>{number}</Text>
-        </View>
-        <Text style={style.teamTitle}>Team {number}</Text>
-      </View>
+      <Text style={style.teamTitle}>Team {number}</Text>
       {members.map((name, i) => (
         <Text key={`${name}-${i}`} style={style.member} numberOfLines={1}>
           {name}
@@ -181,25 +176,8 @@ const makeStyles = ({contentPadding, contentWidth}: Metrics) => {
       padding: 16,
       borderRadius: 20,
     },
-    teamHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 10,
-    },
-    badge: {
-      width: 28,
-      height: 28,
-      marginRight: 10,
-      borderRadius: 14,
-      backgroundColor: ON_COLOR,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    badgeText: {
-      fontSize: fonts.size.caption + 1,
-      fontWeight: fonts.bold,
-    },
     teamTitle: {
+      marginBottom: 10,
       color: ON_COLOR,
       fontSize: fonts.size.title,
       fontWeight: fonts.bold,
