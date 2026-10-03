@@ -134,7 +134,6 @@ export default function App() {
                 <section.Component
                   title={section.title}
                   color={section.color}
-                  type={section.type}
                   hint={section.hint}
                   onBack={back}
                 />

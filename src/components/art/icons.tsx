@@ -1,7 +1,7 @@
 import React from 'react'
 import Svg, {Circle, Path, Rect, Text as SvgText} from 'react-native-svg'
 
-export type UiIconName = 'back' | 'refresh' | 'settings' | 'help'
+export type UiIconName = 'back' | 'refresh' | 'settings'
 
 type Props = {name: UiIconName; size?: number; color?: string}
 
@@ -27,13 +27,6 @@ export const UiIcon = ({name, size = 24, color = '#fff'}: Props) => (
         <Path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
         <Circle cx="15" cy="7" r="2" />
         <Circle cx="9" cy="17" r="2" />
-      </>
-    )}
-    {name === 'help' && (
-      <>
-        <Circle cx="12" cy="12" r="9" />
-        <Path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.7.4-1.1.9-1.1 1.8" />
-        <Circle cx="12" cy="17" r="0.6" fill={color} />
       </>
     )}
   </Svg>

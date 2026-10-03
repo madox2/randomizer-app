@@ -4,15 +4,13 @@ import {CONTROL_FILL, fonts, ON_COLOR, ON_COLOR_SOFT} from '../theme/colors'
 import {Metrics, useMetrics} from '../theme/metrics'
 import {useReduceMotion} from '../utils/motion'
 import {UiIcon} from './art/icons'
-import {InfoSheet, useInfoPopup} from './Info'
-import {IconButton} from './IconButton'
+import {ICON_BUTTON_SIZE, IconButton} from './IconButton'
 import {Options, OptionsSheet, optionsSummary} from './OptionsSheet'
 import {Touchable} from './Touchable'
 
 export type SectionProps = {
   title: string
   color: string
-  type: string
   hint: string
   onBack: () => void
 }
@@ -30,7 +28,7 @@ type Props = Partial<SectionProps> & {
 
 /**
  * Common layout of all sections: colored background, top bar (back, summary
- * of the options which opens the settings, info), content and bottom bar
+ * of the options which opens the settings), content and bottom bar
  * (footer and hint).
  */
 export const SectionTemplate = ({
@@ -39,7 +37,6 @@ export const SectionTemplate = ({
   footer,
   title = '',
   color = '#444',
-  type = '',
   hint,
   onBack,
   onRefresh,
@@ -49,7 +46,6 @@ export const SectionTemplate = ({
 }: Props) => {
   const m = useMetrics()
   const s = makeStyles(m)
-  const info = useInfoPopup(type)
   const [editing, setEditing] = useState(false)
   const reduceMotion = useReduceMotion()
   const appear = useRef(new Animated.Value(reduceMotion ? 1 : 0)).current
@@ -89,7 +85,8 @@ export const SectionTemplate = ({
               </Touchable>
             )}
           </View>
-          <IconButton icon="help" label="How to play" onPress={info.show} />
+          {/* keeps the summary centered */}
+          <View style={s.topBarSpacer} />
         </View>
         <View style={[s.content, style]}>{children}</View>
         <View style={s.bottomBar}>
@@ -116,13 +113,6 @@ export const SectionTemplate = ({
           }}
         />
       )}
-      <InfoSheet
-        type={type}
-        title={title}
-        accent={color}
-        visible={info.visible}
-        onDismiss={info.hide}
-      />
     </View>
   )
 }
@@ -146,6 +136,9 @@ const makeStyles = ({insets, contentPadding, topBarHeight, bottomBarHeight}: Met
       alignItems: 'center',
       justifyContent: 'space-between',
       paddingHorizontal: contentPadding,
+    },
+    topBarSpacer: {
+      width: ICON_BUTTON_SIZE,
     },
     summaryContainer: {
       flex: 1,
