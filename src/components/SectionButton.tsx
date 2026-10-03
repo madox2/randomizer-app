@@ -1,67 +1,59 @@
 import React from 'react'
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
-import {icons, IconName} from '../resources/images'
+import {StyleSheet, Text, View} from 'react-native'
+import {fonts, ON_COLOR} from '../theme/colors'
 import {Metrics, useMetrics} from '../theme/metrics'
+import {Glyph, GlyphName} from './art/icons'
+import {Touchable} from './Touchable'
 
 type Props = {
   title: string
-  onPress: () => void
+  onPress: (viewRef: View | null) => void
   color: string
-  type: IconName
+  type: GlyphName
 }
 
+/** Tile of a section on the home screen. */
 export const SectionButton = ({title, onPress, color, type}: Props) => {
-  const s = makeStyles(useMetrics())
+  const m = useMetrics()
+  const s = makeStyles(m)
+  const ref = React.useRef<View>(null)
+  const glyphSize = Math.min(96, Math.max(48, (m.height / 3 - 2 * m.gap) * 0.45))
   return (
-    <TouchableOpacity
-      style={[{backgroundColor: color}, s.container]}
-      onPress={onPress}
-      activeOpacity={0.8}>
-      <View style={s.imageWrapper}>
-        <Image style={s.image} source={icons[type]} />
+    <Touchable
+      viewRef={ref}
+      outerStyle={s.outer}
+      pressedScale={0.97}
+      accessibilityLabel={title}
+      onPress={() => onPress(ref.current)}
+      style={[s.container, {backgroundColor: color}]}>
+      <View style={s.glyph}>
+        <Glyph name={type} size={glyphSize} cutout={color} />
       </View>
-      <View style={s.textWrapper}>
-        <Text style={s.text}>{title}</Text>
-      </View>
-    </TouchableOpacity>
+      <Text style={s.text} numberOfLines={1}>
+        {title}
+      </Text>
+    </Touchable>
   )
 }
 
-const makeStyles = ({
-  width,
-  height,
-  dividerWidth,
-  landscape,
-  headingFontSize,
-}: Metrics) => {
-  const buttonWidth = width / 2 - dividerWidth / 2
-  const imageHeight = Math.min(150, ((height / 3) * 2) / 3)
-  return StyleSheet.create({
+const makeStyles = ({landscape, height}: Metrics) =>
+  StyleSheet.create({
+    outer: {
+      flex: 1,
+    },
     container: {
       flex: 1,
-      flexDirection: landscape ? 'row' : 'column',
-      width: buttonWidth,
+      borderRadius: 24,
+      padding: landscape && height < 500 ? 12 : 16,
     },
-    imageWrapper: {
-      flex: landscape ? undefined : 4,
-      width: landscape ? buttonWidth / 2 : undefined,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    image: {
-      height: imageHeight,
-      width: imageHeight,
-    },
-    textWrapper: {
+    glyph: {
       flex: 1,
-      justifyContent: 'center',
       alignItems: 'center',
+      justifyContent: 'center',
     },
     text: {
-      color: 'white',
-      fontSize: headingFontSize,
-      paddingBottom: 10,
-      paddingLeft: 10,
+      color: ON_COLOR,
+      fontSize: fonts.size.title,
+      fontWeight: fonts.bold,
     },
   })
-}

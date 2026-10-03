@@ -1,18 +1,24 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {Animated, Image, Platform, ScrollView, StyleSheet} from 'react-native'
+import {Animated, Platform, ScrollView, StyleSheet} from 'react-native'
+import {MatchArt} from '../components/art/game'
 import {SectionProps, SectionTemplate} from '../components/SectionTemplate'
-import {Options} from '../components/UserOptions'
-import {images} from '../resources/images'
+import {Options} from '../components/OptionsSheet'
 import {storage} from '../services/storage'
 import {Metrics, useMetrics} from '../theme/metrics'
-import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
+import {
+  DRAG_AREA_STYLE,
+  Gesture,
+  USE_NATIVE_DRIVER,
+  usePanResponder,
+} from '../utils/gesture'
+import {haptics} from '../utils/haptics'
 import {uniqueRandomNumbers} from '../utils/random'
 
 const MIN_PULL_LENGTH = 10
 
-const validator = (options: Options) =>
-  Number(options.burnedCount.value) >= Number(options.count.value)
-    ? 'Total count must be greater than count of burned matches'
+const validator = (values: Record<string, number>) =>
+  values.burnedCount >= values.count
+    ? 'Count must be greater than the number of burned matches'
     : null
 
 type MatchProps = {
@@ -31,21 +37,23 @@ const Match = ({burned, lowerPosition, upperPosition, style}: MatchProps) => {
     position.setValue(pulled ? upperPosition : lowerPosition)
   }, [position, pulled, upperPosition, lowerPosition])
 
-  const computePosition = (y0: number, y: number) =>
-    Math.min(lowerPosition, Math.max(upperPosition, y - y0 + lowerPosition))
+  // by the movement of the finger (dy), the absolute position of a move is not
+  // always valid
+  const computePosition = (dy: number) =>
+    Math.min(lowerPosition, Math.max(upperPosition, dy + lowerPosition))
 
   const panResponder = usePanResponder(
     {
-      onMove: ({y0, moveY}: Gesture) => {
+      onMove: ({dy}: Gesture) => {
         if (!pulled) {
-          position.setValue(computePosition(y0, moveY))
+          position.setValue(computePosition(dy))
         }
       },
-      onEnd: ({y0, moveY}: Gesture) => {
+      onEnd: ({dy}: Gesture) => {
         if (pulled) {
           return
         }
-        if (computePosition(y0, moveY) > lowerPosition - MIN_PULL_LENGTH) {
+        if (computePosition(dy) > lowerPosition - MIN_PULL_LENGTH) {
           position.setValue(lowerPosition)
           return
         }
@@ -53,7 +61,14 @@ const Match = ({burned, lowerPosition, upperPosition, style}: MatchProps) => {
           toValue: upperPosition,
           useNativeDriver: USE_NATIVE_DRIVER,
           duration: 200,
-        }).start(() => setPulled(true))
+        }).start(() => {
+          setPulled(true)
+          if (burned) {
+            haptics.warning()
+          } else {
+            haptics.tap()
+          }
+        })
       },
     },
     {captureStart: Platform.OS === 'web', captureMove: Platform.OS !== 'web'},
@@ -62,10 +77,15 @@ const Match = ({burned, lowerPosition, upperPosition, style}: MatchProps) => {
   return (
     <Animated.View
       {...panResponder.panHandlers}
-      style={[style.imageContainer, {transform: [{translateY: position}]}]}>
-      <Image
-        style={style.imageMatch}
-        source={pulled && burned ? images.matchBurned : images.match}
+      style={[
+        style.imageContainer,
+        DRAG_AREA_STYLE,
+        {transform: [{translateY: position}]},
+      ]}>
+      <MatchArt
+        width={style.imageMatch.width}
+        height={style.imageMatch.height}
+        burned={pulled && burned}
       />
     </Animated.View>
   )
@@ -84,24 +104,17 @@ export const Matches = (props: SectionProps) => {
   // changes with every new game to reset the matches
   const [round, setRound] = useState(0)
 
-  const [options] = useState<Options>(() => ({
-    count: {
-      type: 'number',
-      label: 'Count',
-      defaultValue: count,
-      constraints: {min: 2, max: 50},
-    },
+  const options: Options = {
+    count: {label: 'Count', value: count, constraints: {min: 2, max: 50}},
     burnedCount: {
-      type: 'number',
       label: 'Burned',
-      defaultValue: burnedCount,
+      value: burnedCount,
       constraints: {min: 1, max: 50},
       validator,
     },
-  }))
+  }
 
-  const {contentHeight, controlsHeight, settingsHeight} = m
-  const availableHeight = contentHeight - controlsHeight - settingsHeight
+  const availableHeight = m.contentHeight
   const matchHeight = Math.min(300, availableHeight * 0.83)
   const pullHeight = Math.min(availableHeight - matchHeight, matchHeight / 4)
   const lowerPosition = -(availableHeight - matchHeight - pullHeight) / 2
@@ -113,8 +126,8 @@ export const Matches = (props: SectionProps) => {
     setRound((r) => r + 1)
   }
 
-  const onOptionsChange = ({count: c, burnedCount: b}: Options) => {
-    const next = {count: Number(c.value), burnedCount: Number(b.value)}
+  const onOptionsChange = (values: Record<string, number>) => {
+    const next = {count: values.count, burnedCount: values.burnedCount}
     storage.set('Matches.count', next.count)
     storage.set('Matches.burnedCount', next.burnedCount)
     setSettings(next)
@@ -148,7 +161,7 @@ export const Matches = (props: SectionProps) => {
 }
 
 const makeStyles = (
-  {contentWidth, controlsHeight, contentPadding}: Metrics,
+  {contentWidth}: Metrics,
   matchHeight: number,
 ) => {
   const matchWidth = matchHeight / 10.14
@@ -166,7 +179,6 @@ const makeStyles = (
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'center',
-      marginBottom: controlsHeight - contentPadding,
     },
     imageContainer: {
       paddingLeft: matchPadding,

@@ -6,15 +6,18 @@ export type Metrics = {
   height: number
   landscape: boolean
   insets: {top: number; bottom: number; left: number; right: number}
-  dividerWidth: number
-  controlsHeight: number
+  /** gap between the home screen tiles */
+  gap: number
+  topBarHeight: number
+  bottomBarHeight: number
+  /** the area between the top and the bottom bar */
   contentHeight: number
   contentWidth: number
   contentPadding: number
-  headingFontSize: number
-  settingsHeight: number
-  controlButtonSize: number
 }
+
+export const TOP_BAR_HEIGHT = 64
+export const BOTTOM_BAR_HEIGHT = 96
 
 /**
  * Sizes derived from the area of the window which is not covered by system bars.
@@ -26,22 +29,19 @@ export const computeMetrics = (
 ): Metrics => {
   const width = windowWidth - insets.left - insets.right
   const height = windowHeight - insets.top - insets.bottom
-  const size = Math.max(width, height)
-  const minSize = Math.min(width, height)
-  const contentPadding = minSize * 0.04
+  // multiple of 4 close to 4% of the shorter side
+  const contentPadding = Math.max(12, Math.round((Math.min(width, height) * 0.04) / 4) * 4)
   return {
     width,
     height,
     landscape: width > height,
     insets,
-    dividerWidth: 4,
-    controlsHeight: 100,
+    gap: 12,
+    topBarHeight: TOP_BAR_HEIGHT,
+    bottomBarHeight: BOTTOM_BAR_HEIGHT,
     contentPadding,
-    contentHeight: height - 2 * contentPadding,
+    contentHeight: height - TOP_BAR_HEIGHT - BOTTOM_BAR_HEIGHT,
     contentWidth: width - 2 * contentPadding,
-    headingFontSize: size > 700 ? 28 : 18,
-    settingsHeight: 22,
-    controlButtonSize: 70,
   }
 }
 

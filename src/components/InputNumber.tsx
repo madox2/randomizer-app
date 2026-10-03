@@ -1,5 +1,6 @@
-import React from 'react'
-import {StyleSheet, Text, TextInput, View} from 'react-native'
+import React, {Ref, useState} from 'react'
+import {Platform, StyleSheet, Text, TextInput, View} from 'react-native'
+import {fonts, useTheme} from '../theme/colors'
 import {NumberConstraints, sanitize, validate} from '../utils/validate'
 
 type Props = {
@@ -7,6 +8,8 @@ type Props = {
   value: number | string
   err?: string | null
   constraints?: NumberConstraints
+  accent: string
+  ref?: Ref<TextInput>
   onChange: (value: number | string, err: string | null) => void
   onSubmitEditing?: () => void
 }
@@ -17,46 +20,66 @@ export const InputNumber = ({
   value,
   err,
   constraints,
+  accent,
+  ref,
   onSubmitEditing,
 }: Props) => {
+  const theme = useTheme()
+  const [focused, setFocused] = useState(false)
   const onChangeText = (text: string) => {
     const n = sanitize(text)
     onChange(n, validate(n, constraints))
   }
   return (
     <View style={s.container}>
-      <Text style={s.label}>{`${label}:`}</Text>
+      <Text style={[s.label, {color: theme.textMuted}]}>{label}</Text>
       <TextInput
+        ref={ref}
         onChangeText={onChangeText}
         value={`${value}`}
-        style={s.input}
+        accessibilityLabel={label}
+        style={[
+          s.input,
+          {
+            color: theme.text,
+            backgroundColor: theme.inputBg,
+            borderColor: err ? theme.danger : focused ? accent : 'transparent',
+          },
+        ]}
         keyboardType="numeric"
+        selectionColor={accent}
+        selectTextOnFocus
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         onSubmitEditing={onSubmitEditing}
       />
-      {!!err && <Text style={s.error}>{err}</Text>}
+      {!!err && <Text style={[s.error, {color: theme.danger}]}>{err}</Text>}
     </View>
   )
 }
 
 const s = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    padding: 10,
-    margin: 5,
+    marginBottom: 16,
   },
   label: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: fonts.size.caption,
+    fontWeight: fonts.semibold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: 6,
   },
   input: {
-    borderWidth: 0,
-    color: 'gray',
-    padding: 5,
-    fontSize: 18,
+    height: 56,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    borderWidth: 2,
+    fontSize: fonts.size.title,
+    fontWeight: fonts.semibold,
+    ...Platform.select({web: {outlineStyle: 'none'} as object}),
   },
   error: {
-    fontSize: 16,
-    color: 'red',
-    padding: 5,
+    fontSize: 14,
+    marginTop: 6,
   },
 })
