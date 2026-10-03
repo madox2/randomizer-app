@@ -10,6 +10,27 @@ import {randomBoolean} from '../utils/random'
 // scale of the flipped coin (0 does not work properly on android)
 const MIN_SCALE = 0.0001
 
+// The coin turns by quarter turns of `rotation` (0 to 4 is one full turn):
+// a face is full at 0 (first) and 2 (second) and edge-on at 1 and 3. The
+// height of a face follows a cosine so the flip looks like a turning disc.
+const QUARTER = 0.25
+const squash = (turn: number) =>
+  Math.max(Math.abs(Math.cos((turn * Math.PI) / 2)), MIN_SCALE)
+const steps = (from: number, to: number) =>
+  Array.from({length: Math.round((to - from) / QUARTER) + 1}, (_, i) => from + i * QUARTER)
+// first face: visible from 3 to 1 (through 0 and 4), second face: from 1 to 3
+const FIRST_FACE = {
+  input: [...steps(0, 1), ...steps(3, 4)],
+  output: [...steps(0, 1), ...steps(3, 4)].map(squash),
+}
+const SECOND_FACE = {
+  input: [0, ...steps(1, 3), 4],
+  output: [MIN_SCALE, ...steps(1, 3).map((t) => squash(t - 2)), MIN_SCALE],
+}
+// quarter turns of the flight: 4 full turns are slow enough to be followed
+const FLIGHT_TURNS = 16
+const FLIGHT_DURATION = 900
+
 export const Coin = (props: SectionProps) => {
   const m = useMetrics()
   const {contentHeight} = m
@@ -40,25 +61,27 @@ export const Coin = (props: SectionProps) => {
     haptics.tap()
     // spin on from the current face, resetting `time` would flip the coin
     // to the first face for a frame
-    const turns = 32 + (randomBoolean() ? 0 : 2)
+    const turns = FLIGHT_TURNS + (randomBoolean() ? 0 : 2)
     Animated.parallel([
       Animated.timing(time, {
         toValue: restingTime.current + turns,
-        duration: 800,
+        duration: FLIGHT_DURATION,
         easing: Easing.linear,
         useNativeDriver: USE_NATIVE_DRIVER,
       }),
       Animated.sequence([
         Animated.timing(position, {
           toValue: upperPosition,
-          duration: 400,
-          easing: Easing.bezier(0.19, 1, 0.22, 1),
+          // slows down while rising, like a thrown object
+          duration: FLIGHT_DURATION / 2,
+          easing: Easing.out(Easing.quad),
           useNativeDriver: USE_NATIVE_DRIVER,
         }),
         Animated.timing(position, {
           toValue: initialPosition,
-          duration: 400,
-          easing: Easing.bezier(0.95, 0.05, 0.795, 0.035),
+          // and speeds up while falling
+          duration: FLIGHT_DURATION / 2,
+          easing: Easing.in(Easing.quad),
           useNativeDriver: USE_NATIVE_DRIVER,
         }),
       ]),
@@ -87,12 +110,15 @@ export const Coin = (props: SectionProps) => {
     {captureStart: true},
   )
 
-  const face = (inputScale: number[], inputOpacity: number[]) => ({
+  const face = (
+    scale: {input: number[]; output: number[]},
+    inputOpacity: number[],
+  ) => ({
     transform: [
       {
         scaleY: rotation.interpolate({
-          inputRange: [0, 1, 2, 3, 4],
-          outputRange: inputScale,
+          inputRange: scale.input,
+          outputRange: scale.output,
         }),
       },
     ],
@@ -127,7 +153,7 @@ export const Coin = (props: SectionProps) => {
             <Animated.View
               style={[
                 s.rotationContainer,
-                face([1, MIN_SCALE, MIN_SCALE, MIN_SCALE, 1], [1, 1, 0, 1, 1]),
+                face(FIRST_FACE, [1, 1, 0, 1, 1]),
               ]}
               {...panResponder.panHandlers}>
               <CoinFace size={imageSize} side="heads" />
@@ -135,7 +161,7 @@ export const Coin = (props: SectionProps) => {
             <Animated.View
               style={[
                 s.rotationContainer,
-                face([MIN_SCALE, MIN_SCALE, 1, MIN_SCALE, MIN_SCALE], [0, 1, 1, 1, 0]),
+                face(SECOND_FACE, [0, 1, 1, 1, 0]),
               ]}
               {...panResponder.panHandlers}>
               <CoinFace size={imageSize} side="tails" />
