@@ -16,12 +16,23 @@ type Props = {
 // number of rows of the tiles on the home screen
 const ROWS = Math.ceil(sections.length / 2)
 
+const tilePadding = ({landscape, height}: Metrics) => (landscape && height < 500 ? 12 : 16)
+
+const computeGlyphSize = (m: Metrics) => {
+  if (m.landscape) {
+    // the glyph is next to the title, so it is limited by the height of the tile
+    const tileHeight = (m.height - m.gap * (ROWS + 1)) / ROWS
+    return Math.max(32, Math.min(80, tileHeight - 2 * tilePadding(m)))
+  }
+  return Math.min(96, Math.max(48, (m.height / ROWS - 2 * m.gap) * 0.45))
+}
+
 /** Tile of a section on the home screen. */
 export const SectionButton = ({title, onPress, color, type}: Props) => {
   const m = useMetrics()
   const s = makeStyles(m)
   const ref = React.useRef<View>(null)
-  const glyphSize = Math.min(96, Math.max(48, (m.height / ROWS - 2 * m.gap) * 0.45))
+  const glyphSize = computeGlyphSize(m)
   return (
     <Touchable
       viewRef={ref}
@@ -40,7 +51,7 @@ export const SectionButton = ({title, onPress, color, type}: Props) => {
   )
 }
 
-const makeStyles = ({landscape, height}: Metrics) =>
+const makeStyles = (m: Metrics) =>
   StyleSheet.create({
     outer: {
       flex: 1,
@@ -48,14 +59,20 @@ const makeStyles = ({landscape, height}: Metrics) =>
     container: {
       flex: 1,
       borderRadius: 24,
-      padding: landscape && height < 500 ? 12 : 16,
+      padding: tilePadding(m),
+      // the glyph is above the title, in landscape next to it
+      flexDirection: m.landscape ? 'row' : 'column',
+      alignItems: m.landscape ? 'center' : 'stretch',
     },
-    glyph: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+    glyph: m.landscape
+      ? {marginRight: 16}
+      : {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
     text: {
+      flexShrink: 1,
       color: ON_COLOR,
       fontSize: fonts.size.title,
       fontWeight: fonts.bold,
