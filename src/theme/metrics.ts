@@ -34,7 +34,7 @@ export const computeMetrics = (
     height,
     landscape: width > height,
     insets,
-    dividerWidth: 4,
+    dividerWidth: 12,
     controlsHeight: 100,
     contentPadding,
     contentHeight: height - 2 * contentPadding,

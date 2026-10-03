@@ -1,5 +1,6 @@
 import React from 'react'
 import {StyleSheet, Text, TextInput, View} from 'react-native'
+import {palette, radius} from '../theme/palette'
 import {NumberConstraints, sanitize, validate} from '../utils/validate'
 
 type Props = {
@@ -25,7 +26,7 @@ export const InputNumber = ({
   }
   return (
     <View style={s.container}>
-      <Text style={s.label}>{`${label}:`}</Text>
+      <Text style={s.label}>{label}</Text>
       <TextInput
         onChangeText={onChangeText}
         value={`${value}`}
@@ -41,22 +42,31 @@ export const InputNumber = ({
 const s = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    padding: 10,
-    margin: 5,
+    padding: 8,
   },
   label: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '600',
+    color: palette.textMuted,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
   },
   input: {
-    borderWidth: 0,
-    color: 'gray',
-    padding: 5,
-    fontSize: 18,
+    backgroundColor: palette.surface,
+    borderRadius: radius.medium,
+    borderWidth: 1.5,
+    borderColor: palette.border,
+    color: palette.text,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 22,
+    fontWeight: '600',
   },
   error: {
-    fontSize: 16,
-    color: 'red',
-    padding: 5,
+    fontSize: 15,
+    color: palette.error,
+    paddingTop: 8,
+    paddingLeft: 4,
   },
 })

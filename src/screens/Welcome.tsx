@@ -1,7 +1,8 @@
 import React from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, Text, View} from 'react-native'
 import {SectionButton} from '../components/SectionButton'
 import {Metrics, useMetrics} from '../theme/metrics'
+import {palette} from '../theme/palette'
 import {SectionId, sections} from './sections'
 
 type Props = {
@@ -16,34 +17,32 @@ export const Welcome = ({onSelect}: Props) => {
   return (
     <View style={s.container}>
       <View style={s.safeArea}>
-        {rows.map((row, i) => (
-          <React.Fragment key={i}>
-            {i > 0 && <View style={s.hdivider} />}
-            <View style={s.row}>
-              {row.map(({id, title, color, type}, j) => (
-                <React.Fragment key={id}>
-                  {j > 0 && <View style={s.vdivider} />}
-                  <SectionButton
-                    title={title}
-                    color={color}
-                    type={type}
-                    onPress={() => onSelect(id)}
-                  />
-                </React.Fragment>
+        <Text style={s.title}>Randomizer</Text>
+        <View style={s.grid}>
+          {rows.map((row, i) => (
+            <View key={i} style={s.row}>
+              {row.map(({id, title, color, type}) => (
+                <SectionButton
+                  key={id}
+                  title={title}
+                  color={color}
+                  type={type}
+                  onPress={() => onSelect(id)}
+                />
               ))}
             </View>
-          </React.Fragment>
-        ))}
+          ))}
+        </View>
       </View>
     </View>
   )
 }
 
-const makeStyles = ({dividerWidth, insets}: Metrics) =>
+const makeStyles = ({dividerWidth, insets, contentPadding, height}: Metrics) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'white',
+      backgroundColor: palette.background,
     },
     safeArea: {
       flex: 1,
@@ -51,15 +50,27 @@ const makeStyles = ({dividerWidth, insets}: Metrics) =>
       marginBottom: insets.bottom,
       marginLeft: insets.left,
       marginRight: insets.right,
+      padding: Math.max(contentPadding, dividerWidth),
+      width: '100%',
+      maxWidth: 960,
+      alignSelf: 'center',
+    },
+    title: {
+      color: palette.text,
+      fontSize: height > 500 ? 28 : 20,
+      fontWeight: '700',
+      letterSpacing: 0.3,
+      paddingHorizontal: 4,
+      paddingTop: height > 500 ? 4 : 0,
+      paddingBottom: height > 500 ? 16 : 8,
+    },
+    grid: {
+      flex: 1,
+      gap: dividerWidth,
     },
     row: {
       flex: 1,
       flexDirection: 'row',
-    },
-    vdivider: {
-      width: dividerWidth,
-    },
-    hdivider: {
-      height: dividerWidth,
+      gap: dividerWidth,
     },
   })

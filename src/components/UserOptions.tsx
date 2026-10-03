@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native'
 import {Metrics, useMetrics} from '../theme/metrics'
+import {palette} from '../theme/palette'
 import {mapProps, reduceProps, someProp} from '../utils/functional'
 import {NumberConstraints} from '../utils/validate'
 import {Button} from './Button'
@@ -156,10 +157,10 @@ const OptionsEditor = ({children, onSave, onCancel}: EditorProps) => {
         behavior={Platform.OS === 'web' ? undefined : 'padding'}>
         <View style={s.edit}>{children}</View>
         <View style={s.controls}>
-          <Button onPress={onSave} style={s.buttonLeft}>
+          <Button onPress={onCancel}>Cancel</Button>
+          <Button onPress={onSave} primary>
             Save
           </Button>
-          <Button onPress={onCancel}>Cancel</Button>
         </View>
       </KeyboardAvoidingView>
     </Animated.View>
@@ -176,16 +177,22 @@ const makeStyles = ({insets, settingsHeight}: Metrics) =>
     },
     summary: {
       flexDirection: 'row',
+      gap: 8,
       height: settingsHeight,
     },
     summaryItem: {
-      marginRight: 15,
-      color: '#444',
-      fontStyle: 'italic',
+      overflow: 'hidden',
+      paddingHorizontal: 10,
+      lineHeight: settingsHeight,
+      borderRadius: settingsHeight / 2,
+      backgroundColor: 'rgba(255, 255, 255, 0.35)',
+      color: palette.text,
+      fontSize: 13,
+      fontWeight: '600',
     },
     editor: {
       ...StyleSheet.absoluteFill,
-      backgroundColor: 'white',
+      backgroundColor: palette.background,
       paddingTop: insets.top,
       paddingBottom: insets.bottom,
       paddingLeft: insets.left,
@@ -193,7 +200,7 @@ const makeStyles = ({insets, settingsHeight}: Metrics) =>
     },
     editContainer: {
       flex: 1,
-      padding: 5,
+      padding: 16,
     },
     edit: {
       flexDirection: 'column',
@@ -201,9 +208,6 @@ const makeStyles = ({insets, settingsHeight}: Metrics) =>
     },
     controls: {
       flexDirection: 'row',
-      justifyContent: 'space-around',
-    },
-    buttonLeft: {
-      borderRightWidth: 0,
+      gap: 12,
     },
   })

@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import {storage} from '../services/storage'
 import {Metrics, useMetrics} from '../theme/metrics'
+import {palette, radius} from '../theme/palette'
 import {INFO_BUTTON_SIZE} from './InfoButton'
 
 /**
@@ -60,7 +61,7 @@ export const InfoPopup = ({type, onDismiss}: Props) => {
         <Pressable style={s.option}>
           <Text style={s.text}>{storage.get(`Info.${type}`)}</Text>
           <TouchableOpacity onPress={onDismiss}>
-            <Text style={s.dismiss}>dismiss...</Text>
+            <Text style={s.dismiss}>Got it</Text>
           </TouchableOpacity>
         </Pressable>
       </View>
@@ -72,36 +73,31 @@ const makeStyles = ({width, insets, contentPadding}: Metrics) =>
   StyleSheet.create({
     backdrop: {
       ...StyleSheet.absoluteFill,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: 'rgba(20, 22, 26, 0.45)',
     },
     options: {
       position: 'absolute',
       top: insets.top + contentPadding / 2 + INFO_BUTTON_SIZE,
       right: insets.right + contentPadding / 2,
       maxWidth: Math.min(width - contentPadding, 340),
-      backgroundColor: 'white',
-      borderRadius: 20,
-      borderTopRightRadius: 0,
-      elevation: 5,
-      shadowColor: 'black',
-      shadowOpacity: 0.3,
-      shadowRadius: 4,
-      shadowOffset: {width: 0, height: 2},
+      backgroundColor: palette.surface,
+      borderRadius: radius.medium,
+      borderTopRightRadius: 6,
     },
     option: {
-      padding: 13,
-      paddingTop: 18,
+      padding: 20,
     },
     text: {
-      textAlign: 'center',
       lineHeight: 24,
       fontSize: 16,
+      color: palette.text,
     },
     dismiss: {
-      marginTop: 20,
+      marginTop: 16,
       lineHeight: 24,
       fontSize: 16,
+      fontWeight: '600',
       textAlign: 'right',
-      color: '#6495ed',
+      color: palette.text,
     },
   })

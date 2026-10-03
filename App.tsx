@@ -3,6 +3,7 @@ import {BackHandler, Platform, StyleSheet, View} from 'react-native'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
 import {Welcome} from './src/screens/Welcome'
 import {SectionId, sections} from './src/screens/sections'
+import {palette} from './src/theme/palette'
 import {storage} from './src/services/storage'
 
 export default function App() {
@@ -52,6 +53,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: palette.background,
   },
 })
