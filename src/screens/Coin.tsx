@@ -43,11 +43,11 @@ const SECOND_FACE = {
   },
   visible: {input: [0, 1 - AFTER, 1, 3, 3 + AFTER, 4], output: [0, 0, 1, 1, 0, 0]},
 }
-// 3 full turns in a flight are slow enough to follow, faster turns blur into
-// a flicker
 // movement of a finger (px) which is a drag, not a tap
 const DRAG_SLOP = 6
-const FLIGHT_TURNS = 12
+// quarter turns of a flight, 5 full turns: fast, but the coin keeps a visible
+// edge so it does not blink
+const FLIGHT_TURNS = 20
 const FLIGHT_DURATION = 1000
 
 export const Coin = (props: SectionProps) => {
