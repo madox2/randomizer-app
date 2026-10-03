@@ -47,10 +47,23 @@ export const BottleArt = ({width, height}: {width: number; height: number}) => (
   </Svg>
 )
 
-const MATCH_WOOD = '#f1d49b'
-const MATCH_HEAD = '#e23d3d'
-const MATCH_BURNED = '#2a2724'
+const WOOD_LIGHT = '#f7da8b'
+const WOOD_DARK = '#d9a521'
+const HEAD_LIGHT = '#e8392f'
+const HEAD_DARK = '#b8231c'
+const CHAR_LIGHT = '#322a27'
+const CHAR_DARK = '#1b1513'
+const SCORCH_LIGHT = '#8a5a2b'
+const SCORCH_DARK = '#6a4119'
 
+// the head, a drop: the left half is lit, the right half is in the shade
+const HEAD = 'M10 2C15.5 2 19 8.5 19 17C19 24 15 29 10 29C5 29 1 24 1 17C1 8.5 4.5 2 10 2Z'
+const HEAD_SHADE = 'M10 2C15.5 2 19 8.5 19 17C19 24 15 29 10 29Z'
+
+/**
+ * A match standing upright, the head is on top. A burned match has a charred
+ * head and a burned top part of the stick with a ragged edge to the wood.
+ */
 export const MatchArt = ({
   width,
   height,
@@ -60,9 +73,32 @@ export const MatchArt = ({
   height: number
   burned: boolean
 }) => (
-  <Svg width={width} height={height} viewBox="0 0 10 100">
-    <Rect x="2.2" y="6" width="5.6" height="94" rx="2.8" fill={burned ? '#cdb887' : MATCH_WOOD} />
-    <Ellipse cx="5" cy="7" rx="4.8" ry="7" fill={burned ? MATCH_BURNED : MATCH_HEAD} />
+  <Svg width={width} height={height} viewBox="0 0 20 200">
+    {/* stick: lit left half, shaded right half */}
+    <Path d="M5 27H10V199L5.6 197.4Z" fill={WOOD_LIGHT} />
+    <Path d="M10 27H15V197.4L10 199Z" fill={WOOD_DARK} />
+    {burned && (
+      <>
+        {/* scorched wood below the char */}
+        <Path d="M5 27H10V101L8.9 95L7.5 104L6.3 95L5 99Z" fill={SCORCH_LIGHT} />
+        <Path d="M10 27H15V95L13.6 102L12.2 94L11 103L10 101Z" fill={SCORCH_DARK} />
+        {/* char */}
+        <Path d="M5 27H10V96L9 90L7.6 99L6.4 90L5 94Z" fill={CHAR_LIGHT} />
+        <Path d="M10 27H15V90L13.6 97L12.2 89L11 98L10 96Z" fill={CHAR_DARK} />
+      </>
+    )}
+    {/* head */}
+    <Path d={HEAD} fill={burned ? CHAR_LIGHT : HEAD_LIGHT} />
+    <Path d={HEAD_SHADE} fill={burned ? CHAR_DARK : HEAD_DARK} />
+    {/* the glint on the head: a shine, or the last glow of a burned match */}
+    <Ellipse
+      cx="6.6"
+      cy="11"
+      rx="1.7"
+      ry="4"
+      fill={burned ? '#f2b83a' : '#ff8a7c'}
+      opacity={burned ? 0.9 : 0.85}
+    />
   </Svg>
 )
 
