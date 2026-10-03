@@ -23,6 +23,8 @@ export const Coin = (props: SectionProps) => {
   const rotation = useRef(Animated.modulo(time, 4)).current
   const position = useRef(new Animated.Value(initialPosition)).current
   const animating = useRef(false)
+  // visible face between throws: 0 or 2 (the quarter turns of `time`)
+  const restingTime = useRef(0)
 
   useEffect(() => {
     if (!animating.current) {
@@ -36,10 +38,12 @@ export const Coin = (props: SectionProps) => {
   const throwCoin = () => {
     animating.current = true
     haptics.tap()
-    time.setValue(0)
+    // spin on from the current face, resetting `time` would flip the coin
+    // to the first face for a frame
+    const turns = 32 + (randomBoolean() ? 0 : 2)
     Animated.parallel([
       Animated.timing(time, {
-        toValue: 30 + (randomBoolean() ? 0 : 2),
+        toValue: restingTime.current + turns,
         duration: 800,
         easing: Easing.linear,
         useNativeDriver: USE_NATIVE_DRIVER,
@@ -60,6 +64,9 @@ export const Coin = (props: SectionProps) => {
       ]),
     ]).start(() => {
       animating.current = false
+      // the same face, the value is kept small
+      restingTime.current = (restingTime.current + turns) % 4
+      time.setValue(restingTime.current)
       haptics.thud()
     })
   }
