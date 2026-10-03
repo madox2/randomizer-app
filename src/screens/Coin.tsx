@@ -7,29 +7,41 @@ import {Gesture, USE_NATIVE_DRIVER, usePanResponder} from '../utils/gesture'
 import {haptics} from '../utils/haptics'
 import {randomBoolean} from '../utils/random'
 
-// scale of the flipped coin (0 does not work properly on android)
-const MIN_SCALE = 0.0001
-
-// The coin turns by quarter turns of `rotation` (0 to 4 is one full turn):
-// a face is full at 0 (first) and 2 (second) and edge-on at 1 and 3. The
-// height of a face follows a cosine so the flip looks like a turning disc.
+// The coin turns by quarter turns of `rotation` (0 to 4 is one full turn): the
+// first face is full at 0, the second at 2, both are at their thinnest at 1
+// and 3. A flat disc seen exactly edge-on vanishes, which looks like a blink
+// every half turn. The coin is never thinner than EDGE, like a coin tilted
+// in perspective, and the faces change at the thinnest point.
+const EDGE = 0.16
 const QUARTER = 0.25
 const squash = (turn: number) =>
-  Math.max(Math.abs(Math.cos((turn * Math.PI) / 2)), MIN_SCALE)
+  Math.max(Math.abs(Math.cos((turn * Math.PI) / 2)), EDGE)
 const steps = (from: number, to: number) =>
-  Array.from({length: Math.round((to - from) / QUARTER) + 1}, (_, i) => from + i * QUARTER)
-// first face: visible from 3 to 1 (through 0 and 4), second face: from 1 to 3
+  Array.from(
+    {length: Math.round((to - from) / QUARTER) + 1},
+    (_, i) => from + i * QUARTER,
+  )
+// a hair after the turn, to switch the faces in one step
+const AFTER = 0.0001
+// the first face is shown from 3 to 1 (through 0 and 4), the second from 1 to 3
 const FIRST_FACE = {
-  input: [...steps(0, 1), ...steps(3, 4)],
-  output: [...steps(0, 1), ...steps(3, 4)].map(squash),
+  height: {
+    input: [...steps(0, 1), ...steps(3, 4)],
+    output: [...steps(0, 1), ...steps(3, 4)].map(squash),
+  },
+  visible: {input: [0, 1, 1 + AFTER, 3 - AFTER, 3, 4], output: [1, 1, 0, 0, 1, 1]},
 }
 const SECOND_FACE = {
-  input: [0, ...steps(1, 3), 4],
-  output: [MIN_SCALE, ...steps(1, 3).map((t) => squash(t - 2)), MIN_SCALE],
+  height: {
+    input: [0, ...steps(1, 3), 4],
+    output: [EDGE, ...steps(1, 3).map((t) => squash(t - 2)), EDGE],
+  },
+  visible: {input: [0, 1 - AFTER, 1, 3, 3 + AFTER, 4], output: [0, 0, 1, 1, 0, 0]},
 }
-// quarter turns of the flight: 4 full turns are slow enough to be followed
-const FLIGHT_TURNS = 16
-const FLIGHT_DURATION = 900
+// 3 full turns in a flight are slow enough to follow, faster turns blur into
+// a flicker
+const FLIGHT_TURNS = 12
+const FLIGHT_DURATION = 1000
 
 export const Coin = (props: SectionProps) => {
   const m = useMetrics()
@@ -110,21 +122,18 @@ export const Coin = (props: SectionProps) => {
     {captureStart: true},
   )
 
-  const face = (
-    scale: {input: number[]; output: number[]},
-    inputOpacity: number[],
-  ) => ({
+  const face = (shape: typeof FIRST_FACE) => ({
     transform: [
       {
         scaleY: rotation.interpolate({
-          inputRange: scale.input,
-          outputRange: scale.output,
+          inputRange: shape.height.input,
+          outputRange: shape.height.output,
         }),
       },
     ],
     opacity: rotation.interpolate({
-      inputRange: [0, 1, 2, 3, 4],
-      outputRange: inputOpacity,
+      inputRange: shape.visible.input,
+      outputRange: shape.visible.output,
     }),
   })
 
@@ -153,7 +162,7 @@ export const Coin = (props: SectionProps) => {
             <Animated.View
               style={[
                 s.rotationContainer,
-                face(FIRST_FACE, [1, 1, 0, 1, 1]),
+                face(FIRST_FACE),
               ]}
               {...panResponder.panHandlers}>
               <CoinFace size={imageSize} side="heads" />
@@ -161,7 +170,7 @@ export const Coin = (props: SectionProps) => {
             <Animated.View
               style={[
                 s.rotationContainer,
-                face(SECOND_FACE, [0, 1, 1, 1, 0]),
+                face(SECOND_FACE),
               ]}
               {...panResponder.panHandlers}>
               <CoinFace size={imageSize} side="tails" />
