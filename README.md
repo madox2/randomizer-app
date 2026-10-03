@@ -10,14 +10,14 @@ Ultimate randomizer mobile/web application created with [Expo](https://expo.dev)
 
 ## Features
 
-* Get a random number
-* Flip the coin
-* Spin the bottle
-* Ask yes/no question
-* Pull a burned match
-* Throw dices
-* Pick a card from a shuffled deck
-* Split players into random teams
+* **Numbers**: get a random number in a range you choose
+* **Coin**: flip the coin
+* **Bottle**: spin the bottle
+* **Magic 8-Ball**: ask a yes/no question
+* **Matches**: pull a match, someone gets the burned one
+* **Dices**: throw one or more dice with any number of sides
+* **Cards**: draw from a shuffled 52-card deck, without putting cards back
+* **Teams**: shuffle your players into a chosen number of teams, the list of players is saved
 
 ## License
 
