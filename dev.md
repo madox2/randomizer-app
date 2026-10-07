@@ -50,6 +50,21 @@ Requirements: JDK 17+ and the Android SDK (`ANDROID_HOME` set).
 npm install
 npx expo prebuild --platform android --clean   # generates ./android
 
+# android/app/build.gradle
+# add signingConfigs
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
+# modify in release build types
+            signingConfig signingConfigs.release
+
+# copy keystore to android/app/my-release-key.keystore
+
 cd android
 ./gradlew assembleRelease    # APK: android/app/build/outputs/apk/release/app-release.apk
 ./gradlew bundleRelease      # AAB: android/app/build/outputs/bundle/release/app-release.aab
