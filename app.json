@@ -23,6 +23,17 @@
       "name": "Randomizer App - Random Generator",
       "shortName": "Randomizer",
       "description": "Ultimate randomizer: random numbers, coin, bottle, magic 8-ball, matches, dices, cards and teams"
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ]
+    ]
   }
 }
